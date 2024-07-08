@@ -241,7 +241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 25
   health: 25
-  transform: {fileID: 0}
+  transform: {fileID: 5213378883116263550}
   statuses: []
   _damage:
   - 0
@@ -259,6 +259,7 @@ MonoBehaviour:
   projSpeed: 12
   multiplierTakeDamage: 1
   agroRadius: 25
+  _entity: {fileID: -8441912993091560161}
   missle: {fileID: 7686851911220215187, guid: 669fa5d08c1681b458a7ee21d734b4a1, type: 3}
   tower: {fileID: 5956137601538878063}
 --- !u!1 &7354107537700443755

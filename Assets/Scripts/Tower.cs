@@ -13,6 +13,8 @@ public class Tower : Entity
     private void Awake()
     {
         _entity.Awake();
+        if(!tower)
+            tower = GetComponent<GameObject>();
     }
     private void Update()
     {
