@@ -22,6 +22,7 @@ public class Entity : MonoBehaviour
     {
         _entity = this;
     }
+
     public void Awake()
     {
         damage = new Damage(_damage[0], _damage[1], _damage[2], _damage[3], _damage[4]);

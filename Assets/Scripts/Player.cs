@@ -6,13 +6,11 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Camera camera;
-    public float gold;
-    public float wood;
-    public float stone;
     public float voidEssence;
     private float moveSpeed;
     private float speed = 40f;
-    public GameObject tower;
+    public Resources resources = new Resources(50,50,50,0);
+    [SerializeField] public List<GameObject> Towers;
     private void Update()
     {
         if (Input.GetKey(KeyCode.LeftShift))
@@ -37,15 +35,15 @@ public class Player : MonoBehaviour
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
             {
                 if (hit.transform.gameObject.tag == "Tower\'sPlace")
-                    PlaceTower(tower, hit.transform.gameObject);
+                    hit.transform.gameObject.GetComponentInChildren<CanvasController>().canvas.gameObject.SetActive(true);
             }
         }
     }
 
-    void PlaceTower(GameObject tower, GameObject place)
-    {
-        GameObject _tower = Instantiate(tower);
-        _tower.transform.position = place.transform.position;
-        Debug.Log(place.name);
-    }
+    //void PlaceTower(GameObject tower, GameObject place)
+    //{
+    //    GameObject _tower = Instantiate(tower);
+    //    _tower.transform.position = place.transform.position;
+    //    Debug.Log(place.name);
+    //}
 }

@@ -203,9 +203,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5213378883116263550}
-  - component: {fileID: -8441912993091560161}
+  - component: {fileID: 312111415878609934}
   m_Layer: 0
-  m_Name: Canon
+  m_Name: Cannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -227,7 +227,7 @@ Transform:
   - {fileID: 420902268743629246}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-8441912993091560161
+--- !u!114 &312111415878609934
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -239,8 +239,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23001e1bee15ec847a3e2c3967ffd446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 25
-  health: 25
+  maxHealth: 100
+  health: 100
   transform: {fileID: 5213378883116263550}
   statuses: []
   _damage:
@@ -248,7 +248,7 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  - 25
+  - 0
   _resist:
   - 0
   - 0
@@ -256,12 +256,17 @@ MonoBehaviour:
   - 0
   - 0
   attackSpeed: 0.25
-  projSpeed: 12
-  multiplierTakeDamage: 1
-  agroRadius: 25
-  _entity: {fileID: -8441912993091560161}
+  projSpeed: 10
+  multiplierTakeDamage: 0
+  agroRadius: 10
+  _entity: {fileID: 312111415878609934}
   missle: {fileID: 7686851911220215187, guid: 669fa5d08c1681b458a7ee21d734b4a1, type: 3}
   tower: {fileID: 5956137601538878063}
+  incDamage: 1
+  incAttackSpeed: 0
+  incHealth: 0
+  spriteButton: {fileID: 21300000, guid: e1cbfe16981c94242b55de1771c70c3e, type: 3}
+  costs: 0a0000000a0000000a00000000000000
 --- !u!1 &7354107537700443755
 GameObject:
   m_ObjectHideFlags: 0
