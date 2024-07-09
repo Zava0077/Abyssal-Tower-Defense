@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     private float speed = 40f;
     public Resources resources = new Resources(50,50,50,0);
     [SerializeField] public List<GameObject> Towers;
+    [SerializeField] public GameObject explotion;
+    [SerializeField] public GameObject puddle;
     private void Update()
     {
         if (Input.GetKey(KeyCode.LeftShift))

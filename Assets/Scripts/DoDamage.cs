@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DoDamage : MonoBehaviour
 {
-    public static DoDamage dodamge = new DoDamage();
+    public static DoDamage dodamge;
 
     public DoDamage()
     {

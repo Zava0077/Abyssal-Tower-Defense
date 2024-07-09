@@ -18,13 +18,17 @@ public class Tower : Entity
     public Sprite spriteButton;
     public Resources cost;
     [SerializeField] List<int> costs = new List<int>();
+    [SerializeField] List<int> chances = new List<int>();
     [SerializeField] Dictionary<GameObject, bool> keyValuePairs = new Dictionary<GameObject, bool>();
+    Chances chance;
+
     protected void Awake()
     {
         _entity.Awake();
         if(!tower)
             tower = GetComponent<GameObject>();
         cost = new Resources(costs[0], costs[1], costs[2], costs[3]);
+        chance = new Chances(chances[0], chances[1], chances[2], chances[3], chances[4], chances[5], chances[6]);
     }
     protected void Update()
     {
@@ -71,13 +75,14 @@ public class Tower : Entity
         return false;
     }
 
-    public virtual void Shoot(Entity target)
+    public void Shoot(Entity target)
     {
         Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w);
         rotation.SetEulerAngles((3.14f / 180) * rotation.eulerAngles.x, (3.14f / 180) * rotation.eulerAngles.y - (3.14f/180) * 90, (3.14f / 180) * rotation.eulerAngles.z);
         GameObject _missle = Instantiate(missle, transform.position, rotation , transform.parent);
         _missle.GetComponent<Projectile>().target = target;
         _missle.GetComponent<Projectile>().damage = damage;//new Damage(damage._fire * incDamage, damage._cold * incDamage, damage._lightning * incDamage, damage._void * incDamage,damage._physical * incDamage);
+        _missle.GetComponent<Projectile>().owner = gameObject.GetComponent<Entity>();
         _missle.GetComponent<Projectile>().projSpeed = projSpeed;
     }
 }

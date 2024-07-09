@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletEffects
+public class BulletEffects : MonoBehaviour
 {
-    public void Travel()
+    public virtual void Travel()
     {
 
     }
-    public void End()
+    public virtual void End()
     {
 
     }
