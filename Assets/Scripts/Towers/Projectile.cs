@@ -7,16 +7,19 @@ using UnityEngine.Assertions.Must;
 
 public class Projectile : MonoBehaviour
 {
-    public Projectile(Damage damage, Vector3 target, Entity owner)
+    public Projectile(Damage damage, Vector3 target, GameObject owner, float agroRadius)
     {
         this.damage = damage;
         this.target = target;
         this.owner = owner;
+        this.agroRadius = agroRadius;
     }
-    public Entity owner;
+    public float agroRadius;
+    public GameObject owner;
     public Vector3 target;
     public Vector3 targetMemory;
     public Vector3 projection;
+    public Mob prevEnemy;
     public Damage damage;
     public float projSpeed;
     public float archMultiplier;
@@ -49,16 +52,21 @@ public class Projectile : MonoBehaviour
         {
             effect.Travel();//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
         }
-        
     }
     private void OnTriggerEnter(Collider other)
     {
-        foreach (BulletEffects effect in effects)
-        {
-            effect.End(); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
-        }
+        if (prevEnemy == other.GetComponent<Mob>() && prevEnemy != null)
+            return;
         if (other.gameObject.tag == "Enemy" && damage != null)
+        {
             DoDamage.DealDamage(other.GetComponent<Entity>(), null, damage);
-        Destroy(gameObject);
+            prevEnemy = other.gameObject.GetComponent<Mob>();
+        }
+        if(other.tag != "Effect")
+        {
+            foreach (BulletEffects effect in effects)
+                effect.End(); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
+            Destroy(gameObject);
+        }
     }
 }

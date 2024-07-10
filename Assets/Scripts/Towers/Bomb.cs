@@ -15,10 +15,13 @@ public class Bomb : BulletEffects
     public override void End()
     {
         float size = 0;
-        foreach (var damage in projectile.GetComponent<Projectile>().owner.damage.GetType().GetFields())
-            size += (float)damage.GetValue(projectile.GetComponent<Projectile>().owner.damage)/7;
-        expl = Instantiate(Camera.main.GetComponent<Player>().explotion, projectile.transform.position, Quaternion.identity, projectile.transform.parent);
-        expl.GetComponent<Explotion>().damage = new Damage(0f, 0f, 0f, 15f, 50f);
-        expl.transform.localScale = new Vector3(expl.transform.localScale.x + size, expl.transform.localScale.y + size, expl.transform.localScale.z + size);
+        if(projectile)
+        {
+            foreach (var damage in projectile.GetComponent<Projectile>().damage.GetType().GetFields())
+                size += (float)damage.GetValue(projectile.GetComponent<Projectile>().damage) / 7;
+            expl = Instantiate(Camera.main.GetComponent<Player>().explotion, projectile.transform.position, Quaternion.identity, projectile.transform.parent);
+            expl.GetComponent<Explotion>().damage = new Damage(0f, 0f, 0f, 15f, 50f);
+            expl.transform.localScale = new Vector3(expl.transform.localScale.x + size, expl.transform.localScale.y + size, expl.transform.localScale.z + size);
+        }
     }
 }
