@@ -15,7 +15,7 @@ public class WaterPocket : BulletEffects
         float size = 0;
         foreach (var damage in GetComponent<Projectile>().owner.damage.GetType().GetFields())
             size += (float)damage.GetValue(GetComponent<Projectile>().owner.damage);
-        pudd = Instantiate(Camera.main.GetComponent<Player>().puddle, gameObject.transform.position, Quaternion.identity, gameObject.transform.parent);
+        pudd = Instantiate(Camera.main.GetComponent<Player>().puddle, projectile.transform.position, Quaternion.identity, projectile.transform.parent);
         pudd.transform.localScale = new Vector3(pudd.transform.localScale.x + size, pudd.transform.localScale.y, pudd.transform.localScale.z + size);
     }
 }

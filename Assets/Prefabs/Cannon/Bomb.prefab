@@ -279,7 +279,6 @@ GameObject:
   - component: {fileID: 2025462934503648031}
   - component: {fileID: 3270855810709017543}
   - component: {fileID: 8616462509861489022}
-  - component: {fileID: -7404378252478306226}
   - component: {fileID: 6411475034501561373}
   m_Layer: 0
   m_Name: Bomb
@@ -389,25 +388,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  target: {fileID: 0}
+  target: {x: 0, y: 0, z: 0}
   targetMemory: {x: 0, y: 0, z: 0}
   projection: {x: 0, y: 0, z: 0}
   projSpeed: 0
   archMultiplier: 35
-  statuses:
-  - {fileID: -7404378252478306226}
---- !u!114 &-7404378252478306226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7686851911220215187}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6704a172ee49bef478931a4810f39af5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  effects: []
 --- !u!54 &6411475034501561373
 Rigidbody:
   m_ObjectHideFlags: 0

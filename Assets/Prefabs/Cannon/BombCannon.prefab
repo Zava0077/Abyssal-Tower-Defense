@@ -366,8 +366,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5213378883116263550}
   - component: {fileID: 312111415878609934}
+  - component: {fileID: 7812720660362123708}
   m_Layer: 0
-  m_Name: Cannon 2
+  m_Name: BombCannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -417,7 +418,7 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  attackSpeed: 0.1
+  attackSpeed: 0.15
   projSpeed: 35
   multiplierTakeDamage: 0
   agroRadius: 55
@@ -430,6 +431,22 @@ MonoBehaviour:
   spriteButton: {fileID: 21300000, guid: e1cbfe16981c94242b55de1771c70c3e, type: 3}
   costs: 0a0000000a0000000a00000000000000
   chances: 00000000000000000000000000000000000000000000000000000000
+  effects:
+  - {fileID: 7812720660362123708}
+--- !u!114 &7812720660362123708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5956137601538878063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6704a172ee49bef478931a4810f39af5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effect: {fileID: 0}
+  name: 
 --- !u!1 &7354107537700443755
 GameObject:
   m_ObjectHideFlags: 0

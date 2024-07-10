@@ -205,7 +205,7 @@ GameObject:
   - component: {fileID: 5213378883116263550}
   - component: {fileID: 312111415878609934}
   m_Layer: 0
-  m_Name: Cannon 3
+  m_Name: FastCannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -248,14 +248,14 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  - 5
+  - 1.5
   _resist:
   - 0
   - 0
   - 0
   - 0
   - 0
-  attackSpeed: 2.5
+  attackSpeed: 5
   projSpeed: 25
   multiplierTakeDamage: 0
   agroRadius: 20

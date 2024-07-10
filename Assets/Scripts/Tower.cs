@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -20,6 +21,7 @@ public class Tower : Entity
     [SerializeField] List<int> costs = new List<int>();
     [SerializeField] List<int> chances = new List<int>();
     [SerializeField] Dictionary<GameObject, bool> keyValuePairs = new Dictionary<GameObject, bool>();
+    public List<BulletEffects> effects = new List<BulletEffects>();
     Chances chance;
 
     protected void Awake()
@@ -53,7 +55,7 @@ public class Tower : Entity
 
             if (time > 1 / attackSpeed)
             {
-                Shoot(enemy);
+                Shoot(this.gameObject,enemy.GetComponent<Transform>().position,damage,missle);
                 time = 0f;
             }
         }
@@ -75,14 +77,19 @@ public class Tower : Entity
         return false;
     }
 
-    public void Shoot(Entity target)
+    public static void Shoot(GameObject turret,Vector3 target, Damage damage, GameObject missle)
     {
-        Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w);
+        Quaternion rotation = new Quaternion(turret.transform.rotation.x, turret.transform.rotation.y, turret.transform.rotation.z, turret.transform.rotation.w);
         rotation.SetEulerAngles((3.14f / 180) * rotation.eulerAngles.x, (3.14f / 180) * rotation.eulerAngles.y - (3.14f/180) * 90, (3.14f / 180) * rotation.eulerAngles.z);
-        GameObject _missle = Instantiate(missle, transform.position, rotation , transform.parent);
+        GameObject _missle = Instantiate(missle, turret.transform.position, rotation , turret.transform.parent);
         _missle.GetComponent<Projectile>().target = target;
         _missle.GetComponent<Projectile>().damage = damage;//new Damage(damage._fire * incDamage, damage._cold * incDamage, damage._lightning * incDamage, damage._void * incDamage,damage._physical * incDamage);
-        _missle.GetComponent<Projectile>().owner = gameObject.GetComponent<Entity>();
-        _missle.GetComponent<Projectile>().projSpeed = projSpeed;
+        _missle.GetComponent<Projectile>().owner = turret.GetComponent<Entity>();
+        _missle.GetComponent<Projectile>().effects = turret.GetComponent<Tower>().effects;
+        foreach (var _effect in _missle.GetComponent<Projectile>().effects)
+        {
+            _effect.projectile = _missle;
+        }
+        _missle.GetComponent<Projectile>().projSpeed = turret.GetComponent<Tower>().projSpeed;
     }
 }
