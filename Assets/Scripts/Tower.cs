@@ -66,11 +66,11 @@ public class Tower : Entity
     }
     public static Entity FindEnemy(GameObject tower, float agroRadius, Mob lastEnemy = null)
     {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy"); //мб переделать, а то слишком дохуя чекать
+        enemies = GameObject.FindGameObjectsWithTag("Enemy"); //РјР± РїРµСЂРµРґРµР»Р°С‚СЊ, Р° С‚Рѕ СЃР»РёС€РєРѕРј РґРѕС…СѓСЏ С‡РµРєР°С‚СЊ
         foreach (var enemy in enemies)
             if (Vector3.Distance(enemy.transform.position, tower.transform.position) < agroRadius) 
             {
-                if (lastEnemy && enemy == lastEnemy.GetComponent<GameObject>()) continue;
+                if (lastEnemy && enemy.GetComponent<Mob>() == lastEnemy) continue;
                 return enemy.GetComponent<Mob>();
             }
             else continue;
@@ -83,11 +83,17 @@ public class Tower : Entity
     {
         Quaternion rotation = new Quaternion(turret.transform.rotation.x, turret.transform.rotation.y, turret.transform.rotation.z, turret.transform.rotation.w);
         rotation.SetEulerAngles((3.14f / 180) * rotation.eulerAngles.x, (3.14f / 180) * rotation.eulerAngles.y - (3.14f / 180) * 90, (3.14f / 180) * rotation.eulerAngles.z);
-        GameObject _missle = Instantiate(missle, turret.transform.position, Quaternion.identity , turret.transform.parent);
+        Vector3 projectile = Vector3.forward;
+        foreach(var element in turret.GetComponentsInChildren<Transform>())
+        {
+            if (element.tag == "Projectile")
+                projectile = element.position;
+        }
+        GameObject _missle = Instantiate(missle, projectile, Quaternion.identity , turret.transform.parent);
         _missle.transform.rotation = rotation;
         _missle.GetComponent<Projectile>().target = target;
         _missle.GetComponent<Projectile>().damage = damage;//new Damage(damage._fire * incDamage, damage._cold * incDamage, damage._lightning * incDamage, damage._void * incDamage,damage._physical * incDamage);
-        _missle.GetComponent<Projectile>().owner = turret; //у бомбы нет энтити
+        _missle.GetComponent<Projectile>().owner = turret; //Сѓ Р±РѕРјР±С‹ РЅРµС‚ СЌРЅС‚РёС‚Рё
         _missle.GetComponent<Projectile>().agroRadius = agroRadius;
         if (turret.GetComponent<Tower>())
             _missle.GetComponent<Projectile>().effects = turret.GetComponent<Tower>().effects;

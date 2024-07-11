@@ -26,6 +26,8 @@ public class Projectile : MonoBehaviour
     float distance;
     float deltaDistance = 0f;
     float projHeight = 0f;
+    float timeNeed;
+    public float testTimer;
     public List<BulletEffects> effects; //то, что происходит во время полёта и в конце
     private void Awake()
     {
@@ -37,13 +39,17 @@ public class Projectile : MonoBehaviour
         {
             distance = Vector3.Distance(this.gameObject.transform.position, target);
             targetMemory = target;
+            timeNeed = distance / (Vector3.right * projSpeed).magnitude;
+            testTimer = 0f;
         }
     }
     private void Update()
     {
-        projection = new Vector3(gameObject.transform.position.x, 0, gameObject.transform.position.z);
-        deltaDistance = Vector3.Distance(projection, targetMemory);
-        if (deltaDistance < distance / 2 && projHeight > 0)
+        testTimer += Time.deltaTime;
+        if (testTimer > timeNeed)
+            projHeight = -100;
+        else
+        if (testTimer > timeNeed / 2 && projHeight > 0)
             projHeight *= -1;
         transform.position += transform.right * projSpeed * Time.deltaTime;
         transform.position += new Vector3(0, projHeight * Time.deltaTime, 0);
@@ -66,6 +72,7 @@ public class Projectile : MonoBehaviour
         {
             foreach (BulletEffects effect in effects)
                 effect.End(); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
+            Debug.Log(timeNeed + " " + testTimer);
             Destroy(gameObject);
         }
     }

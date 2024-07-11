@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 7490537545158428284}
   m_Layer: 0
   m_Name: Hole
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -367,7 +367,7 @@ GameObject:
   - component: {fileID: 5213378883116263550}
   - component: {fileID: 312111415878609934}
   - component: {fileID: 7812720660362123708}
-  - component: {fileID: -1092168514609227509}
+  - component: {fileID: 8859420285603802472}
   m_Layer: 0
   m_Name: BombCannon
   m_TagString: Untagged
@@ -434,7 +434,7 @@ MonoBehaviour:
   chances: 00000000000000000000000000000000000000000000000000000000
   effects:
   - {fileID: 7812720660362123708}
-  - {fileID: -1092168514609227509}
+  - {fileID: 8859420285603802472}
 --- !u!114 &7812720660362123708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -448,7 +448,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectile: {fileID: 0}
---- !u!114 &-1092168514609227509
+  little: 0
+--- !u!114 &8859420285603802472
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -457,7 +458,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5956137601538878063}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13994d47280216448a940faae72eb882, type: 3}
+  m_Script: {fileID: 11500000, guid: 2dcdeb21b3951bf4c9146b5d7e0c1327, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   projectile: {fileID: 0}
@@ -494,8 +495,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 143618411086838488}
   - {fileID: 6114189544630069898}
+  - {fileID: 143618411086838488}
   m_Father: {fileID: 5213378883116263550}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &4305807844878868342

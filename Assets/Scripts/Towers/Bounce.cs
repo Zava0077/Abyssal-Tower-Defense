@@ -18,7 +18,7 @@ public class Bounce : BulletEffects
             if(testrnd < 100)//заменить на шанс от башни
             {
                 // Quaternion rotation = new Quaternion(base.projectile.transform.rotation.x, base.projectile.transform.rotation.y, base.projectile.transform.rotation.z, base.projectile.transform.rotation.w);
-                Vector3 newPosition = new Vector3(base.projectile.transform.position.x, base.projectile.transform.position.y /*+ 10f*/, base.projectile.transform.position.z);
+                Vector3 newPosition = new Vector3(base.projectile.transform.position.x, base.projectile.transform.position.y, base.projectile.transform.position.z);
                 clone = Instantiate(base.projectile, newPosition, Quaternion.identity, base.projectile.transform.parent);
                 Vector3 nextTarget = Tower.FindEnemy(clone, clone.GetComponent<Projectile>().agroRadius, base.projectile.GetComponent<Projectile>().prevEnemy).GetComponent<Transform>().position;
                 if (nextTarget == projectile.GetComponent<Projectile>().prevEnemy.gameObject.transform.position)
