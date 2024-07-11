@@ -64,6 +64,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: d1251fc53d8150d48a30ac6971d98bf4, type: 2}
+  - {fileID: 2100000, guid: d1251fc53d8150d48a30ac6971d98bf4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -257,6 +258,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 4f31217663672e645bcd21d51a9ac960, type: 2}
+  - {fileID: 2100000, guid: 4f31217663672e645bcd21d51a9ac960, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -418,6 +420,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 2100000, guid: 4f31217663672e645bcd21d51a9ac960, type: 2}
   - {fileID: 2100000, guid: 4f31217663672e645bcd21d51a9ac960, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -581,6 +584,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 4f31217663672e645bcd21d51a9ac960, type: 2}
+  - {fileID: 2100000, guid: 4f31217663672e645bcd21d51a9ac960, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -743,6 +747,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 2100000, guid: 4f31217663672e645bcd21d51a9ac960, type: 2}
   - {fileID: 2100000, guid: 4f31217663672e645bcd21d51a9ac960, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -908,15 +913,29 @@ MonoBehaviour:
   multiplierTakeDamage: 0
   agroRadius: 45
   _entity: {fileID: 312111415878609934}
+  damageMat: {fileID: 0}
   missle: {fileID: 7686851911220215187, guid: c23b3aacf2c38a2468b108b0d2213b52, type: 3}
   tower: {fileID: 5956137601538878063}
   incDamage: 1
   incAttackSpeed: 0
   incHealth: 0
+  levelUpsRemain: 2220
   spriteButton: {fileID: 21300000, guid: e1cbfe16981c94242b55de1771c70c3e, type: 3}
+  updateLvlUp: 1
   costs: 0a0000000a0000000a00000000000000
   chances: 00000000000000000000000000000000000000000000000000000000
   effects: []
+  levelUpCallbackNames:
+  - DamageUp
+  - RangeUp
+  - AttackSpUp
+  - DoubleAttackUp
+  - FractionUp
+  - SplashUp
+  - BounceUp
+  - PuddleUp
+  - DamageConvert
+  chance: {fileID: 0}
 --- !u!1 &7354107537700443755
 GameObject:
   m_ObjectHideFlags: 0
@@ -985,6 +1004,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 2100000, guid: 5c7fe771dd8f5274aaaaac3920933926, type: 2}
   - {fileID: 2100000, guid: 5c7fe771dd8f5274aaaaac3920933926, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0

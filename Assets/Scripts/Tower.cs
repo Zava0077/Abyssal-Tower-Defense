@@ -1,7 +1,9 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static LevelUp;
 
 
 
@@ -16,18 +18,44 @@ public class Tower : Entity
     public float incAttackSpeed;
     public float incHealth;
     private float currentRotationAngle = 0f;
+    public float levelUpsRemain = 2220f;
     public Sprite spriteButton;
+    public bool updateLvlUp = true;
     public Resources cost;
     [SerializeField] List<int> costs = new List<int>();
     [SerializeField] List<int> chances = new List<int>();
     [SerializeField] Dictionary<GameObject, bool> keyValuePairs = new Dictionary<GameObject, bool>();
     public List<BulletEffects> effects = new List<BulletEffects>();
+    public List<LevelUpCallback> levelUpCallbacks = new List<LevelUpCallback>()
+    {
+        DamageUp,
+        RangeUp,
+        AttackSpUp,
+        DoubleAttackUp,
+        FractionUp,
+        SplashUp,
+        BounceUp,
+        PuddleUp,
+        DamageConvert
+    };
+    public List<string> levelUpCallbackNames = new List<string>()
+    {
+        "DamageUp",
+        "RangeUp",
+        "AttackSpUp",
+        "DoubleAttackUp",
+        "FractionUp",
+        "SplashUp",
+        "BounceUp",
+        "PuddleUp",
+        "DamageConvert"
+    };
     public static Tower twr;
     public Tower()
     {
         twr = this;
     }
-    Chances chance;
+    public Chances chance;
 
     protected void Awake()
     {
@@ -62,7 +90,8 @@ public class Tower : Entity
             if (time > 1 / attackSpeed)
             {
                 Shoot(this.gameObject, enemy.GetComponent<Transform>().position, damage, missle, agroRadius);
-                time = 0f;
+                if(Random.Range(1,99) > chance.doubleAttack) //реализация двойной атаки
+                    time = 0f;
             }
         }
         else
@@ -98,7 +127,7 @@ public class Tower : Entity
         _missle.transform.rotation = rotation;
         _missle.GetComponent<Projectile>().target = target;
         _missle.GetComponent<Projectile>().damage = damage;//new Damage(damage._fire * incDamage, damage._cold * incDamage, damage._lightning * incDamage, damage._void * incDamage,damage._physical * incDamage);
-        _missle.GetComponent<Projectile>().owner = turret; //у бомбы нет энтити
+        _missle.GetComponent<Projectile>().owner = turret;
         _missle.GetComponent<Projectile>().agroRadius = agroRadius;
         if (turret.GetComponent<Tower>())
             _missle.GetComponent<Projectile>().effects = turret.GetComponent<Tower>().effects;

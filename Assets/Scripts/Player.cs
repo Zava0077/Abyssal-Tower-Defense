@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField] public List<GameObject> Towers;
     [SerializeField] public GameObject explotion;
     [SerializeField] public GameObject puddle;
+    public float levelUpBonus = 2f;
     private void Update()
     {
         if (Input.GetKey(KeyCode.LeftShift))

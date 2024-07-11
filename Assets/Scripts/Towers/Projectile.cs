@@ -61,6 +61,8 @@ public class Projectile : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag == "Ground")
+            ;
         if (prevEnemy == other.GetComponent<Mob>() && prevEnemy != null)
             return;
         if (other.gameObject.tag == "Enemy" && damage != null)
@@ -72,7 +74,7 @@ public class Projectile : MonoBehaviour
         {
             foreach (BulletEffects effect in effects)
                 effect.End(gameObject); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
-            Debug.Log(timeNeed + " " + testTimer);
+            Debug.Log(timeNeed + " " + testTimer + " " + other.tag.ToString());
             Destroy(gameObject);
         }
     }

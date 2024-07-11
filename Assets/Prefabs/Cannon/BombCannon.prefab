@@ -64,6 +64,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: d9bdd8e13f553a540834fdf37e8c72dd, type: 2}
+  - {fileID: 2100000, guid: d9bdd8e13f553a540834fdf37e8c72dd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -258,6 +259,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5c7fe771dd8f5274aaaaac3920933926, type: 2}
+  - {fileID: 2100000, guid: 5c7fe771dd8f5274aaaaac3920933926, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -367,7 +369,6 @@ GameObject:
   - component: {fileID: 5213378883116263550}
   - component: {fileID: 312111415878609934}
   - component: {fileID: 7812720660362123708}
-  - component: {fileID: 1184098007001585683}
   m_Layer: 0
   m_Name: BombCannon
   m_TagString: Effect
@@ -424,17 +425,30 @@ MonoBehaviour:
   multiplierTakeDamage: 0
   agroRadius: 55
   _entity: {fileID: 312111415878609934}
+  damageMat: {fileID: 0}
   missle: {fileID: 7686851911220215187, guid: b3a1e694e4142824b93d696f60b21b1d, type: 3}
   tower: {fileID: 5956137601538878063}
   incDamage: 1
   incAttackSpeed: 0
   incHealth: 0
+  levelUpsRemain: 2220
   spriteButton: {fileID: 21300000, guid: e1cbfe16981c94242b55de1771c70c3e, type: 3}
+  updateLvlUp: 1
   costs: 0a0000000a0000000a00000000000000
-  chances: 00000000000000000000000000000000000000000000000000000000
+  chances: 00000000640000000000000000000000000000000000000000000000
   effects:
   - {fileID: 7812720660362123708}
-  - {fileID: 1184098007001585683}
+  levelUpCallbackNames:
+  - DamageUp
+  - RangeUp
+  - AttackSpUp
+  - DoubleAttackUp
+  - FractionUp
+  - SplashUp
+  - BounceUp
+  - PuddleUp
+  - DamageConvert
+  chance: {fileID: 0}
 --- !u!114 &7812720660362123708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -449,19 +463,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 0}
   little: 0
---- !u!114 &1184098007001585683
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5956137601538878063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13994d47280216448a940faae72eb882, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectile: {fileID: 0}
 --- !u!1 &7354107537700443755
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,6 +528,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 2100000, guid: 5c7fe771dd8f5274aaaaac3920933926, type: 2}
   - {fileID: 2100000, guid: 5c7fe771dd8f5274aaaaac3920933926, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0

@@ -12,8 +12,8 @@ public class Fraction : BulletEffects
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(1, 99);
-        if (base.projectile /*&& base.projectile.GetComponent<Projectile>().prevEnemy*/)
-            if (testrnd < 54)//заменить на шанс от башни
+        if (base.projectile)
+            if (testrnd < proj.GetComponent<Projectile>().owner.GetComponent<Tower>().chance.shatter)//заменить на шанс от башни
             {
                 for(int i = 0; i < 2; i++)
                 {

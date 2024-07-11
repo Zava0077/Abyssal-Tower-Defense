@@ -7,10 +7,10 @@ public class Mob : Entity
     public float speed;
     private void Awake()
     {
-        _entity.Awake();
+        base.Awake();
     }
     private void Update()
     {
-        _entity.Update();
+        base.Update();
     }
 }

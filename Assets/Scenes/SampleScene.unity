@@ -163,6 +163,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1567110193}
     m_Modifications:
+    - target: {fileID: 176237380693906566, guid: 2640aa6c154cac0468fac8689492055e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.00030517578
+      objectReference: {fileID: 0}
     - target: {fileID: 1091235151928842612, guid: 2640aa6c154cac0468fac8689492055e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -546,6 +550,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1567110193}
     m_Modifications:
+    - target: {fileID: 176237380693906566, guid: 2640aa6c154cac0468fac8689492055e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.00030517578
+      objectReference: {fileID: 0}
     - target: {fileID: 1091235151928842612, guid: 2640aa6c154cac0468fac8689492055e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -869,6 +877,7 @@ MonoBehaviour:
   multiplierTakeDamage: 0
   agroRadius: 0
   _entity: {fileID: 390776737}
+  damageMat: {fileID: 0}
   speed: 0
 --- !u!65 &390776738
 BoxCollider:
@@ -911,6 +920,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -1042,6 +1052,7 @@ MonoBehaviour:
   multiplierTakeDamage: 0
   agroRadius: 0
   _entity: {fileID: 607629881}
+  damageMat: {fileID: 0}
   speed: 0
 --- !u!65 &607629882
 BoxCollider:
@@ -1084,6 +1095,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -1276,6 +1288,7 @@ MonoBehaviour:
   multiplierTakeDamage: 0
   agroRadius: 0
   _entity: {fileID: 924795428}
+  damageMat: {fileID: 0}
   speed: 0
 --- !u!65 &924795429
 BoxCollider:
@@ -1318,6 +1331,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -1477,6 +1491,7 @@ MonoBehaviour:
   - {fileID: 5956137601538878063, guid: 01735a65741435549acaca92e7b087eb, type: 3}
   explotion: {fileID: 6213966059812680312, guid: 64c76fe34414010408be8e89b0cd929c, type: 3}
   puddle: {fileID: 6213966059812680312, guid: f0d415d6a03108b41974fe609a30a8af, type: 3}
+  levelUpBonus: 2
 --- !u!1 &1097285407
 GameObject:
   m_ObjectHideFlags: 0
@@ -1864,6 +1879,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1941,6 +1957,7 @@ MonoBehaviour:
   multiplierTakeDamage: 0
   agroRadius: 0
   _entity: {fileID: 1528209929}
+  damageMat: {fileID: 0}
   speed: 0
 --- !u!1 &1567110192
 GameObject:
@@ -2223,6 +2240,7 @@ MonoBehaviour:
   multiplierTakeDamage: 0
   agroRadius: 0
   _entity: {fileID: 1960442621}
+  damageMat: {fileID: 0}
   speed: 0
 --- !u!65 &1960442622
 BoxCollider:
@@ -2265,6 +2283,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -2318,6 +2337,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1567110193}
     m_Modifications:
+    - target: {fileID: 176237380693906566, guid: 2640aa6c154cac0468fac8689492055e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.00030517578
+      objectReference: {fileID: 0}
     - target: {fileID: 1091235151928842612, guid: 2640aa6c154cac0468fac8689492055e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
