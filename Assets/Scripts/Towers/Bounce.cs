@@ -20,7 +20,7 @@ public class Bounce : BulletEffects
                 clone = Instantiate(proj, newPosition, Quaternion.identity, proj.transform.parent);
                 Entity nextEnemy = Tower.twr.FindEnemy(clone, clone.GetComponent<Projectile>().agroRadius, proj.GetComponent<Projectile>().prevEnemy);
                 Vector3 nextTarget = nextEnemy ? nextEnemy.GetComponent<Transform>().position : Vector3.zero;
-                if (nextEnemy == null || nextTarget == proj.GetComponent<Projectile>().prevEnemy.gameObject.transform.position) //
+                if (nextEnemy == null || (proj.GetComponent<Projectile>().prevEnemy != null && nextTarget == proj.GetComponent<Projectile>().prevEnemy.gameObject.transform.position)) //
                 {
                     Destroy(clone);
                     return;
