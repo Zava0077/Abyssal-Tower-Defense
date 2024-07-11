@@ -6,11 +6,11 @@ using UnityEngine;
 public class BulletEffects : MonoBehaviour
 {
     public GameObject projectile;
-    public virtual void Travel()
+    public virtual void Travel(GameObject proj)
     {
 
     }
-    public virtual void End()
+    public virtual void End(GameObject proj)
     {
 
     }

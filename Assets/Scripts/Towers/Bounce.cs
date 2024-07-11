@@ -6,22 +6,21 @@ using static UnityEngine.GraphicsBuffer;
 public class Bounce : BulletEffects
 {
     GameObject clone;
-    public override void Travel()
+    public override void Travel(GameObject proj)
     {
         
     }
-    public override void End()
+    public override void End(GameObject proj)
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(1, 99);
-       if (base.projectile && base.projectile.GetComponent<Projectile>().prevEnemy)
             if(testrnd < 100)//заменить на шанс от башни
             {
-                // Quaternion rotation = new Quaternion(base.projectile.transform.rotation.x, base.projectile.transform.rotation.y, base.projectile.transform.rotation.z, base.projectile.transform.rotation.w);
-                Vector3 newPosition = new Vector3(base.projectile.transform.position.x, base.projectile.transform.position.y, base.projectile.transform.position.z);
-                clone = Instantiate(base.projectile, newPosition, Quaternion.identity, base.projectile.transform.parent);
-                Vector3 nextTarget = Tower.FindEnemy(clone, clone.GetComponent<Projectile>().agroRadius, base.projectile.GetComponent<Projectile>().prevEnemy).GetComponent<Transform>().position;
-                if (nextTarget == projectile.GetComponent<Projectile>().prevEnemy.gameObject.transform.position)
+                Vector3 newPosition = new Vector3(proj.transform.position.x, proj.transform.position.y, proj.transform.position.z);
+                clone = Instantiate(proj, newPosition, Quaternion.identity, proj.transform.parent);
+                Entity nextEnemy = Tower.twr.FindEnemy(clone, clone.GetComponent<Projectile>().agroRadius, proj.GetComponent<Projectile>().prevEnemy);
+                Vector3 nextTarget = nextEnemy ? nextEnemy.GetComponent<Transform>().position : Vector3.zero;
+                if (nextEnemy == null || nextTarget == proj.GetComponent<Projectile>().prevEnemy.gameObject.transform.position) //
                 {
                     Destroy(clone);
                     return;
@@ -30,12 +29,12 @@ public class Bounce : BulletEffects
                 rotation.SetEulerAngles((3.14f / 180) * rotation.eulerAngles.x, (3.14f / 180) * rotation.eulerAngles.y - (3.14f / 180) * 90, (3.14f / 180) * rotation.eulerAngles.z);
                 clone.transform.rotation = rotation;
                 clone.GetComponent<Projectile>().target = nextTarget;
-                clone.GetComponent<Projectile>().damage = base.projectile.GetComponent<Projectile>().damage;
-                clone.GetComponent<Projectile>().owner = base.projectile.GetComponent<Projectile>().owner;
-                clone.GetComponent<Projectile>().agroRadius = base.projectile.GetComponent<Projectile>().agroRadius;
-                clone.GetComponent<Projectile>().prevEnemy = base.projectile.GetComponent<Projectile>().prevEnemy;
+                clone.GetComponent<Projectile>().damage = proj.GetComponent<Projectile>().damage;
+                clone.GetComponent<Projectile>().owner = proj.GetComponent<Projectile>().owner;
+                clone.GetComponent<Projectile>().agroRadius = proj.GetComponent<Projectile>().agroRadius;
+                clone.GetComponent<Projectile>().prevEnemy = proj.GetComponent<Projectile>().prevEnemy;
                 if (projectile.GetComponent<Projectile>())
-                    clone.GetComponent<Projectile>().effects = projectile.GetComponent<Projectile>().effects;
+                    clone.GetComponent<Projectile>().effects = proj.GetComponent<Projectile>().effects;
                 foreach (var _effect in clone.GetComponent<Projectile>().effects)
                     _effect.projectile = clone;
             }

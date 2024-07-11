@@ -367,10 +367,10 @@ GameObject:
   - component: {fileID: 5213378883116263550}
   - component: {fileID: 312111415878609934}
   - component: {fileID: 7812720660362123708}
-  - component: {fileID: 8859420285603802472}
+  - component: {fileID: 1184098007001585683}
   m_Layer: 0
   m_Name: BombCannon
-  m_TagString: Untagged
+  m_TagString: Effect
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -434,7 +434,7 @@ MonoBehaviour:
   chances: 00000000000000000000000000000000000000000000000000000000
   effects:
   - {fileID: 7812720660362123708}
-  - {fileID: 8859420285603802472}
+  - {fileID: 1184098007001585683}
 --- !u!114 &7812720660362123708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -449,7 +449,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 0}
   little: 0
---- !u!114 &8859420285603802472
+--- !u!114 &1184098007001585683
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -458,7 +458,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5956137601538878063}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2dcdeb21b3951bf4c9146b5d7e0c1327, type: 3}
+  m_Script: {fileID: 11500000, guid: 13994d47280216448a940faae72eb882, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   projectile: {fileID: 0}

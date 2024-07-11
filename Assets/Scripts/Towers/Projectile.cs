@@ -56,7 +56,7 @@ public class Projectile : MonoBehaviour
         
         foreach (BulletEffects effect in effects)
         {
-            effect.Travel();//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
+            effect.Travel(gameObject);//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -68,10 +68,10 @@ public class Projectile : MonoBehaviour
             DoDamage.DealDamage(other.GetComponent<Entity>(), null, damage);
             prevEnemy = other.gameObject.GetComponent<Mob>();
         }
-        if(other.tag != "Effect")
+        if (other.tag != "Effect")
         {
             foreach (BulletEffects effect in effects)
-                effect.End(); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
+                effect.End(gameObject); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
             Debug.Log(timeNeed + " " + testTimer);
             Destroy(gameObject);
         }

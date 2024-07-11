@@ -22,6 +22,11 @@ public class Tower : Entity
     [SerializeField] List<int> chances = new List<int>();
     [SerializeField] Dictionary<GameObject, bool> keyValuePairs = new Dictionary<GameObject, bool>();
     public List<BulletEffects> effects = new List<BulletEffects>();
+    public static Tower twr;
+    public Tower()
+    {
+        twr = this;
+    }
     Chances chance;
 
     protected void Awake()
@@ -64,7 +69,7 @@ public class Tower : Entity
             newDir = Quaternion.Lerp(transform.rotation,  Quaternion.Euler(0, currentRotationAngle, 0), 0.05f);
         transform.rotation = newDir;
     }
-    public static Entity FindEnemy(GameObject tower, float agroRadius, Mob lastEnemy = null)
+    public Entity FindEnemy(GameObject tower, float agroRadius, Mob lastEnemy = null)
     {
         enemies = GameObject.FindGameObjectsWithTag("Enemy"); //мб переделать, а то слишком дохуя чекать
         foreach (var enemy in enemies)
@@ -79,7 +84,7 @@ public class Tower : Entity
         return null;
     }
 
-    public static void Shoot(GameObject turret,Vector3 target, Damage damage, GameObject missle, float agroRadius)
+    public void Shoot(GameObject turret,Vector3 target, Damage damage, GameObject missle, float agroRadius)
     {
         Quaternion rotation = new Quaternion(turret.transform.rotation.x, turret.transform.rotation.y, turret.transform.rotation.z, turret.transform.rotation.w);
         rotation.SetEulerAngles((3.14f / 180) * rotation.eulerAngles.x, (3.14f / 180) * rotation.eulerAngles.y - (3.14f / 180) * 90, (3.14f / 180) * rotation.eulerAngles.z);
@@ -97,13 +102,9 @@ public class Tower : Entity
         _missle.GetComponent<Projectile>().agroRadius = agroRadius;
         if (turret.GetComponent<Tower>())
             _missle.GetComponent<Projectile>().effects = turret.GetComponent<Tower>().effects;
-        //else if(turret.GetComponent<Projectile>())
-        //    _missle.GetComponent<Projectile>().effects = turret.GetComponent<Projectile>().effects;
         foreach (var _effect in _missle.GetComponent<Projectile>().effects)
             _effect.projectile = _missle;
         if (turret.GetComponent<Tower>())
             _missle.GetComponent<Projectile>().projSpeed = turret.GetComponent<Tower>().projSpeed;
-        //else if (turret.GetComponent<Projectile>())
-        //    _missle.GetComponent<Projectile>().projSpeed = turret.GetComponent<Projectile>().projSpeed;
     }
 }
