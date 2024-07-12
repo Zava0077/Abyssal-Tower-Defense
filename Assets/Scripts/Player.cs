@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     private float speed = 40f;
     public Resources resources = new Resources(50,50,50,0);
     [SerializeField] public List<GameObject> Towers;
+    public Sprite[] levelUpSprites;
     [SerializeField] public GameObject explotion;
     [SerializeField] public GameObject puddle;
     public float levelUpBonus = 2f;

@@ -259,7 +259,7 @@ MonoBehaviour:
   attackSpeed: 0.5
   projSpeed: 10
   multiplierTakeDamage: 0
-  agroRadius: 10
+  agroRadius: 20
   _entity: {fileID: 312111415878609934}
   damageMat: {fileID: 0}
   missle: {fileID: 7686851911220215187, guid: 669fa5d08c1681b458a7ee21d734b4a1, type: 3}

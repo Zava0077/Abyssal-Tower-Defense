@@ -52,19 +52,20 @@ public class CanvasController : MonoBehaviour
     {
         int first = Random.Range(0, _tower.GetComponent<Tower>().levelUpCallbacks.Count);
         int second = 0;
-        while(true)
+
+        while (true)
         {
             second = Random.Range(0, _tower.GetComponent<Tower>().levelUpCallbacks.Count);
-            if (second == first) continue;
+            if (second == first || (first > 12 && second > 12)) continue;
             else break;
         }
         levelUpBtns = levelUpMenu.GetComponentsInChildren<Button>();
         levelUpBtns[0].onClick.RemoveAllListeners();
         levelUpBtns[1].onClick.RemoveAllListeners();
-        levelUpBtns[0].onClick.AddListener(() => _tower.GetComponent<Tower>().levelUpCallbacks[first](_tower.GetComponent<Tower>(), Random.Range(0, 4)));
-        levelUpBtns[1].onClick.AddListener(() => _tower.GetComponent<Tower>().levelUpCallbacks[second](_tower.GetComponent<Tower>(), Random.Range(0, 4)));
-        levelUpBtns[0].GetComponentInChildren<Text>().text = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[first]];
-        levelUpBtns[1].GetComponentInChildren<Text>().text = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[second]];
+        levelUpBtns[0].onClick.AddListener(() => _tower.GetComponent<Tower>().levelUpCallbacks[first](_tower.GetComponent<Tower>()));
+        levelUpBtns[1].onClick.AddListener(() => _tower.GetComponent<Tower>().levelUpCallbacks[second](_tower.GetComponent<Tower>()));
+        levelUpBtns[0].GetComponent<Image>().sprite = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[first]];
+        levelUpBtns[1].GetComponent<Image>().sprite = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[second]];
     }
     public void Exit()
     {

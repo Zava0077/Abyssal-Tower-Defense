@@ -28,7 +28,11 @@ public class Tower : Entity
     public List<BulletEffects> effects = new List<BulletEffects>();
     public List<LevelUpCallback> levelUpCallbacks = new List<LevelUpCallback>()
     {
-        DamageUp,
+        FireUp,
+        ColdUp,
+        LightningUp,
+        VoidUp,
+        PhysUp,
         RangeUp,
         AttackSpUp,
         DoubleAttackUp,
@@ -36,20 +40,12 @@ public class Tower : Entity
         SplashUp,
         BounceUp,
         PuddleUp,
-        DamageConvert
+        FireConvert,
+        ColdConvert,
+        LightningConvert,
+        PhysicalConvert,
     };
-    public Dictionary<LevelUpCallback, string> levelUpCallbackNames = new Dictionary<LevelUpCallback, string>()
-    {
-        { DamageUp , "DamageUp" },
-        {RangeUp,"RangeUp"},
-        {AttackSpUp,"AttackSpUp"},
-        {DoubleAttackUp,"DoubleAttackUp"},
-      { FractionUp ,"FractionUp"},
-        {SplashUp,"SplashUp"},
-        {BounceUp,"BounceUp"},
-        {PuddleUp,"PuddleUp"},
-        {DamageConvert,"DamageConvert"}
-    };
+    public Dictionary<LevelUpCallback, Sprite> levelUpCallbackNames;
     public static Tower twr;
     public Tower()
     {
@@ -60,7 +56,26 @@ public class Tower : Entity
     protected void Awake()
     {
         _entity.Awake();
-        if(!tower)
+        levelUpCallbackNames = new Dictionary<LevelUpCallback, Sprite>()
+    {
+        { FireUp , Camera.main.GetComponent<Player>().levelUpSprites[0] },
+        { ColdUp , Camera.main.GetComponent<Player>().levelUpSprites[1] },
+        { LightningUp , Camera.main.GetComponent<Player>().levelUpSprites[2] },
+        { VoidUp , Camera.main.GetComponent<Player>().levelUpSprites[3] },
+        { PhysUp , Camera.main.GetComponent<Player>().levelUpSprites[4] },
+        {RangeUp, Camera.main.GetComponent<Player>().levelUpSprites[5] },
+        {AttackSpUp, Camera.main.GetComponent<Player>().levelUpSprites[6] },
+        {DoubleAttackUp, Camera.main.GetComponent<Player>().levelUpSprites[7] },
+        {FractionUp , Camera.main.GetComponent<Player>().levelUpSprites[8] },
+        {SplashUp, Camera.main.GetComponent<Player>().levelUpSprites[9] },
+        {BounceUp, Camera.main.GetComponent<Player>().levelUpSprites[10] },
+        {PuddleUp, Camera.main.GetComponent<Player>().levelUpSprites[11] },
+        {FireConvert, Camera.main.GetComponent<Player>().levelUpSprites[12] },
+        {ColdConvert, Camera.main.GetComponent<Player>().levelUpSprites[13] },
+        {LightningConvert, Camera.main.GetComponent<Player>().levelUpSprites[14] },
+        {PhysicalConvert, Camera.main.GetComponent<Player>().levelUpSprites[15] }
+    };
+        if (!tower)
             tower = GetComponent<GameObject>();
         cost = new Resources(costs[0], costs[1], costs[2], costs[3]);
         chance = new Chances(chances[0], chances[1], chances[2], chances[3], chances[4], chances[5], chances[6]);
