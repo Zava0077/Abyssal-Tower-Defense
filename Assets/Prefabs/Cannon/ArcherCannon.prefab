@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6881115322444211015}
   - component: {fileID: 7218716992162672247}
   - component: {fileID: 699467715239484036}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Canon'sBarrel (4)
   m_TagString: Effect
   m_Icon: {fileID: 0}
@@ -172,7 +172,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7490537545158428284}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Hole
   m_TagString: Projectile
   m_Icon: {fileID: 0}
@@ -207,7 +207,7 @@ GameObject:
   - component: {fileID: 4645840612454943409}
   - component: {fileID: 1233862299999673514}
   - component: {fileID: 8643223895230417499}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Canon'sBarrel (3)
   m_TagString: Effect
   m_Icon: {fileID: 0}
@@ -370,7 +370,7 @@ GameObject:
   - component: {fileID: 5490936514748858899}
   - component: {fileID: 8292728692275101340}
   - component: {fileID: 4652266693244005043}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Canon'sBarrel (2)
   m_TagString: Effect
   m_Icon: {fileID: 0}
@@ -533,7 +533,7 @@ GameObject:
   - component: {fileID: 2355452293319653582}
   - component: {fileID: 8316459439764259088}
   - component: {fileID: 7637458751378085309}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Canon'sBarrel (1)
   m_TagString: Effect
   m_Icon: {fileID: 0}
@@ -696,7 +696,7 @@ GameObject:
   - component: {fileID: 2285049697275631107}
   - component: {fileID: 4899870884689508797}
   - component: {fileID: 5309268236523180588}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Canon'sBarrel
   m_TagString: Effect
   m_Icon: {fileID: 0}
@@ -857,7 +857,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5213378883116263550}
   - component: {fileID: 312111415878609934}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ArcherCannon
   m_TagString: Effect
   m_Icon: {fileID: 0}
@@ -940,7 +940,7 @@ GameObject:
   - component: {fileID: 5058418138634264142}
   - component: {fileID: 2822529800201284506}
   - component: {fileID: 4791157788873701616}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Canon'sBody
   m_TagString: Effect
   m_Icon: {fileID: 0}

@@ -5,7 +5,6 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Bounce : BulletEffects
 {
-    GameObject clone;
     public override void Travel(GameObject proj)
     {
         
@@ -17,7 +16,7 @@ public class Bounce : BulletEffects
             if(proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().owner.GetComponent<Tower>().chance.bounce)//заменить на шанс от башни
             {
                 Vector3 newPosition = new Vector3(proj.transform.position.x, proj.transform.position.y, proj.transform.position.z);
-                clone = Instantiate(proj, newPosition, Quaternion.identity, proj.transform.parent);
+                GameObject clone = Instantiate(proj, newPosition, Quaternion.identity, proj.transform.parent);
                 Entity nextEnemy = Tower.twr.FindEnemy(clone, clone.GetComponent<Projectile>().agroRadius, proj.GetComponent<Projectile>().prevEnemy);
                 Vector3 nextTarget = nextEnemy ? nextEnemy.GetComponent<Transform>().position : Vector3.zero;
                 if (nextEnemy == null || (proj.GetComponent<Projectile>().prevEnemy != null && nextTarget == proj.GetComponent<Projectile>().prevEnemy.gameObject.transform.position)) //
@@ -35,8 +34,8 @@ public class Bounce : BulletEffects
                 clone.GetComponent<Projectile>().prevEnemy = proj.GetComponent<Projectile>().prevEnemy;
                 if (proj.GetComponent<Projectile>())
                     clone.GetComponent<Projectile>().effects = proj.GetComponent<Projectile>().effects;
-                foreach (var _effect in clone.GetComponent<Projectile>().effects)
-                    _effect.projectile = clone;
+                //foreach (var _effect in clone.GetComponent<Projectile>().effects)
+                //    _effect.projectile = clone;
             }
     }
 }

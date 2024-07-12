@@ -131,8 +131,8 @@ public class Tower : Entity
         _missle.GetComponent<Projectile>().agroRadius = agroRadius;
         if (turret.GetComponent<Tower>())
             _missle.GetComponent<Projectile>().effects = turret.GetComponent<Tower>().effects;
-        foreach (var _effect in _missle.GetComponent<Projectile>().effects)
-            _effect.projectile = _missle;
+        //foreach (var _effect in _missle.GetComponent<Projectile>().effects)
+        //    _effect.projectile = _missle;
         if (turret.GetComponent<Tower>())
             _missle.GetComponent<Projectile>().projSpeed = turret.GetComponent<Tower>().projSpeed;
     }

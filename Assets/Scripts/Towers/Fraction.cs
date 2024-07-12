@@ -18,8 +18,9 @@ public class Fraction : BulletEffects
                 {
                     Vector3 newPosition = new Vector3(proj.transform.position.x, proj.transform.position.y + 2f, proj.transform.position.z);
                     GameObject mini = Instantiate(proj, newPosition, Quaternion.identity, proj.transform.parent);
+                    mini.transform.localScale = new Vector3(proj.transform.localScale.x/1.5f, proj.transform.localScale.y/ 1.5f, proj.transform.localScale.z/ 1.5f);
                     Vector3 nextTarget = new Vector3(proj.transform.position.x + random.Next(-9, 9), proj.transform.position.y, proj.transform.position.z + random.Next(-9, 9));
-                    Quaternion rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (nextTarget - newPosition), 3.14f, 0));
+                    Quaternion rotation = Quaternion.LookRotation(Vector3.RotateTowards(proj.transform.forward, (nextTarget - newPosition), 3.14f, 0));
                     rotation.SetEulerAngles((3.14f / 180) * rotation.eulerAngles.x, (3.14f / 180) * rotation.eulerAngles.y - (3.14f / 180) * 90, (3.14f / 180) * rotation.eulerAngles.z);
                     mini.transform.rotation = rotation;
                     mini.GetComponent<Projectile>().target = nextTarget;
@@ -33,8 +34,8 @@ public class Fraction : BulletEffects
                         mini.GetComponent<Bomb>().little = true;
                     if (proj.GetComponent<Projectile>())
                         mini.GetComponent<Projectile>().effects = proj.GetComponent<Projectile>().effects;
-                    foreach (var _effect in mini.GetComponent<Projectile>().effects)
-                        _effect.projectile = mini;
+                    //foreach (var _effect in mini.GetComponent<Projectile>().effects)
+                    //    _effect.projectile = mini;
                 }
             }            
     }
