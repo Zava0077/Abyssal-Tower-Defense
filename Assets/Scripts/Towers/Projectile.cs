@@ -26,6 +26,7 @@ public class Projectile : MonoBehaviour
     float distance;
     float deltaDistance = 0f;
     float projHeight = 0f;
+    float liveTime = 0f;
     float timeNeed;
     public float testTimer;
     public List<BulletEffects> effects; //то, что происходит во время полёта и в конце
@@ -46,6 +47,9 @@ public class Projectile : MonoBehaviour
     private void Update()
     {
         testTimer += Time.deltaTime;
+        if (liveTime > 5f)
+            Destroy(gameObject);
+        liveTime += Time.deltaTime;
         if (testTimer > timeNeed)
             projHeight = -100;
         else
@@ -59,23 +63,47 @@ public class Projectile : MonoBehaviour
             effect.Travel(gameObject);//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
         }
     }
-    private void OnTriggerEnter(Collider other)
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.tag == "Ground")
+    //        ;
+    //    if (prevEnemy == other.GetComponent<Mob>() && prevEnemy != null)
+    //        return;
+    //    if (other.gameObject.tag == "Enemy" && damage != null)
+    //    {
+    //        DoDamage.DealDamage(other.GetComponent<Entity>(), null, damage);
+    //        prevEnemy = other.gameObject.GetComponent<Mob>();
+    //    }
+    //    if (other.tag != "Effect")
+    //    {
+    //        foreach (BulletEffects effect in effects)
+    //            effect.End(gameObject); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
+    //        Debug.Log(timeNeed + " " + testTimer + " " + other.tag.ToString());
+    //        Destroy(gameObject);
+    //    }
+    //    liveTime = 0f;
+    //}
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.tag == "Ground")
-            ;
-        if (prevEnemy == other.GetComponent<Mob>() && prevEnemy != null)
-            return;
-        if (other.gameObject.tag == "Enemy" && damage != null)
+        foreach(var _collision in collision.contacts)
         {
-            DoDamage.DealDamage(other.GetComponent<Entity>(), null, damage);
-            prevEnemy = other.gameObject.GetComponent<Mob>();
+            if (_collision.otherCollider.tag == "Ground")
+                ;
+            if (prevEnemy == _collision.otherCollider.GetComponent<Mob>() && prevEnemy != null)
+                return;
+            if (_collision.otherCollider.tag == "Enemy" && damage != null)
+            {
+                DoDamage.DealDamage(_collision.otherCollider.GetComponent<Entity>(), null, damage);
+                prevEnemy = _collision.otherCollider.gameObject.GetComponent<Mob>();
+            }
+            if (_collision.otherCollider.tag != "Effect")
+            {
+                foreach (BulletEffects effect in effects)
+                    effect.End(gameObject); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
+                Debug.Log(timeNeed + " " + testTimer + " " + _collision.otherCollider.tag.ToString());
+                Destroy(gameObject);
+            }
         }
-        if (other.tag != "Effect")
-        {
-            foreach (BulletEffects effect in effects)
-                effect.End(gameObject); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
-            Debug.Log(timeNeed + " " + testTimer + " " + other.tag.ToString());
-            Destroy(gameObject);
-        }
+        liveTime = 0f;
     }
 }

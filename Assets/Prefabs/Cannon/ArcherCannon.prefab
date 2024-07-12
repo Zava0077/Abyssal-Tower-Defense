@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 699467715239484036}
   m_Layer: 0
   m_Name: Canon'sBarrel (4)
-  m_TagString: Untagged
+  m_TagString: Effect
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 8643223895230417499}
   m_Layer: 0
   m_Name: Canon'sBarrel (3)
-  m_TagString: Untagged
+  m_TagString: Effect
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -372,7 +372,7 @@ GameObject:
   - component: {fileID: 4652266693244005043}
   m_Layer: 0
   m_Name: Canon'sBarrel (2)
-  m_TagString: Untagged
+  m_TagString: Effect
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -535,7 +535,7 @@ GameObject:
   - component: {fileID: 7637458751378085309}
   m_Layer: 0
   m_Name: Canon'sBarrel (1)
-  m_TagString: Untagged
+  m_TagString: Effect
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -698,7 +698,7 @@ GameObject:
   - component: {fileID: 5309268236523180588}
   m_Layer: 0
   m_Name: Canon'sBarrel
-  m_TagString: Untagged
+  m_TagString: Effect
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -916,6 +916,7 @@ MonoBehaviour:
   damageMat: {fileID: 0}
   missle: {fileID: 7686851911220215187, guid: c23b3aacf2c38a2468b108b0d2213b52, type: 3}
   tower: {fileID: 5956137601538878063}
+  time: 0
   incDamage: 1
   incAttackSpeed: 0
   incHealth: 0
@@ -925,16 +926,6 @@ MonoBehaviour:
   costs: 0a0000000a0000000a00000000000000
   chances: 00000000000000000000000000000000000000000000000000000000
   effects: []
-  levelUpCallbackNames:
-  - DamageUp
-  - RangeUp
-  - AttackSpUp
-  - DoubleAttackUp
-  - FractionUp
-  - SplashUp
-  - BounceUp
-  - PuddleUp
-  - DamageConvert
   chance: {fileID: 0}
 --- !u!1 &7354107537700443755
 GameObject:
@@ -951,7 +942,7 @@ GameObject:
   - component: {fileID: 4791157788873701616}
   m_Layer: 0
   m_Name: Canon'sBody
-  m_TagString: Untagged
+  m_TagString: Effect
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

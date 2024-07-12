@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4547961549059016469}
   m_Layer: 0
   m_Name: Canon'sBarrel (1)
-  m_TagString: Untagged
+  m_TagString: Effect
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 5309268236523180588}
   m_Layer: 0
   m_Name: Canon'sBarrel
-  m_TagString: Untagged
+  m_TagString: Effect
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -428,6 +428,7 @@ MonoBehaviour:
   damageMat: {fileID: 0}
   missle: {fileID: 7686851911220215187, guid: b3a1e694e4142824b93d696f60b21b1d, type: 3}
   tower: {fileID: 5956137601538878063}
+  time: 0
   incDamage: 1
   incAttackSpeed: 0
   incHealth: 0
@@ -438,16 +439,6 @@ MonoBehaviour:
   chances: 00000000640000000000000000000000000000000000000000000000
   effects:
   - {fileID: 7812720660362123708}
-  levelUpCallbackNames:
-  - DamageUp
-  - RangeUp
-  - AttackSpUp
-  - DoubleAttackUp
-  - FractionUp
-  - SplashUp
-  - BounceUp
-  - PuddleUp
-  - DamageConvert
   chance: {fileID: 0}
 --- !u!114 &7812720660362123708
 MonoBehaviour:
@@ -478,7 +469,7 @@ GameObject:
   - component: {fileID: 4791157788873701616}
   m_Layer: 0
   m_Name: Canon'sBody
-  m_TagString: Untagged
+  m_TagString: Effect
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

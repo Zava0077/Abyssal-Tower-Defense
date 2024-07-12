@@ -13,7 +13,7 @@ public class Tower : Entity
     static GameObject[] enemies;
     Entity enemy;
     [SerializeField] GameObject tower;
-    float time;
+    public float time;
     public float incDamage = 1;
     public float incAttackSpeed;
     public float incHealth;
@@ -38,17 +38,17 @@ public class Tower : Entity
         PuddleUp,
         DamageConvert
     };
-    public List<string> levelUpCallbackNames = new List<string>()
+    public Dictionary<LevelUpCallback, string> levelUpCallbackNames = new Dictionary<LevelUpCallback, string>()
     {
-        "DamageUp",
-        "RangeUp",
-        "AttackSpUp",
-        "DoubleAttackUp",
-        "FractionUp",
-        "SplashUp",
-        "BounceUp",
-        "PuddleUp",
-        "DamageConvert"
+        { DamageUp , "DamageUp" },
+        {RangeUp,"RangeUp"},
+        {AttackSpUp,"AttackSpUp"},
+        {DoubleAttackUp,"DoubleAttackUp"},
+      { FractionUp ,"FractionUp"},
+        {SplashUp,"SplashUp"},
+        {BounceUp,"BounceUp"},
+        {PuddleUp,"PuddleUp"},
+        {DamageConvert,"DamageConvert"}
     };
     public static Tower twr;
     public Tower()

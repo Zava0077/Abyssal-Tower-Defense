@@ -62,7 +62,7 @@ public class LevelUp
     };
     public static LevelUpCallback FractionUp = (Tower tower, int type) =>
     {
-        if (tower.chance.shatter == 0)
+        if (!tower.GetComponent<Fraction>())
             tower.effects.Add(tower.AddComponent<Fraction>());
         else
             tower.chance.shatter += Camera.main.GetComponent<Player>().levelUpBonus;//25
@@ -73,7 +73,7 @@ public class LevelUp
     };
     public static LevelUpCallback SplashUp = (Tower tower, int type) =>
     {
-        if (tower.chance.splash == 0)
+        if (!tower.GetComponent<Bomb>())
             tower.effects.Add(tower.AddComponent<Bomb>());
         else
         tower.chance.splash += Camera.main.GetComponent<Player>().levelUpBonus;//75
@@ -84,7 +84,7 @@ public class LevelUp
     };
     public static LevelUpCallback BounceUp = (Tower tower, int type) =>
     {
-        if (tower.chance.bounce == 0)
+        if (!tower.GetComponent<Bounce>())
             tower.effects.Add(tower.AddComponent<Bounce>());
         else
             tower.chance.bounce += Camera.main.GetComponent<Player>().levelUpBonus;//25
@@ -95,7 +95,7 @@ public class LevelUp
     };
     public static LevelUpCallback PuddleUp = (Tower tower, int type) =>
     {
-        if (tower.chance.puddle == 0)
+        if (!tower.GetComponent<WaterPocket>())
             tower.effects.Add(tower.AddComponent<WaterPocket>());
         else
             tower.chance.puddle += Camera.main.GetComponent<Player>().levelUpBonus;//75
@@ -117,38 +117,38 @@ public class LevelUp
         {
             case 0:
                 tower.GetComponent<Tower>().damage._fire += tower.GetComponent<Tower>().damage._cold + tower.GetComponent<Tower>().damage._lightning + tower.GetComponent<Tower>().damage._void + tower.GetComponent<Tower>().damage._physical;
-                tower.GetComponent<Tower>().damage._cold += 0;
-                tower.GetComponent<Tower>().damage._lightning += 0;
-                tower.GetComponent<Tower>().damage._void += 0;
-                tower.GetComponent<Tower>().damage._physical += 0;
+                tower.GetComponent<Tower>().damage._cold = 0;
+                tower.GetComponent<Tower>().damage._lightning = 0;
+                tower.GetComponent<Tower>().damage._void = 0;
+                tower.GetComponent<Tower>().damage._physical = 0;
                 break;
             case 1:
                 tower.GetComponent<Tower>().damage._cold += tower.GetComponent<Tower>().damage._fire + tower.GetComponent<Tower>().damage._lightning + tower.GetComponent<Tower>().damage._void + tower.GetComponent<Tower>().damage._physical;
-                tower.GetComponent<Tower>().damage._fire += 0;
-                tower.GetComponent<Tower>().damage._lightning += 0;
-                tower.GetComponent<Tower>().damage._void += 0;
-                tower.GetComponent<Tower>().damage._physical += 0;
+                tower.GetComponent<Tower>().damage._fire = 0;
+                tower.GetComponent<Tower>().damage._lightning = 0;
+                tower.GetComponent<Tower>().damage._void = 0;
+                tower.GetComponent<Tower>().damage._physical = 0;
                 break;
             case 2:
                 tower.GetComponent<Tower>().damage._lightning += tower.GetComponent<Tower>().damage._fire + tower.GetComponent<Tower>().damage._cold + tower.GetComponent<Tower>().damage._void + tower.GetComponent<Tower>().damage._physical;
-                tower.GetComponent<Tower>().damage._fire += 0;
-                tower.GetComponent<Tower>().damage._cold += 0;
-                tower.GetComponent<Tower>().damage._void += 0;
-                tower.GetComponent<Tower>().damage._physical += 0;
+                tower.GetComponent<Tower>().damage._fire = 0;
+                tower.GetComponent<Tower>().damage._cold = 0;
+                tower.GetComponent<Tower>().damage._void = 0;
+                tower.GetComponent<Tower>().damage._physical = 0;
                 break;
             case 3:
                 tower.GetComponent<Tower>().damage._void += tower.GetComponent<Tower>().damage._fire + tower.GetComponent<Tower>().damage._cold + tower.GetComponent<Tower>().damage._lightning + tower.GetComponent<Tower>().damage._physical;
-                tower.GetComponent<Tower>().damage._fire += 0;
-                tower.GetComponent<Tower>().damage._cold += 0;
-                tower.GetComponent<Tower>().damage._lightning += 0;
-                tower.GetComponent<Tower>().damage._physical += 0;
+                tower.GetComponent<Tower>().damage._fire = 0;
+                tower.GetComponent<Tower>().damage._cold = 0;
+                tower.GetComponent<Tower>().damage._lightning = 0;
+                tower.GetComponent<Tower>().damage._physical = 0;
                 break;
             case 4:
                 tower.GetComponent<Tower>().damage._physical += tower.GetComponent<Tower>().damage._fire + tower.GetComponent<Tower>().damage._cold + tower.GetComponent<Tower>().damage._lightning + tower.GetComponent<Tower>().damage._void;
-                tower.GetComponent<Tower>().damage._fire += 0;
-                tower.GetComponent<Tower>().damage._cold += 0;
-                tower.GetComponent<Tower>().damage._lightning += 0;
-                tower.GetComponent<Tower>().damage._void += 0;
+                tower.GetComponent<Tower>().damage._fire = 0;
+                tower.GetComponent<Tower>().damage._cold = 0;
+                tower.GetComponent<Tower>().damage._lightning = 0;
+                tower.GetComponent<Tower>().damage._void = 0;
                 break;
         }
         tower.levelUpsRemain--;
