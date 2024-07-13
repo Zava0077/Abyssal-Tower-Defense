@@ -13,22 +13,31 @@ public class CanvasController : MonoBehaviour
     [SerializeField] private GameObject marker;
     [SerializeField] private GameObject levelUpMenu;
     private bool setTower = false;
+    public bool showAgro = false;
     private GameObject _tower;
     private Button[] levelUpBtns;
-
+    [SerializeField] private GameObject cooldownRedBar;
+    [SerializeField] private GameObject cooldownBar;
+    private float barLimit;
     [SerializeField] private GameObject destroyButton;
+    [SerializeField] private GameObject agroRadius;
     private void Awake()
     {
         destroyButton.SetActive(false);
         canvas.gameObject.SetActive(false);
         levelUpMenu.SetActive(false);
+        barLimit = cooldownRedBar.transform.localScale.x;
     }
 
     private void Update()
     {
         buildObject.SetActive(!setTower);
-        if(_tower)
+        cooldownBar.SetActive(setTower);
+        agroRadius.SetActive(setTower && showAgro);
+        if (_tower)
         {
+            agroRadius.transform.localScale = new Vector3(_tower.GetComponent<Tower>().agroRadius/4, agroRadius.transform.localScale.y, _tower.GetComponent<Tower>().agroRadius/4);
+            cooldownRedBar.transform.localScale = new Vector3((_tower.GetComponent<Tower>().time / (1 / _tower.GetComponent<Tower>().attackSpeed)) * barLimit, cooldownRedBar.transform.localScale.y, cooldownRedBar.transform.localScale.z);
             levelUpMenu.SetActive(setTower && _tower.GetComponent<Tower>().levelUpsRemain > 0);
             if (_tower.GetComponent<Tower>().updateLvlUp)
             {
@@ -36,6 +45,7 @@ public class CanvasController : MonoBehaviour
                 _tower.GetComponent<Tower>().updateLvlUp = false;
             }
         }
+        showAgro = false;
     }
 
     private void Start()

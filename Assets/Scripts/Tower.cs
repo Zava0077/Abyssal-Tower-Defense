@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using static LevelUp;
@@ -24,6 +25,7 @@ public class Tower : Entity
     public Resources cost;
     [SerializeField] List<int> costs = new List<int>();
     [SerializeField] List<int> chances = new List<int>();
+    Dictionary<float, Entity> enemiesCanShooted = new Dictionary<float, Entity>();
     [SerializeField] Dictionary<GameObject, bool> keyValuePairs = new Dictionary<GameObject, bool>();
     public List<BulletEffects> effects = new List<BulletEffects>();
     public List<LevelUpCallback> levelUpCallbacks = new List<LevelUpCallback>()
@@ -57,7 +59,7 @@ public class Tower : Entity
     {
         _entity.Awake();
         levelUpCallbackNames = new Dictionary<LevelUpCallback, Sprite>()
-    {
+        {
         { FireUp , Camera.main.GetComponent<Player>().levelUpSprites[0] },
         { ColdUp , Camera.main.GetComponent<Player>().levelUpSprites[1] },
         { LightningUp , Camera.main.GetComponent<Player>().levelUpSprites[2] },
@@ -74,7 +76,7 @@ public class Tower : Entity
         {ColdConvert, Camera.main.GetComponent<Player>().levelUpSprites[13] },
         {LightningConvert, Camera.main.GetComponent<Player>().levelUpSprites[14] },
         {PhysicalConvert, Camera.main.GetComponent<Player>().levelUpSprites[15] }
-    };
+        };
         if (!tower)
             tower = GetComponent<GameObject>();
         cost = new Resources(costs[0], costs[1], costs[2], costs[3]);
@@ -89,6 +91,7 @@ public class Tower : Entity
                 value.Key.active = true;
             }
         }
+        enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(x => x.Value == null).Key);
         currentRotationAngle += attackSpeed * Time.deltaTime * 30;
         if (currentRotationAngle >= 360f)
         {
@@ -117,15 +120,25 @@ public class Tower : Entity
     {
         enemies = GameObject.FindGameObjectsWithTag("Enemy"); //мб переделать, а то слишком дохуя чекать
         foreach (var enemy in enemies)
-            if (Vector3.Distance(enemy.transform.position, tower.transform.position) < agroRadius) 
+        {
+            float distance = Vector3.Distance(enemy.transform.position, tower.transform.position);
+            if (distance < agroRadius)
             {
                 if (lastEnemy && enemy.GetComponent<Mob>() == lastEnemy) continue;
-                return enemy.GetComponent<Mob>();
+                if (!enemiesCanShooted.ContainsValue(enemy.GetComponent<Mob>()))
+                    enemiesCanShooted.Add(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
+                else
+                {
+                    enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(x => x.Value == enemy.GetComponent<Mob>()).Key);
+                    enemiesCanShooted.Add(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
+                }
             }
             else continue;
-        if(tower.GetComponent<Tower>())
-            tower.GetComponent<Tower>().time = 0f;
-        return null;
+
+        }
+        //if(tower.GetComponent<Tower>())
+        //    tower.GetComponent<Tower>().time = 0f;
+        return enemiesCanShooted.Count > 0 ? enemiesCanShooted[enemiesCanShooted.Keys.Min()] : null;
     }
 
     public void Shoot(GameObject turret,Vector3 target, Damage damage, GameObject missle, float agroRadius)

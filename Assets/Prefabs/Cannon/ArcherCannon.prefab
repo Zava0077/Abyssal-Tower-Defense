@@ -921,7 +921,7 @@ MonoBehaviour:
   incAttackSpeed: 0
   incHealth: 0
   levelUpsRemain: 2220
-  spriteButton: {fileID: 21300000, guid: e1cbfe16981c94242b55de1771c70c3e, type: 3}
+  spriteButton: {fileID: 21300000, guid: 21600128ee6070a40b53a04acd0c20c1, type: 3}
   updateLvlUp: 1
   costs: 0a0000000a0000000a00000000000000
   chances: 00000000000000000000000000000000000000000000000000000000

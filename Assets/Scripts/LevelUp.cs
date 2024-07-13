@@ -31,7 +31,7 @@ public class LevelUp
     };
     public static LevelUpCallback VoidUp = (Tower tower) =>
     {
-        tower.GetComponent<Tower>().damage._void += Camera.main.GetComponent<Player>().levelUpBonus / 10f;
+        tower.GetComponent<Tower>().damage._void += Camera.main.GetComponent<Player>().levelUpBonus / 50f;
         tower.levelUpsRemain--;
         tower.updateLvlUp = true;
     };

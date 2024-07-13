@@ -17,13 +17,16 @@ public class WaterPocket : BulletEffects
         if(proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().owner.GetComponent<Tower>().chance.puddle)
         {
             float size = 0;
+            float r = proj.GetComponent<Projectile>().damage._fire + proj.GetComponent<Projectile>().damage._physical < 255 ? (proj.GetComponent<Projectile>().damage._fire + proj.GetComponent<Projectile>().damage._physical) : 255;
+            float g = 0;
+            float b = proj.GetComponent<Projectile>().damage._cold < 255 ? proj.GetComponent<Projectile>().damage._cold : 255;
             foreach (var damage in proj.GetComponent<Projectile>().damage.GetType().GetFields())//
                 size += (float)damage.GetValue(proj.GetComponent<Projectile>().damage) / 4;
             GameObject[] ground = GameObject.FindGameObjectsWithTag("Ground");
             Vector3 puddPosition = new Vector3(proj.transform.position.x, ground[0].transform.position.y, proj.transform.position.z);
             pudd = Instantiate(Camera.main.GetComponent<Player>().puddle, puddPosition, Quaternion.identity, proj.transform.parent);
             pudd.GetComponent<Puddle>().damage = proj.GetComponent<Projectile>().damage;
-            pudd.GetComponent<Renderer>().material.SetColor("White",new Color(proj.GetComponent<Projectile>().damage._fire + proj.GetComponent<Projectile>().damage._physical, 0, proj.GetComponent<Projectile>().damage._cold));
+            pudd.GetComponent<Renderer>().material.color = new Color(255 - r, 0, 255 - b);
             pudd.transform.localScale = new Vector3(pudd.transform.localScale.x + size, pudd.transform.localScale.y, pudd.transform.localScale.z + size);
 
         }

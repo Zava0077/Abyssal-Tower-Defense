@@ -34,14 +34,23 @@ public class Player : MonoBehaviour
         {
             camera.transform.position = camera.transform.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
         }
-        if (Input.GetMouseButtonDown(0))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
         {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+            if (hit.transform.gameObject.tag == "Tower\'sPlace")
             {
-                if (hit.transform.gameObject.tag == "Tower\'sPlace")
+                if (Input.GetMouseButtonDown(0))
                     hit.transform.gameObject.GetComponentInChildren<CanvasController>().canvas.gameObject.SetActive(true);
+                hit.transform.gameObject.GetComponentInChildren<CanvasController>().showAgro = true;
             }
         }
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+        //    {
+        //        if (hit.transform.gameObject.tag == "Tower\'sPlace")
+        //            hit.transform.gameObject.GetComponentInChildren<CanvasController>().canvas.gameObject.SetActive(true);
+        //    }
+        //}
     }
 
     //void PlaceTower(GameObject tower, GameObject place)
