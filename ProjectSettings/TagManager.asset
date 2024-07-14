@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Tower'sPlace
   - Enemy
+  - Farm'sPlace
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Monster
   - Water
   - UI
   - 
