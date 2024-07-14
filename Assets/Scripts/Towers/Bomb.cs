@@ -16,7 +16,7 @@ public class Bomb : BulletEffects
     public override void End(GameObject proj)
     {
         System.Random random = new System.Random();
-        float testrnd = random.Next(1, 99);
+        float testrnd = random.Next(0, 99);
         if (proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().owner.GetComponent<Tower>().chance.splash)
         {
             float size = 0;

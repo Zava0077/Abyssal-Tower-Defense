@@ -11,7 +11,7 @@ public class Fraction : BulletEffects
     public override void End(GameObject proj)
     {
         System.Random random = new System.Random();
-        float testrnd = random.Next(1, 99);
+        float testrnd = random.Next(0, 99);
             if (proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().owner.GetComponent<Tower>().chance.shatter)//заменить на шанс от башни
             {
                 for(int i = 0; i < 2; i++)
@@ -30,6 +30,7 @@ public class Fraction : BulletEffects
                     mini.GetComponent<Projectile>().agroRadius = proj.GetComponent<Projectile>().agroRadius;
                     mini.GetComponent<Projectile>().archMultiplier = 3;
                     mini.GetComponent<Projectile>().projSpeed = proj.GetComponent<Projectile>().projSpeed;
+                    mini.GetComponent<Projectile>().prevEnemy = null;
                     if (mini.GetComponent<Bomb>())
                         mini.GetComponent<Bomb>().little = true;
                     if (proj.GetComponent<Projectile>())

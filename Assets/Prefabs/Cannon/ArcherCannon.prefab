@@ -857,6 +857,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5213378883116263550}
   - component: {fileID: 312111415878609934}
+  - component: {fileID: -1575403184597258283}
   m_Layer: 6
   m_Name: ArcherCannon
   m_TagString: Effect
@@ -924,9 +925,23 @@ MonoBehaviour:
   spriteButton: {fileID: 21300000, guid: 21600128ee6070a40b53a04acd0c20c1, type: 3}
   updateLvlUp: 1
   costs: 0a0000000a0000000a00000000000000
-  chances: 00000000000000000000000000000000000000000000000000000000
-  effects: []
+  chances: 0000000000000000000000000000000000000000000000000000000000000000
+  effects:
+  - {fileID: -7847984708026376529, guid: 58b5e006c2daff546ba26a718b37ca3a, type: 3}
   chance: {fileID: 0}
+--- !u!114 &-1575403184597258283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5956137601538878063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a05634f8d0489794f99c7a33026f3c21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectile: {fileID: 0}
 --- !u!1 &7354107537700443755
 GameObject:
   m_ObjectHideFlags: 0

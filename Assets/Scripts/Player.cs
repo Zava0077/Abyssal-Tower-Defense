@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     public Sprite[] levelUpSprites;
     [SerializeField] public GameObject explotion;
     [SerializeField] public GameObject puddle;
+    [SerializeField] public GameObject particleShadow;
     public float levelUpBonus = 2f;
     private void Update()
     {
@@ -43,20 +44,5 @@ public class Player : MonoBehaviour
                 hit.transform.gameObject.GetComponentInChildren<CanvasController>().showAgro = true;
             }
         }
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
-        //    {
-        //        if (hit.transform.gameObject.tag == "Tower\'sPlace")
-        //            hit.transform.gameObject.GetComponentInChildren<CanvasController>().canvas.gameObject.SetActive(true);
-        //    }
-        //}
     }
-
-    //void PlaceTower(GameObject tower, GameObject place)
-    //{
-    //    GameObject _tower = Instantiate(tower);
-    //    _tower.transform.position = place.transform.position;
-    //    Debug.Log(place.name);
-    //}
 }

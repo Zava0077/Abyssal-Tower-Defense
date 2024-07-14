@@ -9,7 +9,7 @@ public class LevelUp
 {
     
     public delegate void LevelUpCallback(Tower tower);
-    public LevelUpCallback StatUp;
+    public LevelUpCallback StatUp; //Заменить конверт уронов на пробивку этим типом урона
     public static LevelUpCallback FireUp = (Tower tower) =>
     {
         tower.GetComponent<Tower>().damage._fire += Camera.main.GetComponent<Player>().levelUpBonus;

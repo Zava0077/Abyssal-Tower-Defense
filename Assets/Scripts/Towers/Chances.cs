@@ -14,7 +14,9 @@ public class Chances : MonoBehaviour
     public float crit;
     public float status; //hz chto eto
 
-    public Chances(float bounce, float splash, float puddle, float shatter, float doubleAttack, float crit, float status)
+    public float pierce;
+
+    public Chances(float bounce, float splash, float puddle, float shatter, float doubleAttack, float crit, float status, float pierce)
     {
         this.bounce = bounce;
         this.splash = splash;
@@ -23,5 +25,6 @@ public class Chances : MonoBehaviour
         this.doubleAttack = doubleAttack;
         this.crit = crit;
         this.status = status;
+        this.pierce = pierce;
     }
 }

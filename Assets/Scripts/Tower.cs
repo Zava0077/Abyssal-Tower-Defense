@@ -25,7 +25,6 @@ public class Tower : Entity
     public Resources cost;
     [SerializeField] List<int> costs = new List<int>();
     [SerializeField] List<int> chances = new List<int>();
-    Dictionary<float, Entity> enemiesCanShooted = new Dictionary<float, Entity>();
     [SerializeField] Dictionary<GameObject, bool> keyValuePairs = new Dictionary<GameObject, bool>();
     public List<BulletEffects> effects = new List<BulletEffects>();
     public List<LevelUpCallback> levelUpCallbacks = new List<LevelUpCallback>()
@@ -80,7 +79,7 @@ public class Tower : Entity
         if (!tower)
             tower = GetComponent<GameObject>();
         cost = new Resources(costs[0], costs[1], costs[2], costs[3]);
-        chance = new Chances(chances[0], chances[1], chances[2], chances[3], chances[4], chances[5], chances[6]);
+        chance = new Chances(chances[0], chances[1], chances[2], chances[3], chances[4], chances[5], chances[6], chances[7]);
     }
     protected void Update()
     {
@@ -91,7 +90,7 @@ public class Tower : Entity
                 value.Key.active = true;
             }
         }
-        enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(x => x.Value == null).Key);
+        //enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(x => x.Value == null).Key);
         currentRotationAngle += attackSpeed * Time.deltaTime * 30;
         if (currentRotationAngle >= 360f)
         {
@@ -118,6 +117,7 @@ public class Tower : Entity
     }
     public Entity FindEnemy(GameObject tower, float agroRadius, Mob lastEnemy = null)
     {
+        Dictionary<float, Entity> enemiesCanShooted = new Dictionary<float, Entity>();
         enemies = GameObject.FindGameObjectsWithTag("Enemy"); //мб переделать, а то слишком дохуя чекать
         foreach (var enemy in enemies)
         {
@@ -125,7 +125,7 @@ public class Tower : Entity
             if (distance < agroRadius)
             {
                 if (lastEnemy && enemy.GetComponent<Mob>() == lastEnemy) continue;
-                if (!enemiesCanShooted.ContainsValue(enemy.GetComponent<Mob>()))
+                if (!enemiesCanShooted.ContainsValue(enemy.GetComponent<Mob>()) || !enemiesCanShooted.ContainsKey(Vector3.Distance(enemy.transform.position, tower.transform.position)))
                     enemiesCanShooted.Add(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
                 else
                 {
