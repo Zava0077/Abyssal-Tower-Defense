@@ -7,7 +7,7 @@ using static LevelUp;
 
 public class CanvasController : MonoBehaviour
 {
-    [SerializeField] public Canvas canvas;
+    [SerializeField] public Image menu;
     [SerializeField] private Button prefabButton;
     [SerializeField] private GameObject buildObject;
     [SerializeField] private GameObject marker;
@@ -23,21 +23,19 @@ public class CanvasController : MonoBehaviour
     [SerializeField] private GameObject agroRadius;
     private void Awake()
     {
-        destroyButton.SetActive(false);
-        canvas.gameObject.SetActive(false);
-        levelUpMenu.SetActive(false);
-        barLimit = cooldownRedBar.transform.localScale.x;
+        menu = Camera.main.GetComponentInChildren<Image>();
+        //barLimit = cooldownRedBar.transform.localScale.x;
     }
 
     private void Update()
     {
         buildObject.SetActive(!setTower);
-        cooldownBar.SetActive(setTower);
-        agroRadius.SetActive(setTower && showAgro);
+        //cooldownBar.SetActive(setTower);
+        //agroRadius.SetActive(setTower && showAgro);
         if (_tower)
         {
-            agroRadius.transform.localScale = new Vector3(_tower.GetComponent<Tower>().agroRadius/4, agroRadius.transform.localScale.y, _tower.GetComponent<Tower>().agroRadius/4);
-            cooldownRedBar.transform.localScale = new Vector3((_tower.GetComponent<Tower>().time / (1 / _tower.GetComponent<Tower>().attackSpeed)) * barLimit, cooldownRedBar.transform.localScale.y, cooldownRedBar.transform.localScale.z);
+            //agroRadius.transform.localScale = new Vector3(_tower.GetComponent<Tower>().agroRadius/4, agroRadius.transform.localScale.y, _tower.GetComponent<Tower>().agroRadius/4);
+            //cooldownRedBar.transform.localScale = new Vector3((_tower.GetComponent<Tower>().time / (1 / _tower.GetComponent<Tower>().attackSpeed)) * barLimit, cooldownRedBar.transform.localScale.y, cooldownRedBar.transform.localScale.z);
             levelUpMenu.SetActive(setTower && _tower.GetComponent<Tower>().levelUpsRemain > 0);
             if (_tower.GetComponent<Tower>().updateLvlUp)
             {
@@ -48,8 +46,11 @@ public class CanvasController : MonoBehaviour
         showAgro = false;
     }
 
-    private void Start()
+    public void Show()
     {
+        menu.gameObject.SetActive(true);
+        levelUpMenu = GameObject.FindGameObjectWithTag("LevelUpMenu");
+        buildObject = GameObject.FindGameObjectWithTag("CreateMenu");
         foreach (var tower in Camera.main.GetComponent<Player>().Towers)
         {
             Button _button = Instantiate(prefabButton);
@@ -58,6 +59,7 @@ public class CanvasController : MonoBehaviour
             _button.onClick.AddListener(() => SetTower(tower));
         }
     }
+
     void GenerateUps()
     {
         int first = Random.Range(0, _tower.GetComponent<Tower>().levelUpCallbacks.Count);
@@ -76,10 +78,6 @@ public class CanvasController : MonoBehaviour
         levelUpBtns[1].onClick.AddListener(() => _tower.GetComponent<Tower>().levelUpCallbacks[second](_tower.GetComponent<Tower>()));
         levelUpBtns[0].GetComponent<Image>().sprite = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[first]];
         levelUpBtns[1].GetComponent<Image>().sprite = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[second]];
-    }
-    public void Exit()
-    {
-        canvas.gameObject.SetActive(false);
     }
 
     public void DestroyTower()

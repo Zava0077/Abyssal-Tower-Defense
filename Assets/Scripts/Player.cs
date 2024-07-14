@@ -18,6 +18,11 @@ public class Player : MonoBehaviour
     [SerializeField] public GameObject particleShadow;
     public float levelUpBonus = 2f;
     public List<GameObject> Ferms;
+
+    private void Start()
+    {
+        Camera.main.GetComponentInChildren<Image>().gameObject.SetActive(false);
+    }
     private void Update()
     {
         if (Input.GetKey(KeyCode.LeftShift))
@@ -42,7 +47,7 @@ public class Player : MonoBehaviour
             if (hit.transform.gameObject.tag == "Tower\'sPlace")
             {
                 if (Input.GetMouseButtonDown(0))
-                    hit.transform.gameObject.GetComponentInChildren<CanvasController>().canvas.gameObject.SetActive(true);
+                    hit.transform.gameObject.GetComponentInChildren<CanvasController>().Show();
                 //hit.transform.gameObject.GetComponentInChildren<CanvasController>().showAgro = true;
             }
         }

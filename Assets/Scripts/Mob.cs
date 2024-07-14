@@ -10,19 +10,18 @@ public class Mob : Entity
     public float speed;
     private void Awake()
     {
-        _entity.Awake();
-        agent = GetComponent<NavMeshAgent>();
+        base.Awake();
     }
-
     private void Start()
     {
         agent.speed = speed;
         agent.acceleration = speed;
         agent.angularSpeed = speed;
     }
+
     private void Update()
     {
-        _entity.Update();
+        base.Update();
         agent.SetDestination(kuda.transform.position);
     }
 }

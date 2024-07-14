@@ -9,6 +9,8 @@ TagManager:
   - Ground
   - Effect
   - Projectile
+  - LevelUpMenu
+  - CreateMenu
   layers:
   - Default
   - TransparentFX

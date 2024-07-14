@@ -46,6 +46,7 @@ public class Tower : Entity
         LightningConvert,
         PhysicalConvert,
     };
+
     public Dictionary<LevelUpCallback, Sprite> levelUpCallbackNames;
     public static Tower twr;
     public Tower()
