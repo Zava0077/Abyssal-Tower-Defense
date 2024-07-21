@@ -11,6 +11,7 @@ TagManager:
   - Projectile
   - LevelUpMenu
   - CreateMenu
+  - LevelUpBtn
   layers:
   - Default
   - TransparentFX

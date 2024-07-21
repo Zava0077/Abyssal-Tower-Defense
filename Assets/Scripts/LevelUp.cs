@@ -18,7 +18,6 @@ public class LevelUp
     };
     public static LevelUpCallback ColdUp = (Tower tower) =>
     {
-
         tower.GetComponent<Tower>().damage._cold += Camera.main.GetComponent<Player>().levelUpBonus;
         tower.levelUpsRemain--;
         tower.updateLvlUp = true;
@@ -139,7 +138,6 @@ public class LevelUp
     };
     public static LevelUpCallback LightningConvert = (Tower tower) =>
     {
-
         tower.GetComponent<Tower>().damage._lightning += tower.GetComponent<Tower>().damage._fire + tower.GetComponent<Tower>().damage._cold + tower.GetComponent<Tower>().damage._void + tower.GetComponent<Tower>().damage._physical;
         tower.GetComponent<Tower>().damage._fire = 0;
         tower.GetComponent<Tower>().damage._cold = 0;

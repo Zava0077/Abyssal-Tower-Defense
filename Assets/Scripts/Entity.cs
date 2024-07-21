@@ -32,7 +32,7 @@ public class Entity : MonoBehaviour
         resistances = new Resistances(_resist[0], _resist[1], _resist[2], _resist[3], _resist[4]);
         if(gameObject.GetComponent<Renderer>())
         {
-            gameObject.GetComponent<Renderer>().materials[1] = damageMat;
+            //gameObject.GetComponent<Renderer>().materials[1] = damageMat;
             defaultColor = gameObject.GetComponent<Renderer>().materials[0].color;
         }
     }
@@ -46,7 +46,7 @@ public class Entity : MonoBehaviour
         {
             status.DoStatus();
         }
-        if (health < 0)
+        if (health <= 0)
             Death();
     }
     public void ColorChanger()

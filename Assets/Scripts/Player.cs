@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
         {
             camera.transform.position = camera.transform.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
         }
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit) && !CanvasController.cnv.menu.IsActive())
         {
             if (hit.transform.gameObject.tag == "Tower\'sPlace")
             {
