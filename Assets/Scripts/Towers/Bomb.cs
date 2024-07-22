@@ -17,7 +17,7 @@ public class Bomb : BulletEffects
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
-        if (proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().owner.GetComponent<Tower>().chance.splash)
+        if (proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().chance.splash)//
         {
             float size = 0;
             foreach (var damage in proj.GetComponent<Projectile>().damage.GetType().GetFields())//

@@ -15,6 +15,7 @@ public class CanvasController : MonoBehaviour
     public static CanvasController cnv;
     [SerializeField] public Image menu;
     [SerializeField] private Button prefabButton;
+    [SerializeField] private GameObject prefabStat;
     [SerializeField] private GameObject buildObject;
     [SerializeField] private GameObject marker;
     [SerializeField] private GameObject levelUpMenu;

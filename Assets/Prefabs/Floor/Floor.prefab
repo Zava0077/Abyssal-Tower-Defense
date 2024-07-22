@@ -124,6 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menu: {fileID: 0}
   prefabButton: {fileID: 1589337694094405330, guid: b09e81c1aacb46b4897c254894e0c6e0, type: 3}
+  prefabStat: {fileID: 5160030089848512819, guid: 8858c18a786a2044485069db01632154, type: 3}
   buildObject: {fileID: 0}
   marker: {fileID: 0}
   levelUpMenu: {fileID: 0}

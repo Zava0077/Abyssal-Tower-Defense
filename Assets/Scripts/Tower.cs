@@ -127,7 +127,7 @@ public class Tower : Entity
             {
                 if (lastEnemy && enemy.GetComponent<Mob>() == lastEnemy) continue;
                 if (!enemiesCanShooted.ContainsValue(enemy.GetComponent<Mob>()) || !enemiesCanShooted.ContainsKey(Vector3.Distance(enemy.transform.position, tower.transform.position)))
-                    enemiesCanShooted.Add(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
+                    enemiesCanShooted.TryAdd(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
                 else
                 {
                     enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(x => x.Value == enemy.GetComponent<Mob>()).Key);
@@ -142,21 +142,22 @@ public class Tower : Entity
         return enemiesCanShooted.Count > 0 ? enemiesCanShooted[enemiesCanShooted.Keys.Min()] : null;
     }
 
-    public void Shoot(GameObject turret,Vector3 target, Damage damage, GameObject missle, float agroRadius)
+    public void Shoot(GameObject turret, Vector3 target, Damage damage, GameObject missle, float agroRadius)
     {
         Quaternion rotation = new Quaternion(turret.transform.rotation.x, turret.transform.rotation.y, turret.transform.rotation.z, turret.transform.rotation.w);
         rotation.SetEulerAngles((3.14f / 180) * rotation.eulerAngles.x, (3.14f / 180) * rotation.eulerAngles.y - (3.14f / 180) * 90, (3.14f / 180) * rotation.eulerAngles.z);
         Vector3 projectile = Vector3.forward;
-        foreach(var element in turret.GetComponentsInChildren<Transform>())
+        foreach (var element in turret.GetComponentsInChildren<Transform>())
         {
             if (element.tag == "Projectile")
                 projectile = element.position;
         }
-        GameObject _missle = Instantiate(missle, projectile, Quaternion.identity , turret.transform.parent);
+        GameObject _missle = Instantiate(missle, projectile, Quaternion.identity, turret.transform.parent);
         _missle.transform.rotation = rotation;
         _missle.GetComponent<Projectile>().target = target;
-        _missle.GetComponent<Projectile>().damage = damage;//new Damage(damage._fire * incDamage, damage._cold * incDamage, damage._lightning * incDamage, damage._void * incDamage,damage._physical * incDamage);
-        _missle.GetComponent<Projectile>().owner = turret;
+        _missle.GetComponent<Projectile>().damage = damage;
+        _missle.GetComponent<Projectile>().owner = turret;//не обязательно. заменить на передачу шансов
+        _missle.GetComponent<Projectile>().chance = chance;
         _missle.GetComponent<Projectile>().agroRadius = agroRadius;
         if (turret.GetComponent<Tower>())
             _missle.GetComponent<Projectile>().effects = turret.GetComponent<Tower>().effects;
@@ -165,4 +166,27 @@ public class Tower : Entity
         if (turret.GetComponent<Tower>())
             _missle.GetComponent<Projectile>().projSpeed = turret.GetComponent<Tower>().projSpeed;
     }
+    //public void Shoot(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius)
+    //{
+    //    Quaternion rotation = new Quaternion(turret.transform.rotation.x, turret.transform.rotation.y, turret.transform.rotation.z, turret.transform.rotation.w);
+    //    rotation.SetEulerAngles((3.14f / 180) * rotation.eulerAngles.x, (3.14f / 180) * rotation.eulerAngles.y - (3.14f / 180) * 90, (3.14f / 180) * rotation.eulerAngles.z);
+    //    Vector3 projectile = Vector3.forward;
+    //    foreach (var element in turret.GetComponentsInChildren<Transform>())
+    //    {
+    //        if (element.tag == "Projectile")
+    //            projectile = element.position;
+    //    }
+    //    GameObject _missle = Instantiate(missle, projectile, Quaternion.identity, turret.transform.parent);
+    //    _missle.transform.rotation = rotation;
+    //    _missle.GetComponent<Projectile>().target = target;
+    //    _missle.GetComponent<Projectile>().damage = damage;
+    //    _missle.GetComponent<Projectile>().chances = chance;//не обязательно. заменить на передачу шансов
+    //    _missle.GetComponent<Projectile>().agroRadius = agroRadius;
+    //    if (turret.GetComponent<Tower>())
+    //        _missle.GetComponent<Projectile>().effects = turret.GetComponent<Tower>().effects;
+    //    //foreach (var _effect in _missle.GetComponent<Projectile>().effects)
+    //    //    _effect.projectile = _missle;
+    //    if (turret.GetComponent<Tower>())
+    //        _missle.GetComponent<Projectile>().projSpeed = turret.GetComponent<Tower>().projSpeed;
+    //}
 }

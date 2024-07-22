@@ -12,7 +12,7 @@ public class Fraction : BulletEffects
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
-            if (proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().owner.GetComponent<Tower>().chance.shatter)//заменить на шанс от башни
+            if (proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().chance.shatter)//заменить на шанс от башни
             {
                 for(int i = 0; i < 2; i++)
                 {
@@ -27,6 +27,7 @@ public class Fraction : BulletEffects
                     mini.GetComponent<Projectile>().damage = new Damage(proj.GetComponent<Projectile>().damage._fire / 2, proj.GetComponent<Projectile>().damage._cold / 2,
                         proj.GetComponent<Projectile>().damage._lightning / 2, proj.GetComponent<Projectile>().damage._void / 2, proj.GetComponent<Projectile>().damage._physical / 2);
                     mini.GetComponent<Projectile>().owner = proj.GetComponent<Projectile>().owner;
+                    mini.GetComponent<Projectile>().chance = proj.GetComponent<Projectile>().chance;
                     mini.GetComponent<Projectile>().agroRadius = proj.GetComponent<Projectile>().agroRadius;
                     mini.GetComponent<Projectile>().archMultiplier = 3;
                     mini.GetComponent<Projectile>().projSpeed = proj.GetComponent<Projectile>().projSpeed;

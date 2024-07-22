@@ -7,13 +7,15 @@ using UnityEngine.Assertions.Must;
 
 public class Projectile : MonoBehaviour
 {
-    public Projectile(Damage damage, Vector3 target, GameObject owner, float agroRadius)
+    public Projectile(Damage damage, Vector3 target, GameObject owner, float agroRadius, Chances chance)
     {
         this.damage = damage;
         this.target = target;
         this.owner = owner;
         this.agroRadius = agroRadius;
+        this.chance = chance;
     }
+    public Chances chance;
     public float agroRadius;
     public GameObject owner;
     public Vector3 target;
@@ -68,7 +70,6 @@ public class Projectile : MonoBehaviour
         if (collision.gameObject.tag != "Effect")
         {
             foreach (BulletEffects effect in effects)
-                if (effect)
                     effect.End(gameObject); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
             if (owner.GetComponent<Tower>().chance.pierce < Random.Range(1, 100) || collision.gameObject.tag == "Ground")
                 Destroy(gameObject);

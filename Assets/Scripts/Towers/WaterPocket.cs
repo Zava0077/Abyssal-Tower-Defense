@@ -14,7 +14,7 @@ public class WaterPocket : BulletEffects
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
-        if(proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().owner.GetComponent<Tower>().chance.puddle)
+        if(proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().chance.puddle)
         {
             float size = 0;
             float r = proj.GetComponent<Projectile>().damage._fire + proj.GetComponent<Projectile>().damage._physical < 255 ? (proj.GetComponent<Projectile>().damage._fire + proj.GetComponent<Projectile>().damage._physical) : 255;

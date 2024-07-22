@@ -13,7 +13,7 @@ public class Bounce : BulletEffects
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
-            if(proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().owner.GetComponent<Tower>().chance.bounce)//заменить на шанс от башни
+            if(proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().chance.bounce)//заменить на шанс от башни
             {
                 Vector3 newPosition = new Vector3(proj.transform.position.x, proj.transform.position.y, proj.transform.position.z);
                 GameObject clone = Instantiate(proj, newPosition, Quaternion.identity, proj.transform.parent);
@@ -30,6 +30,7 @@ public class Bounce : BulletEffects
                 clone.GetComponent<Projectile>().target = nextTarget;
                 clone.GetComponent<Projectile>().damage = proj.GetComponent<Projectile>().damage;
                 clone.GetComponent<Projectile>().owner = proj.GetComponent<Projectile>().owner;
+                clone.GetComponent<Projectile>().chance = proj.GetComponent<Projectile>().chance;
                 clone.GetComponent<Projectile>().agroRadius = proj.GetComponent<Projectile>().agroRadius;
                 clone.GetComponent<Projectile>().prevEnemy = proj.GetComponent<Projectile>().prevEnemy;
                 if (proj.GetComponent<Projectile>())
