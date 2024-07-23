@@ -1,6 +1,7 @@
 using OpenCover.Framework.Model;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using UnityEngine;
 using UnityEngine.UI;
 using static LevelUp;
@@ -43,7 +44,6 @@ public class CanvasController : MonoBehaviour
     }
     private void Update()
     {
-        
         //cooldownBar.SetActive(setTower);
         //agroRadius.SetActive(setTower && showAgro);
         if (_tower)
@@ -76,13 +76,14 @@ public class CanvasController : MonoBehaviour
             levelUpMenu.GetComponentsInChildren<Button>()[0].GetComponent<Image>().sprite = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[firstUp]];
             levelUpMenu.GetComponentsInChildren<Button>()[1].GetComponent<Image>().sprite = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[secondUp]];
         }
-        foreach (var tower in Camera.main.GetComponent<Player>().Towers)
-        {
-            Button _button = Instantiate(prefabButton);
-            _button.transform.SetParent(buildObject.transform, false);
-            _button.GetComponent<Image>().sprite = tower.GetComponent<Tower>().spriteButton;
-            _button.onClick.AddListener(() => SetTower(tower));
-        }
+        if(!setTower)
+            foreach (var tower in Camera.main.GetComponent<Player>().Towers)
+            {
+                Button _button = Instantiate(prefabButton);
+                _button.transform.SetParent(buildObject.transform, false);
+                _button.GetComponent<Image>().sprite = tower.GetComponent<Tower>().spriteButton;
+                _button.onClick.AddListener(() => SetTower(tower));
+            }
     }
 
     void GenerateUps()
