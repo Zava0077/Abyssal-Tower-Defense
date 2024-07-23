@@ -119,11 +119,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c9163c9e247a9a489b29e3c95e53258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chance: {fileID: 0}
   agroRadius: 0
   owner: {fileID: 0}
   target: {x: 0, y: 0, z: 0}
   targetMemory: {x: 0, y: 0, z: 0}
   projection: {x: 0, y: 0, z: 0}
+  position: {x: 0, y: 0, z: 0}
   prevEnemy: {fileID: 0}
   projSpeed: 0
   archMultiplier: 1
@@ -132,6 +134,7 @@ MonoBehaviour:
   liveTime: 0
   timeNeed: 0
   testTimer: 0
+  bounces: 1126
   effects: []
 --- !u!54 &6411475034501561373
 Rigidbody:

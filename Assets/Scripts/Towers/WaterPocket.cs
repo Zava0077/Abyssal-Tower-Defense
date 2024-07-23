@@ -6,6 +6,10 @@ using UnityEngine;
 public class WaterPocket : BulletEffects
 {
     GameObject pudd;
+    public override void OnStart(GameObject proj)
+    {
+
+    }
     public override void Travel(GameObject proj)
     {
 
@@ -23,13 +27,17 @@ public class WaterPocket : BulletEffects
             if (colors[i] == colors.Max())
                 colors[i] = 1;
             else colors[i] = colors[i] / colors.Max();
-        if (proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().chance.puddle)
+        if (testrnd < proj.GetComponent<Projectile>().chance.puddle)
         {
             float size = 0;
+            Vector3 from = proj.transform.position;
+            foreach (var element in proj.GetComponentsInChildren<Transform>())
+                if (element.gameObject.tag == "Projectile")
+                    from = element.position;
             foreach (var damage in proj.GetComponent<Projectile>().damage.GetType().GetFields())//
                 size += (float)damage.GetValue(proj.GetComponent<Projectile>().damage) / 4;
             GameObject[] ground = GameObject.FindGameObjectsWithTag("Ground");
-            Vector3 puddPosition = new Vector3(proj.transform.position.x, ground[0].transform.position.y, proj.transform.position.z);
+            Vector3 puddPosition = new Vector3(from.x, ground[0].transform.position.y, from.z);
             pudd = Instantiate(Camera.main.GetComponent<Player>().puddle, puddPosition, Quaternion.identity, proj.transform.parent);
             pudd.GetComponent<Puddle>().damage = proj.GetComponent<Projectile>().damage;
             pudd.GetComponent<Renderer>().material.color = new Color(colors[0], colors[1], colors[2]);

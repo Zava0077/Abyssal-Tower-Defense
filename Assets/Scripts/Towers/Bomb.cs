@@ -8,6 +8,10 @@ public class Bomb : BulletEffects
 {
     GameObject expl;
     public bool little;
+    public override void OnStart(GameObject proj)
+    {
+
+    }
     public override void Travel(GameObject proj)
     {
         
@@ -17,13 +21,17 @@ public class Bomb : BulletEffects
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
-        if (proj.GetComponent<Projectile>().owner && testrnd < proj.GetComponent<Projectile>().chance.splash)//
+        if (testrnd < proj.GetComponent<Projectile>().chance.splash)//
         {
             float size = 0;
+            Vector3 from = proj.transform.position;
+            foreach (var element in proj.GetComponentsInChildren<Transform>())
+                if (element.gameObject.tag == "Projectile")
+                    from = element.position;
             foreach (var damage in proj.GetComponent<Projectile>().damage.GetType().GetFields())//
-                size += (float)damage.GetValue(proj.GetComponent<Projectile>().damage) / (!little ? 10 : 7);
-            expl = Instantiate(Camera.main.GetComponent<Player>().explotion, proj.transform.position, Quaternion.identity, proj.transform.parent);
-            expl.GetComponent<Explotion>().damage = new Damage(0f, 0f, 0f, 15f, !little ? 25f : 50f);
+                size += (float)damage.GetValue(proj.GetComponent<Projectile>().damage) / 7;
+            expl = Instantiate(Camera.main.GetComponent<Player>().explotion, from, Quaternion.identity, proj.transform.parent);
+            expl.GetComponent<Explotion>().damage = new Damage(0f, 0f, 0f, 15f, 50f);
             expl.transform.localScale = new Vector3(expl.transform.localScale.x + size, expl.transform.localScale.y + size, expl.transform.localScale.z + size);
         }
     }

@@ -50,7 +50,6 @@ public class CanvasController : MonoBehaviour
         {
             //agroRadius.transform.localScale = new Vector3(_tower.GetComponent<Tower>().agroRadius/4, agroRadius.transform.localScale.y, _tower.GetComponent<Tower>().agroRadius/4);
             //cooldownRedBar.transform.localScale = new Vector3((_tower.GetComponent<Tower>().time / (1 / _tower.GetComponent<Tower>().attackSpeed)) * barLimit, cooldownRedBar.transform.localScale.y, cooldownRedBar.transform.localScale.z);
-            
             if (_tower.GetComponent<Tower>().updateLvlUp)
             {
                 GenerateUps();
@@ -59,7 +58,6 @@ public class CanvasController : MonoBehaviour
         }
         showAgro = false;
     }
-
     public void Show()
     {
         menu.gameObject.SetActive(true);
