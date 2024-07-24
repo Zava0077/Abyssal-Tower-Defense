@@ -32,7 +32,7 @@ public class Projectile : MonoBehaviour
     public float liveTime = 0f;
     public float timeNeed;
     public float testTimer;
-    public bool collidable = true;
+    public bool collidable;
     public List<BulletEffects> effects; //то, что происходит во время полёта и в конце
     private void Awake()
     {
@@ -47,6 +47,7 @@ public class Projectile : MonoBehaviour
             timeNeed = distance / (Vector3.right * projSpeed).magnitude;
             position = transform.position;
             testTimer = 0f;
+            collidable = true;
         }
         foreach (BulletEffects effect in effects)
         {
@@ -65,7 +66,6 @@ public class Projectile : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-
         if (gameObject.GetComponent<Projectile>())
             gameObject.GetComponent<Projectile>().enabled = true;
         if (prevEnemy != null)
