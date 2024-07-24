@@ -116,7 +116,7 @@ public class Tower : Entity
                     if (element.tag == "Projectile")
                         fromWhere = element.position;
                 }
-                Shoot(fromWhere, enemy.GetComponent<Transform>().position, damage, missle, agroRadius,missle.GetComponent<Projectile>().archMultiplier, chance, effects, projSpeed, gameObject.transform);
+                Shoot(fromWhere, enemy.GetComponent<Transform>().position, damage, missle, agroRadius,missle.GetComponent<Projectile>().archMultiplier, chance, effects, projSpeed, gameObject.transform, new List<Mob>());
                 if (Random.Range(1,99) > chance.doubleAttack) //реализация двойной атаки
                     time = 0f;
             }
@@ -125,27 +125,32 @@ public class Tower : Entity
             newDir = Quaternion.Lerp(transform.rotation,  Quaternion.Euler(0, currentRotationAngle, 0), 0.05f);
         transform.rotation = newDir;
     }
-    public Entity FindEnemy(GameObject tower, float agroRadius, Mob lastEnemy = null)
+    public Entity FindEnemy(GameObject tower, float agroRadius, List<Mob> lastEnemy = null)
     {
         Dictionary<float, Entity> enemiesCanShooted = new Dictionary<float, Entity>();
         enemies = GameObject.FindGameObjectsWithTag("Enemy"); //мб переделать, а то слишком дохуя чекать
-        foreach (var enemy in enemies)
-        {
-            float distance = Vector3.Distance(enemy.transform.position, tower.transform.position);
-            if (distance < agroRadius)
+        bool loop = true;
+        while (loop)
+            foreach (var enemy in enemies)
             {
-                if (lastEnemy && enemy.GetComponent<Mob>() == lastEnemy) continue;
-                if (!enemiesCanShooted.ContainsValue(enemy.GetComponent<Mob>()) || !enemiesCanShooted.ContainsKey(Vector3.Distance(enemy.transform.position, tower.transform.position)))
-                    enemiesCanShooted.TryAdd(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
-                else
+                float distance = Vector3.Distance(enemy.transform.position, tower.transform.position);
+                if (distance < agroRadius)
                 {
-                    enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(x => x.Value == enemy.GetComponent<Mob>()).Key);
-                    enemiesCanShooted.Add(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
+                    if (lastEnemy != null && lastEnemy.Contains(enemy.GetComponent<Mob>())) continue;
+                    if (!enemiesCanShooted.ContainsValue(enemy.GetComponent<Mob>()) || !enemiesCanShooted.ContainsKey(Vector3.Distance(enemy.transform.position, tower.transform.position)))
+                        enemiesCanShooted.TryAdd(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
+                    else
+                    {
+                        enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(x => x.Value == enemy.GetComponent<Mob>()).Key);
+                        enemiesCanShooted.Add(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
+                    }
                 }
+                else if (enemy != enemies[enemies.Length - 1]) continue;
+                else
+                    if (lastEnemy != null && enemiesCanShooted.Count == 0 && lastEnemy.Count > 0)
+                    lastEnemy.Clear();
+                loop = false;
             }
-            else continue;
-
-        }
         return enemiesCanShooted.Count > 0 ? enemiesCanShooted[enemiesCanShooted.Keys.Min()] : null;
     }
 
@@ -171,16 +176,14 @@ public class Tower : Entity
     //    if (turret.GetComponent<Tower>())
     //        _missle.GetComponent<Projectile>().projSpeed = turret.GetComponent<Tower>().projSpeed;
     //}
-    public void Shoot(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius,float archMultiplier, Chances chances, List<BulletEffects> effects, float projSpeed, Transform parent, [Optional] Mob prevEnemy, [Optional] Vector3 scale)
+    public void Shoot(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius,float archMultiplier, Chances chances, List<BulletEffects> effects, float projSpeed, Transform parent, [Optional] List<Mob> prevEnemy, [Optional] Vector3 scale)
     {
-        missle.GetComponent<Projectile>().bounces++;
         GameObject _missle = Instantiate(missle, turret, Quaternion.identity, parent.transform.parent);
         Quaternion rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (target - turret), 3.14f, 0));
         rotation.SetEulerAngles((3.14f / 180) * rotation.eulerAngles.x, (3.14f / 180) * rotation.eulerAngles.y - (3.14f / 180) * 90, (3.14f / 180) * rotation.eulerAngles.z);
         _missle.transform.rotation = rotation;
         if (scale != Vector3.zero)
             _missle.transform.localScale = scale;
-        _missle.GetComponent<Projectile>().bounces = missle.GetComponent<Projectile>().bounces;
         _missle.GetComponent<Projectile>().target = target;
         _missle.GetComponent<Projectile>().damage = damage;
         _missle.GetComponent<Projectile>().archMultiplier = archMultiplier;
@@ -189,5 +192,6 @@ public class Tower : Entity
         _missle.GetComponent<Projectile>().prevEnemy = prevEnemy;
         _missle.GetComponent<Projectile>().projSpeed = projSpeed;
         _missle.GetComponent<Projectile>().effects = effects;
+        _missle.GetComponent<Projectile>().liveTime = 0f;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Explotion : MonoBehaviour
@@ -15,6 +16,8 @@ public class Explotion : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if(damage != null && other.GetComponent<Entity>() != null)
+        {
             DoDamage.DealDamage(other.GetComponent<Entity>(), null, damage);
+        }
     }
 }

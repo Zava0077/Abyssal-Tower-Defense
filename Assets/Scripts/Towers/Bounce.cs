@@ -28,12 +28,12 @@ public class Bounce : BulletEffects
                     from = element.position;
             Entity nextEnemy = Tower.twr.FindEnemy(proj, proj.GetComponent<Projectile>().agroRadius, proj.GetComponent<Projectile>().prevEnemy);//иногда баунс всё равно может считать противником самого себя
             Vector3 nextTarget = nextEnemy ? nextEnemy.GetComponent<Transform>().position : Vector3.zero;
-            if (nextEnemy == null || (proj.GetComponent<Projectile>().prevEnemy != null && nextTarget == proj.GetComponent<Projectile>().prevEnemy.gameObject.transform.position)) //
+            if (nextEnemy == null || (proj.GetComponent<Projectile>().prevEnemy != null && proj.GetComponent<Projectile>().prevEnemy.Count > 0 && nextTarget == proj.GetComponent<Projectile>().prevEnemy[0].gameObject.transform.position)) //
             {
                 //Destroy(clone);
                 return;
             }
-            Tower.twr.Shoot(proj.transform.position, nextTarget, proj.GetComponent<Projectile>().damage, proj, proj.GetComponent<Projectile>().agroRadius, proj.GetComponent<Projectile>().agroRadius, proj.GetComponent<Projectile>().chance,
+            Tower.twr.Shoot(from, nextTarget, proj.GetComponent<Projectile>().damage, proj, proj.GetComponent<Projectile>().agroRadius, proj.GetComponent<Projectile>().agroRadius, proj.GetComponent<Projectile>().chance,
                 proj.GetComponent<Projectile>().effects, proj.GetComponent<Projectile>().projSpeed, proj.transform, proj.GetComponent<Projectile>().prevEnemy);
             //Quaternion rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (nextTarget - newPosition), 3.14f, 0));
             //rotation.SetEulerAngles((3.14f / 180) * rotation.eulerAngles.x, (3.14f / 180) * rotation.eulerAngles.y - (3.14f / 180) * 90, (3.14f / 180) * rotation.eulerAngles.z);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
+using static LevelUp;
 
 public class Projectile : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class Projectile : MonoBehaviour
     public Vector3 targetMemory;
     public Vector3 projection;
     public Vector3 position;
-    public Mob prevEnemy;
+    public List<Mob> prevEnemy = new List<Mob>();
     public Damage damage;
     public float projSpeed;
     public float archMultiplier;
@@ -31,7 +32,7 @@ public class Projectile : MonoBehaviour
     public float liveTime = 0f;
     public float timeNeed;
     public float testTimer;
-    public int bounces = 0;
+    public bool collidable = true;
     public List<BulletEffects> effects; //то, что происходит во время полёта и в конце
     private void Awake()
     {
@@ -64,22 +65,28 @@ public class Projectile : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+
         if (gameObject.GetComponent<Projectile>())
             gameObject.GetComponent<Projectile>().enabled = true;
-            if (prevEnemy == collision.gameObject.GetComponent<Mob>() && prevEnemy != null)
+        if (prevEnemy != null)
+        {
+            if (prevEnemy.Contains(collision.gameObject.GetComponent<Mob>()))
                 return;
             if (collision.gameObject.tag == "Enemy" && damage != null)
             {
+                /*if (collidable)*/ 
                 DoDamage.DealDamage(collision.gameObject.GetComponent<Entity>(), null, damage);
-                prevEnemy = collision.gameObject.gameObject.GetComponent<Mob>();
+                prevEnemy.Add(collision.gameObject.gameObject.GetComponent<Mob>());
             }
-        if (collision.gameObject.tag != "Effect")
-        {
-            foreach (BulletEffects effect in effects)
-                    effect.End(gameObject); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
-            if (chance.pierce < Random.Range(1, 100) || collision.gameObject.tag == "Ground")
-                Destroy(gameObject);
         }
+        if (collidable)
+            if (collision.gameObject.tag != "Effect")
+            {
+                foreach (BulletEffects effect in effects)
+                    effect.End(gameObject); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
+                if (chance.pierce < Random.Range(1, 100) || collision.gameObject.tag == "Ground")
+                    Destroy(gameObject);
+            }
         liveTime = 0f;
     }
 }

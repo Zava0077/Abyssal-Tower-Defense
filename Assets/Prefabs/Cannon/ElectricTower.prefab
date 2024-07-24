@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 5213378883116263550}
   - component: {fileID: 312111415878609934}
   - component: {fileID: 8831405746940556535}
-  - component: {fileID: 2406950071707397538}
+  - component: {fileID: -435988591384375778}
   m_Layer: 6
   m_Name: ElectricTower
   m_TagString: Effect
@@ -347,10 +347,10 @@ MonoBehaviour:
   spriteButton: {fileID: 21300000, guid: 1949c18700014574e80a2c57762399ae, type: 3}
   updateLvlUp: 1
   costs: 0a0000000a0000000a00000000000000
-  chances: 0000000000000000000000002800000000000000000000000000000000000000
+  chances: 2800000000000000000000000000000000000000000000000000000000000000
   effects:
   - {fileID: 8831405746940556535}
-  - {fileID: 2406950071707397538}
+  - {fileID: -435988591384375778}
   chance: {fileID: 0}
 --- !u!114 &8831405746940556535
 MonoBehaviour:
@@ -365,7 +365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectile: {fileID: 0}
---- !u!114 &2406950071707397538
+--- !u!114 &-435988591384375778
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -374,7 +374,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5956137601538878063}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2dcdeb21b3951bf4c9146b5d7e0c1327, type: 3}
+  m_Script: {fileID: 11500000, guid: 13994d47280216448a940faae72eb882, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   projectile: {fileID: 0}
