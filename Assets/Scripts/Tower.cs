@@ -130,13 +130,31 @@ public class Tower : Entity
         Dictionary<float, Entity> enemiesCanShooted = new Dictionary<float, Entity>();
         enemies = GameObject.FindGameObjectsWithTag("Enemy"); //мб переделать, а то слишком дохуя чекать
         bool loop = true;
+        bool secLoop = true;
         while (loop)
+        {
+            int enemyCount = 0;
+            foreach (var enemy in enemies)
+                if (Vector3.Distance(enemy.transform.position, tower.transform.position) < agroRadius)
+                    enemyCount++;
+            while(secLoop)
+            {
+                secLoop = false;
+                if (lastEnemy != null)
+                    foreach (var enemy in lastEnemy)
+                        if (Vector3.Distance(enemy.transform.position, tower.transform.position) > agroRadius)
+                        {
+                            lastEnemy.Remove(enemy);
+                            secLoop = true;
+                            break;
+                        }
+
+            }
             foreach (var enemy in enemies)
             {
-                float distance = Vector3.Distance(enemy.transform.position, tower.transform.position);
-                if (distance < agroRadius)
+                if (Vector3.Distance(enemy.transform.position, tower.transform.position) < agroRadius)
                 {
-                    if (lastEnemy != null && enemies.Length == lastEnemy.Count && loop)
+                    if (lastEnemy != null && enemyCount == lastEnemy.Count && loop)
                     {
                         lastEnemy.Clear();
                         loop = false;
@@ -156,6 +174,8 @@ public class Tower : Entity
                     lastEnemy.Clear();
                 loop = false;
             }
+
+        }
         return enemiesCanShooted.Count > 0 ? enemiesCanShooted[enemiesCanShooted.Keys.Min()] : null;
     }
 
