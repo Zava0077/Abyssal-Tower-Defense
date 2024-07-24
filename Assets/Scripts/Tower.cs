@@ -136,6 +136,11 @@ public class Tower : Entity
                 float distance = Vector3.Distance(enemy.transform.position, tower.transform.position);
                 if (distance < agroRadius)
                 {
+                    if (lastEnemy != null && enemies.Length == lastEnemy.Count && loop)
+                    {
+                        lastEnemy.Clear();
+                        loop = false;
+                    }
                     if (lastEnemy != null && lastEnemy.Contains(enemy.GetComponent<Mob>())) continue;
                     if (!enemiesCanShooted.ContainsValue(enemy.GetComponent<Mob>()) || !enemiesCanShooted.ContainsKey(Vector3.Distance(enemy.transform.position, tower.transform.position)))
                         enemiesCanShooted.TryAdd(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
