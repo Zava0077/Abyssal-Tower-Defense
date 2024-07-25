@@ -385,6 +385,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -733,6 +737,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -804,6 +812,10 @@ PrefabInstance:
     - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
       propertyPath: m_Name
       value: FloorForMonsters (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1646,6 +1658,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (25)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1963,6 +1979,10 @@ PrefabInstance:
     - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
       propertyPath: m_Name
       value: FloorForMonsters (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2460,6 +2480,10 @@ PrefabInstance:
     - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
       propertyPath: m_Name
       value: FloorForMonsters (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3298,6 +3322,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3950,6 +3978,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4006,6 +4038,10 @@ PrefabInstance:
     - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
       propertyPath: m_Name
       value: FloorForMonsters (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6317,6 +6353,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7541,6 +7581,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8521,6 +8565,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8797,6 +8845,10 @@ PrefabInstance:
     - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
       propertyPath: m_Name
       value: FloorForMonsters (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9710,6 +9762,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10199,6 +10255,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10255,6 +10315,10 @@ PrefabInstance:
     - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
       propertyPath: m_Name
       value: FloorForMonsters (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10818,6 +10882,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11084,6 +11152,10 @@ PrefabInstance:
     - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
       propertyPath: m_Name
       value: FloorForMonsters (19)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11367,6 +11439,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (21)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11423,6 +11499,10 @@ PrefabInstance:
     - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
       propertyPath: m_Name
       value: FloorForMonsters (22)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12141,6 +12221,10 @@ PrefabInstance:
     - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
       propertyPath: m_Name
       value: FloorForMonsters (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14173,6 +14257,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14675,6 +14763,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (23)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14742,6 +14834,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloorForMonsters (24)
       objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14798,6 +14894,10 @@ PrefabInstance:
     - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
       propertyPath: m_Name
       value: FloorForMonsters (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14985,6 +15085,10 @@ PrefabInstance:
     - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
       propertyPath: m_Name
       value: FloorForMonsters
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359451747781515011, guid: 3bdd78d29dcf88f4ba70fc004a9d0d18, type: 3}
+      propertyPath: m_TagString
+      value: Unpiercable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

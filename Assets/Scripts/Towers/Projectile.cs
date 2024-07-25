@@ -84,7 +84,7 @@ public class Projectile : MonoBehaviour
             {
                 foreach (BulletEffects effect in effects)
                     effect.End(gameObject); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
-                if (chance.pierce < Random.Range(1, 100) || collision.gameObject.tag == "Ground")
+                if (chance.pierce < Random.Range(1, 100) || collision.gameObject.tag == "Unpiercable" || collision.gameObject.tag == "Tower\'sPlace")
                     Destroy(gameObject);
             }
         liveTime = 0f;
