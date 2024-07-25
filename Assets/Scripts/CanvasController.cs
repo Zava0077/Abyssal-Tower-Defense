@@ -91,7 +91,7 @@ public class CanvasController : MonoBehaviour
         while (true)
         {
             secondUp = Random.Range(0, _tower.GetComponent<Tower>().levelUpCallbacks.Count);
-            if (secondUp == firstUp || (firstUp > 12 && secondUp > 12)) continue;
+            if (secondUp == firstUp) continue;
             else break;
         }
         menu.gameObject.SetActive(false);

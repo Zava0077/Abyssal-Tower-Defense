@@ -85,6 +85,12 @@ public class LevelUp
         tower.levelUpsRemain--;
         tower.updateLvlUp = true;
     };
+    public static LevelUpCallback ProjectileSpeedDown = (Tower tower) =>
+    {
+        tower.projSpeed -= Camera.main.GetComponent<Player>().levelUpBonus;
+        tower.levelUpsRemain--;
+        tower.updateLvlUp = true;
+    };
     public static LevelUpCallback BounceUp = (Tower tower) =>
     {
         if (!tower.GetComponent<Bounce>())

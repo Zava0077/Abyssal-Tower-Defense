@@ -112,6 +112,23 @@ MonoBehaviour:
   chances: 0000000000000000000000000000000000000000000000000000000064000000
   effects:
   - {fileID: 2200307029809479997}
+  levelUps:
+  - FireUp
+  - ColdUp
+  - LightningUp
+  - VoidUp
+  - PhysUp
+  - RangeUp
+  - AttackSpUp
+  - DoubleAttackUp
+  - FractionUp
+  - SplashUp
+  - BounceUp
+  - PuddleUp
+  - FireConvert
+  - ColdConvert
+  - LightningConvert
+  - PhysicalConvert
   chance: {fileID: 0}
 --- !u!114 &2200307029809479997
 MonoBehaviour:

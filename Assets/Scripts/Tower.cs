@@ -29,26 +29,46 @@ public class Tower : Entity
     [SerializeField] List<int> chances = new List<int>();
     [SerializeField] Dictionary<GameObject, bool> keyValuePairs = new Dictionary<GameObject, bool>();
     public List<BulletEffects> effects = new List<BulletEffects>();
+    public Dictionary<string, LevelUpCallback> lUCLinks = new Dictionary<string, LevelUpCallback>()
+    {
+        { "FireUp",FireUp },
+        { "ColdUp",ColdUp },
+        { "LightningUp",LightningUp },
+        { "VoidUp",VoidUp },
+        { "PhysUp",PhysUp },
+        { "RangeUp",RangeUp },
+        { "AttackSpUp",AttackSpUp },
+        { "DoubleAttackUp",DoubleAttackUp },
+        { "FractionUp",FractionUp },
+        { "SplashUp",SplashUp },
+        { "BounceUp",BounceUp },
+        { "PuddleUp",PuddleUp },
+        { "FireConvert",FireConvert },
+        { "ColdConvert",ColdConvert },
+        { "LightningConvert",LightningConvert },
+        { "PhysicalConvert",PhysicalConvert },
+         { "ProjectileSpeedDown",ProjectileSpeedDown },
+    };
     public List<LevelUpCallback> levelUpCallbacks = new List<LevelUpCallback>()
     {
-        FireUp,
-        ColdUp,
-        LightningUp,
-        VoidUp,
-        PhysUp,
-        RangeUp,
-        AttackSpUp,
-        DoubleAttackUp,
-        FractionUp,
-        SplashUp,
-        BounceUp,
-        PuddleUp,
-        FireConvert,
-        ColdConvert,
-        LightningConvert,
-        PhysicalConvert,
+        //FireUp,
+        //ColdUp,
+        //LightningUp,
+        //VoidUp,
+        //PhysUp,
+        //RangeUp,
+        //AttackSpUp,
+        //DoubleAttackUp,
+        //FractionUp,
+        //SplashUp,
+        //BounceUp,
+        //PuddleUp,
+        //FireConvert,
+        //ColdConvert,
+        //LightningConvert,
+        //PhysicalConvert,
     };
-
+    [SerializeField] string[] levelUps;
     public Dictionary<LevelUpCallback, Sprite> levelUpCallbackNames;
     public static Tower twr;
     public Tower()
@@ -59,7 +79,7 @@ public class Tower : Entity
 
     protected void Awake()
     {
-        _entity.Awake();
+        base.Awake();
         levelUpCallbackNames = new Dictionary<LevelUpCallback, Sprite>()
         {
         { FireUp , Camera.main.GetComponent<Player>().levelUpSprites[0] },
@@ -77,10 +97,14 @@ public class Tower : Entity
         {FireConvert, Camera.main.GetComponent<Player>().levelUpSprites[12] },
         {ColdConvert, Camera.main.GetComponent<Player>().levelUpSprites[13] },
         {LightningConvert, Camera.main.GetComponent<Player>().levelUpSprites[14] },
-        {PhysicalConvert, Camera.main.GetComponent<Player>().levelUpSprites[15] }
+        {PhysicalConvert, Camera.main.GetComponent<Player>().levelUpSprites[15] },
+        {ProjectileSpeedDown, Camera.main.GetComponent<Player>().levelUpSprites[16] }
         };
+        foreach (var levelUp in levelUps)
+            levelUpCallbacks.Add(lUCLinks[levelUp]);
         if (!tower)
             tower = GetComponent<GameObject>();
+
         cost = new Resources(costs[0], costs[1], costs[2], costs[3]);
         chance = new Chances(chances[0], chances[1], chances[2], chances[3], chances[4], chances[5], chances[6], chances[7]);
     }
@@ -99,7 +123,7 @@ public class Tower : Entity
         {
             currentRotationAngle -= 360f;
         }
-        _entity.Update();
+        base.Update();
         Quaternion newDir;
         Entity enemy = FindEnemy(tower, tower.GetComponent<Tower>().agroRadius);
         if (enemy)

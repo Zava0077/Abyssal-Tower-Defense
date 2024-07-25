@@ -114,6 +114,22 @@ MonoBehaviour:
   effects:
   - {fileID: 1801172839644557239}
   - {fileID: 7812720660362123708}
+  levelUps:
+  - FireUp
+  - ColdUp
+  - LightningUp
+  - VoidUp
+  - PhysUp
+  - RangeUp
+  - AttackSpUp
+  - DoubleAttackUp
+  - FractionUp
+  - BounceUp
+  - PuddleUp
+  - FireConvert
+  - ColdConvert
+  - LightningConvert
+  - PhysicalConvert
   chance: {fileID: 0}
 --- !u!114 &7812720660362123708
 MonoBehaviour:
