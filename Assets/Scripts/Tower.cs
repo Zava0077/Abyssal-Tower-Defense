@@ -216,7 +216,10 @@ public class Tower : Entity
         _missle.GetComponent<Projectile>().agroRadius = agroRadius;
         _missle.GetComponent<Projectile>().prevEnemy = prevEnemy;
         _missle.GetComponent<Projectile>().projSpeed = projSpeed;
-        _missle.GetComponent<Projectile>().effects = effects;
+        _missle.GetComponent<Projectile>().effects.Clear();
+        foreach (var effect in effects)
+            _missle.GetComponent<Projectile>().effects.Add(effect.Clone() as BulletEffects);
+        //_missle.GetComponent<Projectile>().effects = effects;Я
         _missle.GetComponent<Projectile>().liveTime = 0f;
     }
 }

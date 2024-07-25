@@ -12,7 +12,6 @@ public class Laser : BulletEffects
     }
     public override void Travel(GameObject proj)
     {
-        proj.GetComponent<Projectile>().testTimer += Time.deltaTime;
         if (proj.GetComponent<Projectile>().liveTime > 0.05f)
             proj.GetComponent<Projectile>().collidable = true;
         if (proj.GetComponent<Projectile>().liveTime > 1.5f)
