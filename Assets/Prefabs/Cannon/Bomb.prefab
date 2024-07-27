@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4426007978096693559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1835990888478040490}
+  m_Layer: 6
+  m_Name: End
+  m_TagString: Projectile
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1835990888478040490
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4426007978096693559}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.49167293, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2705498526372955965}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4916917745761767917
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,15 +326,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7686851911220215187}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.008400115, y: -0.98887783, z: -0.061448224, w: 0.13518217}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 22.53, y: 3.3315206, z: 48.64}
   m_LocalScale: {x: 1.5342554, y: 1.5573963, z: 1.8314555}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2213604153498962349}
   - {fileID: 100770951876787425}
+  - {fileID: 1835990888478040490}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5736394249676506344
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -394,7 +426,8 @@ MonoBehaviour:
   targetMemory: {x: 0, y: 0, z: 0}
   projection: {x: 0, y: 0, z: 0}
   position: {x: 0, y: 0, z: 0}
-  prevEnemy: {fileID: 0}
+  prevEnemy:
+  - {fileID: 0}
   projSpeed: 35
   archMultiplier: 35
   distance: 0
@@ -402,7 +435,7 @@ MonoBehaviour:
   liveTime: 0
   timeNeed: 0
   testTimer: 0
-  bounces: 0
+  collidable: 0
   effects:
   - {fileID: 0}
   - {fileID: 0}

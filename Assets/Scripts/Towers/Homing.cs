@@ -15,11 +15,13 @@ public class Homing : BulletEffects
     }
     public override void Travel(GameObject proj)
     {
+        if (!enemy)
+            enemy = Tower.twr.FindEnemy(proj, proj.GetComponent<Projectile>().agroRadius, new List<Mob>());
         if (proj.GetComponent<Projectile>().liveTime > proj.GetComponent<Projectile>().timeNeed/4)
             proj.GetComponent<Projectile>().collidable = true;
-        if (proj.GetComponent<Projectile>().liveTime > 2.5f)
+        if (proj.GetComponent<Projectile>().liveTime > (2.5f / 35f) * proj.GetComponent<Projectile>().projSpeed)
             Destroy(proj.gameObject);
-        if (proj.GetComponent<Projectile>().liveTime > 0.15f)
+        if (proj.GetComponent<Projectile>().liveTime > (0.15f / 35f)* proj.GetComponent<Projectile>().projSpeed && enemy)
             proj.transform.rotation = Quaternion.Lerp(proj.transform.rotation, Quaternion.LookRotation(Vector3.RotateTowards(proj.transform.right, enemy.transform.position - proj.transform.position, 3.14f, 0f)),0.05f);
         proj.transform.position += proj.transform.forward * proj.GetComponent<Projectile>().projSpeed * Time.deltaTime;
         GameObject shadow = Instantiate(Camera.main.GetComponent<Player>().particleShadow, proj.transform.position, proj.transform.rotation, proj.transform.parent);

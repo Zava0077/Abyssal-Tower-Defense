@@ -33,7 +33,7 @@ public class Projectile : MonoBehaviour
     public float timeNeed;
     public float testTimer;
     public bool collidable;
-    public List<BulletEffects> effects; //то, что происходит во время полёта и в конце
+    public List<BulletEffects> effects; //то, что происходит во время полёта, в начале и в конце
     private void Awake()
     {
         projHeight = archMultiplier;
@@ -52,7 +52,7 @@ public class Projectile : MonoBehaviour
         foreach (BulletEffects effect in effects)
         {
             if (effect)
-                effect.OnStart(gameObject);//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
+                effect.OnStart(gameObject);//дополнительные эффекты снаряда в начале полета,например, изменение стартового направления, изменение модельки.
         }
     }
     private void Update()
@@ -68,18 +68,17 @@ public class Projectile : MonoBehaviour
     {
         if (gameObject.GetComponent<Projectile>())
             gameObject.GetComponent<Projectile>().enabled = true;
-        if (prevEnemy != null)
+        if (prevEnemy != null /*&& collidable*/)//
         {
             if (prevEnemy.Contains(collision.gameObject.GetComponent<Mob>()))
                 return;
             if (collision.gameObject.tag == "Enemy" && damage != null)
             {
-                /*if (collidable)*/ 
                 DoDamage.DealDamage(collision.gameObject.GetComponent<Entity>(), null, damage);
                 prevEnemy.Add(collision.gameObject.gameObject.GetComponent<Mob>());
             }
         }
-        if (collidable)
+        if (gameObject.GetComponent<Projectile>().collidable)
             if (collision.gameObject.tag != "Effect")
             {
                 foreach (BulletEffects effect in effects)

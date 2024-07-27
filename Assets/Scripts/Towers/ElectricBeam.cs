@@ -19,6 +19,7 @@ public class ElectricBeam : BulletEffects
     }
     public override void Travel(GameObject proj)
     {
+        
         if (proj.GetComponent<Projectile>().liveTime > 0.2f)
         {
             foreach (var effect in proj.GetComponent<Projectile>().effects)

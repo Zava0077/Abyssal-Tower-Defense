@@ -49,25 +49,7 @@ public class Tower : Entity
         { "PhysicalConvert",PhysicalConvert },
          { "ProjectileSpeedDown",ProjectileSpeedDown },
     };
-    public List<LevelUpCallback> levelUpCallbacks = new List<LevelUpCallback>()
-    {
-        //FireUp,
-        //ColdUp,
-        //LightningUp,
-        //VoidUp,
-        //PhysUp,
-        //RangeUp,
-        //AttackSpUp,
-        //DoubleAttackUp,
-        //FractionUp,
-        //SplashUp,
-        //BounceUp,
-        //PuddleUp,
-        //FireConvert,
-        //ColdConvert,
-        //LightningConvert,
-        //PhysicalConvert,
-    };
+    public List<LevelUpCallback> levelUpCallbacks = new List<LevelUpCallback>();
     [SerializeField] string[] levelUps;
     public Dictionary<LevelUpCallback, Sprite> levelUpCallbackNames;
     public static Tower twr;

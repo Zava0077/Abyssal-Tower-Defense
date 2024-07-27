@@ -21,7 +21,6 @@ public class Bomb : BulletEffects
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
-        Damage damage1 = proj.GetComponent<Projectile>().damage;
         if (testrnd < proj.GetComponent<Projectile>().chance.splash)//
         {
             float size = 0;
@@ -32,7 +31,7 @@ public class Bomb : BulletEffects
             foreach (var damage in proj.GetComponent<Projectile>().damage.GetType().GetFields())//
                 size += (float)damage.GetValue(proj.GetComponent<Projectile>().damage) / 7;
             expl = Instantiate(Camera.main.GetComponent<Player>().explotion, from, Quaternion.identity, proj.transform.parent);
-            expl.GetComponent<Explotion>().damage = new Damage(damage1._fire, damage1._cold, damage1._lightning, damage1._void + 15f, damage1._physical + 50f);
+            expl.GetComponent<Explotion>().damage = new Damage(15f, 0f, 0f, 0f, 50f);
             expl.transform.localScale = new Vector3(expl.transform.localScale.x + size, expl.transform.localScale.y + size, expl.transform.localScale.z + size);
         }
     }
