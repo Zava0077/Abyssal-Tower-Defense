@@ -68,9 +68,9 @@ public class Projectile : MonoBehaviour
     {
         if (gameObject.GetComponent<Projectile>())
             gameObject.GetComponent<Projectile>().enabled = true;
-        if (prevEnemy != null /*&& collidable*/)//
+        if (gameObject.GetComponent<Projectile>().prevEnemy != null /*&& collidable*/)//
         {
-            if (prevEnemy.Contains(collision.gameObject.GetComponent<Mob>()))
+            if (gameObject.GetComponent<Projectile>().prevEnemy.Contains(collision.gameObject.GetComponent<Mob>()))
                 return;
             if (collision.gameObject.tag == "Enemy" && damage != null)
             {
