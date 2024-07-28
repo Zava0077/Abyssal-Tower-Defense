@@ -5,15 +5,7 @@ using UnityEngine;
 
 public class Fraction : BulletEffects
 {
-    public override void OnStart(GameObject proj)
-    {
-
-    }
-    public override void Travel(GameObject proj)
-    {
-
-    }
-    public override void End(GameObject proj)
+    public override IEnumerator End(GameObject proj)
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
@@ -35,6 +27,7 @@ public class Fraction : BulletEffects
                     proj.GetComponent<Projectile>().chance, proj.GetComponent<Projectile>().effects, proj.GetComponent<Projectile>().projSpeed, proj.transform, null/*proj.GetComponent<Projectile>().prevEnemy*/,
                     new Vector3(proj.transform.localScale.x / 1.5f, proj.transform.localScale.y / 1.5f, proj.transform.localScale.z / 1.5f));
             }
-        }  
+        }
+        yield return null;
     }
 }

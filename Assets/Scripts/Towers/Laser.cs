@@ -6,11 +6,12 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Laser : BulletEffects
 {
-    public override void OnStart(GameObject proj)
+    public override IEnumerator OnStart(GameObject proj)
     {
         proj.GetComponent<Projectile>().collidable = false;
+        yield return null;
     }
-    public override void Travel(GameObject proj)
+    public override IEnumerator Travel(GameObject proj)
     {
         if (proj.GetComponent<Projectile>().liveTime > 0.05f)
             proj.GetComponent<Projectile>().collidable = true;
@@ -21,9 +22,6 @@ public class Laser : BulletEffects
         GameObject shadow = Instantiate(Camera.main.GetComponent<Player>().particleShadow, proj.transform.position, proj.transform.rotation, proj.transform.parent);
         shadow.GetComponentInChildren<Fading>().liveTime = 0.1f;
         shadow.GetComponentInChildren<Fading>().color = new Color(255, 0, 0, 255);
-    }
-    public override void End(GameObject proj)
-    {
-
+        yield return null;
     }
 }

@@ -8,16 +8,7 @@ public class Bomb : BulletEffects
 {
     GameObject expl;
     public bool little;
-    public override void OnStart(GameObject proj)
-    {
-
-    }
-    public override void Travel(GameObject proj)
-    {
-        
-    }
-
-    public override void End(GameObject proj)
+    public override IEnumerator End(GameObject proj)
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
@@ -34,5 +25,6 @@ public class Bomb : BulletEffects
             expl.GetComponent<Explotion>().damage = new Damage(15f, 0f, 0f, 0f, 50f);
             expl.transform.localScale = new Vector3(expl.transform.localScale.x + size, expl.transform.localScale.y + size, expl.transform.localScale.z + size);
         }
+        yield return null;
     }
 }

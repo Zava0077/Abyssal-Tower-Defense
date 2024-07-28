@@ -225,7 +225,8 @@ public class Tower : Entity
         _missle.GetComponent<Projectile>().effects.Clear();
         foreach (var effect in effects)
             _missle.GetComponent<Projectile>().effects.Add(effect.Clone() as BulletEffects);
-        //_missle.GetComponent<Projectile>().effects = effects;Я
+        //_missle.GetComponent<Projectile>().effects = effects;
         _missle.GetComponent<Projectile>().liveTime = 0f;
+        Debug.Log("Выстрел окончен " + _missle.ToString());
     }
 }

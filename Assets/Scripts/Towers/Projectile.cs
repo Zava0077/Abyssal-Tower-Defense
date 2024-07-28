@@ -50,42 +50,64 @@ public class Projectile : MonoBehaviour
             collidable = true;
         }
         foreach (BulletEffects effect in effects)
-        {
-            if (effect)
-                effect.OnStart(gameObject);//дополнительные эффекты снаряда в начале полета,например, изменение стартового направления, изменение модельки.
-        }
+            StartCoroutine(effect.OnStart(gameObject));//дополнительные эффекты снаряда в начале полета,например, изменение стартового направления, изменение модельки.
     }
-    private void Update()
+    private void FixedUpdate()
     {
         liveTime += Time.deltaTime;
         foreach (BulletEffects effect in effects)
-        {
-            if(effect)
-                effect.Travel(gameObject);//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
-        }
+            StartCoroutine(effect.Travel(gameObject));//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
     }
-    private void OnCollisionEnter(Collision collision)
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    Debug.Log("Удар!");
+    //    prevEnemy ??= new List<Mob>();
+    //    if (prevEnemy.Contains(collision.gameObject.GetComponent<Mob>()))
+    //        return;
+    //    if (collision.gameObject.tag == "Enemy" && damage != null)
+    //    {
+    //        DoDamage.DealDamage(collision.gameObject.GetComponent<Entity>(), null, damage);
+    //        prevEnemy.Add(collision.gameObject.GetComponent<Mob>());
+    //        Debug.Log("Запоминание противника");
+    //    }
+    //    Debug.Log(collidable);
+    //    if (collidable)
+    //        if (collision.gameObject.tag != "Effect")
+    //        {
+    //            Debug.Log("Вызов фракшена");
+    //            foreach (BulletEffects effect in effects)
+    //                StartCoroutine(effect.End(gameObject));
+    //            if (chance.pierce < Random.Range(1, 100))
+    //            {
+    //                Destroy(gameObject);
+    //                enabled = true;
+    //            }
+    //        }
+    //    liveTime = 0f;
+    //}
+    private void OnCollisionStay(Collision collision)
     {
-        if (gameObject.GetComponent<Projectile>())
-            gameObject.GetComponent<Projectile>().enabled = true;
-        if (gameObject.GetComponent<Projectile>().prevEnemy != null /*&& collidable*/)//
+        prevEnemy ??= new List<Mob>();
+        if (collidable)
         {
-            if (gameObject.GetComponent<Projectile>().prevEnemy.Contains(collision.gameObject.GetComponent<Mob>()))
+            if (prevEnemy.Contains(collision.gameObject.GetComponent<Mob>()))
                 return;
             if (collision.gameObject.tag == "Enemy" && damage != null)
             {
                 DoDamage.DealDamage(collision.gameObject.GetComponent<Entity>(), null, damage);
-                prevEnemy.Add(collision.gameObject.gameObject.GetComponent<Mob>());
+                prevEnemy.Add(collision.gameObject.GetComponent<Mob>());
             }
-        }
-        if (gameObject.GetComponent<Projectile>().collidable)
             if (collision.gameObject.tag != "Effect")
             {
                 foreach (BulletEffects effect in effects)
-                    effect.End(gameObject); //дополнительные эффекты снаряда в конце полёта, например, взрыв.
-                if (chance.pierce < Random.Range(1, 100) || collision.gameObject.tag == "Unpiercable" || collision.gameObject.tag == "Tower\'sPlace")
+                    StartCoroutine(effect.End(gameObject));
+                if (chance.pierce < Random.Range(1, 100))
+                {
                     Destroy(gameObject);
+                    enabled = true;
+                }
             }
-        liveTime = 0f;
+            liveTime = 0f;
+        }
     }
 }

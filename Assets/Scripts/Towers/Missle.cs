@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Missle : BulletEffects
 {
-    public override void Travel(GameObject proj)
+    public override IEnumerator Travel(GameObject proj)
     {
         proj.GetComponent<Projectile>().testTimer += Time.deltaTime;
         if (proj.GetComponent<Projectile>().liveTime > 5f)
@@ -16,9 +16,6 @@ public class Missle : BulletEffects
             proj.GetComponent<Projectile>().projHeight *= -1;
         proj.GetComponent<Projectile>().transform.position += proj.transform.right * proj.GetComponent<Projectile>().projSpeed * Time.deltaTime;
         proj.GetComponent<Projectile>().transform.position += new Vector3(0, proj.GetComponent<Projectile>().projHeight * Time.deltaTime, 0);
-    }
-    public override void End(GameObject proj)
-    {
-
+        yield return null;
     }
 }

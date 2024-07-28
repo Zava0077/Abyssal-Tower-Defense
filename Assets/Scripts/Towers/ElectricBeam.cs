@@ -5,7 +5,7 @@ using UnityEngine;
 public class ElectricBeam : BulletEffects
 {
     private Vector3 positionMemory;
-    public override void OnStart(GameObject proj)
+    public override IEnumerator OnStart(GameObject proj)
     {
         positionMemory = proj.transform.position;
         proj.GetComponent<Projectile>().collidable = false;
@@ -15,9 +15,9 @@ public class ElectricBeam : BulletEffects
         element.localScale = new Vector3(element.localScale.x, element.localScale.y, Vector3.Distance(positionMemory, proj.GetComponent<Projectile>().targetMemory));
         element.position = Vector3.MoveTowards(positionMemory, proj.GetComponent<Projectile>().targetMemory, Vector3.Distance(positionMemory, proj.GetComponent<Projectile>().targetMemory) / 2);
         element.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.right, proj.GetComponent<Projectile>().targetMemory - proj.transform.position, 3.14f, 0));
-
+        yield return null;
     }
-    public override void Travel(GameObject proj)
+    public override IEnumerator Travel(GameObject proj)
     {
         
         if (proj.GetComponent<Projectile>().liveTime > 0.2f)
@@ -26,9 +26,10 @@ public class ElectricBeam : BulletEffects
                 effect.End(proj);
             Destroy(proj);
         }
+        yield return null;
     }
 
-    public override void End(GameObject proj)
+    public override IEnumerator End(GameObject proj)
     {
         Vector3 from = proj.transform.position;
         Damage damage1 = proj.GetComponent<Projectile>().damage;
@@ -39,5 +40,6 @@ public class ElectricBeam : BulletEffects
         expl.GetComponent<Explotion>().damage = new Damage(0f, 0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(0f, 0.35f, 1f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
+        yield return null;
     }
 }
