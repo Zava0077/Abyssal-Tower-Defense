@@ -10,18 +10,15 @@ public class BulletEffects : MonoBehaviour
     {
         return MemberwiseClone();
     }
-    public virtual IEnumerator OnStart(GameObject proj)
+    public virtual void OnStart(GameObject proj)
     {
-        yield return null;
 
     }
-    public virtual IEnumerator Travel(GameObject proj)
+    public virtual void Travel(GameObject proj)
     {
-        yield return null;
     }
-    public virtual IEnumerator End(GameObject proj)
+    public virtual void End(GameObject proj)
     {
-        yield return null;
 
     }
 }

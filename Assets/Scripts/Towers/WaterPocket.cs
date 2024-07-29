@@ -7,7 +7,7 @@ public class WaterPocket : BulletEffects
 {
     GameObject pudd;
 
-    public override IEnumerator End(GameObject proj)
+    public override void End(GameObject proj)
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
@@ -37,6 +37,5 @@ public class WaterPocket : BulletEffects
             pudd.transform.localScale = new Vector3(pudd.transform.localScale.x + size, pudd.transform.localScale.y, pudd.transform.localScale.z + size);
 
         }
-        yield return null;
     }
 }

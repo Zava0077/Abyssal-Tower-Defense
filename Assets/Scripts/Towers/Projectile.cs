@@ -38,53 +38,26 @@ public class Projectile : MonoBehaviour
     {
         projHeight = archMultiplier;
     }
-    public void Start()
+    private void Start()
     {
-        if(target != null)
+        if (target != null)
         {
-            distance = Vector3.Distance(gameObject.transform.position, target);
-            targetMemory = target;
-            timeNeed = distance / (Vector3.right * projSpeed).magnitude;
             position = transform.position;
+            distance = Vector3.Distance(position, target);
+            targetMemory = target;
+            timeNeed = distance / (Vector3.forward * projSpeed).magnitude * 1.25f;
             testTimer = 0f;
             collidable = true;
         }
         foreach (BulletEffects effect in effects)
-            StartCoroutine(effect.OnStart(gameObject));//дополнительные эффекты снаряда в начале полета,например, изменение стартового направления, изменение модельки.
+            effect.OnStart(gameObject);  //дополнительные эффекты снаряда в начале полета,например, изменение стартового направления, изменение модельки.
     }
-    private void FixedUpdate()
+    private void Update()
     {
         liveTime += Time.deltaTime;
         foreach (BulletEffects effect in effects)
-            StartCoroutine(effect.Travel(gameObject));//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
+            effect.Travel(gameObject);//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
     }
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    Debug.Log("Удар!");
-    //    prevEnemy ??= new List<Mob>();
-    //    if (prevEnemy.Contains(collision.gameObject.GetComponent<Mob>()))
-    //        return;
-    //    if (collision.gameObject.tag == "Enemy" && damage != null)
-    //    {
-    //        DoDamage.DealDamage(collision.gameObject.GetComponent<Entity>(), null, damage);
-    //        prevEnemy.Add(collision.gameObject.GetComponent<Mob>());
-    //        Debug.Log("Запоминание противника");
-    //    }
-    //    Debug.Log(collidable);
-    //    if (collidable)
-    //        if (collision.gameObject.tag != "Effect")
-    //        {
-    //            Debug.Log("Вызов фракшена");
-    //            foreach (BulletEffects effect in effects)
-    //                StartCoroutine(effect.End(gameObject));
-    //            if (chance.pierce < Random.Range(1, 100))
-    //            {
-    //                Destroy(gameObject);
-    //                enabled = true;
-    //            }
-    //        }
-    //    liveTime = 0f;
-    //}
     private void OnCollisionStay(Collision collision)
     {
         prevEnemy ??= new List<Mob>();
@@ -100,7 +73,7 @@ public class Projectile : MonoBehaviour
             if (collision.gameObject.tag != "Effect")
             {
                 foreach (BulletEffects effect in effects)
-                    StartCoroutine(effect.End(gameObject));
+                    effect.End(gameObject);
                 if (chance.pierce < Random.Range(1, 100))
                 {
                     Destroy(gameObject);

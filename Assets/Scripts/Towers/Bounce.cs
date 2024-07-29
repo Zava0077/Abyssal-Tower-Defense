@@ -6,7 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Bounce : BulletEffects
 {
-    public override IEnumerator End(GameObject proj)
+    public override void End(GameObject proj)
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
@@ -20,11 +20,10 @@ public class Bounce : BulletEffects
             Vector3 nextTarget = nextEnemy ? nextEnemy.GetComponent<Transform>().position : Vector3.zero;
             if (nextEnemy == null || (proj.GetComponent<Projectile>().prevEnemy != null && proj.GetComponent<Projectile>().prevEnemy.Count > 0 && nextTarget == proj.GetComponent<Projectile>().prevEnemy[0].gameObject.transform.position)) //
             {
-                yield return null;
+                
             }
             Tower.twr.Shoot(from, nextTarget, proj.GetComponent<Projectile>().damage, proj, proj.GetComponent<Projectile>().agroRadius, proj.GetComponent<Projectile>().agroRadius, proj.GetComponent<Projectile>().chance,
                 proj.GetComponent<Projectile>().effects, proj.GetComponent<Projectile>().projSpeed, proj.transform, proj.GetComponent<Projectile>().prevEnemy);
         }
-        yield return null;
     }
 }

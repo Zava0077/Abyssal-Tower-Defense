@@ -209,10 +209,7 @@ public class Tower : Entity
     //}
     public void Shoot(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius,float archMultiplier, Chances chances, List<BulletEffects> effects, float projSpeed, Transform parent, [Optional] List<Mob> prevEnemy, [Optional] Vector3 scale)
     {
-        GameObject _missle = Instantiate(missle, turret, Quaternion.identity, parent.transform.parent);
-        Quaternion rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (target - turret), 3.14f, 0));
-        rotation.SetEulerAngles((3.14f / 180) * rotation.eulerAngles.x, (3.14f / 180) * rotation.eulerAngles.y - (3.14f / 180) * 90, (3.14f / 180) * rotation.eulerAngles.z);
-        _missle.transform.rotation = rotation;
+        GameObject _missle = Instantiate(missle, turret, Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0)), parent.transform.parent);
         if (scale != Vector3.zero)
             _missle.transform.localScale = scale;
         _missle.GetComponent<Projectile>().target = target;
@@ -224,9 +221,7 @@ public class Tower : Entity
         _missle.GetComponent<Projectile>().projSpeed = projSpeed;
         _missle.GetComponent<Projectile>().effects.Clear();
         foreach (var effect in effects)
-            _missle.GetComponent<Projectile>().effects.Add(effect.Clone() as BulletEffects);
-        //_missle.GetComponent<Projectile>().effects = effects;
+            _missle.GetComponent<Projectile>().effects.Add(effect.Clone() as BulletEffects);;
         _missle.GetComponent<Projectile>().liveTime = 0f;
-        Debug.Log("Выстрел окончен " + _missle.ToString());
     }
 }
