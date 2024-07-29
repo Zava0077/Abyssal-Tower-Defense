@@ -31,7 +31,6 @@ public class ElectricBeam : BulletEffects
                 foreach (BulletEffects effect in proj.GetComponent<Projectile>().effects)
                     effect.End(proj);
                 Destroy(proj);
-
             }
         }
         

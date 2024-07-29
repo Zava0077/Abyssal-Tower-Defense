@@ -6493,6 +6493,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 95bb1fff37ba1284c9e6b566a9c5f9f9, type: 3}
   - {fileID: 21300000, guid: 4bdd8547454c4d0458b529133ce634f6, type: 3}
   - {fileID: 21300000, guid: f97a1d12d0448224792a19dde7017c7f, type: 3}
+  - {fileID: 21300000, guid: 3a535f24d150ffe43ad52c64ee50e3ca, type: 3}
   explotion: {fileID: 6213966059812680312, guid: 64c76fe34414010408be8e89b0cd929c, type: 3}
   puddle: {fileID: 6213966059812680312, guid: f0d415d6a03108b41974fe609a30a8af, type: 3}
   particleShadow: {fileID: 6680726215642097420, guid: cb73c1a36d7b8c8438b376604eda6d2e, type: 3}

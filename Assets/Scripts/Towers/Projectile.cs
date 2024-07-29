@@ -74,12 +74,13 @@ public class Projectile : MonoBehaviour
             {
                 foreach (BulletEffects effect in effects)
                     effect.End(gameObject);
-                if (chance.pierce < Random.Range(1, 100))
+                if (chance.pierce < Random.Range(1, 100) || collision.gameObject.tag == "Tower\'s Place" || collision.gameObject.tag == "Unpiercable")
                 {
                     Destroy(gameObject);
                     enabled = true;
                 }
             }
+            //Debug.Log(timeNeed.ToString() + " " + liveTime);
             liveTime = 0f;
         }
     }

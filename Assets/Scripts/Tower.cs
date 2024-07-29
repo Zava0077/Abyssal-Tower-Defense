@@ -48,6 +48,7 @@ public class Tower : Entity
         { "LightningConvert",LightningConvert },
         { "PhysicalConvert",PhysicalConvert },
          { "ProjectileSpeedDown",ProjectileSpeedDown },
+          { "ProjectileSpeedUp",ProjectileSpeedUp },
     };
     public List<LevelUpCallback> levelUpCallbacks = new List<LevelUpCallback>();
     [SerializeField] string[] levelUps;
@@ -80,7 +81,8 @@ public class Tower : Entity
         {ColdConvert, Camera.main.GetComponent<Player>().levelUpSprites[13] },
         {LightningConvert, Camera.main.GetComponent<Player>().levelUpSprites[14] },
         {PhysicalConvert, Camera.main.GetComponent<Player>().levelUpSprites[15] },
-        {ProjectileSpeedDown, Camera.main.GetComponent<Player>().levelUpSprites[16] }
+        {ProjectileSpeedDown, Camera.main.GetComponent<Player>().levelUpSprites[16] },
+        {ProjectileSpeedUp, Camera.main.GetComponent<Player>().levelUpSprites[17] },
         };
         foreach (var levelUp in levelUps)
             levelUpCallbacks.Add(lUCLinks[levelUp]);

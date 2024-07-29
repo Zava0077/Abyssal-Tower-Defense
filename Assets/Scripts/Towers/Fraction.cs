@@ -20,11 +20,14 @@ public class Fraction : BulletEffects
                     if (element.gameObject.tag == "Projectile")
                         from = element.position;
                 foreach (var _effect in proj.GetComponent<Projectile>().effects)
+                {
                     if (_effect.ToString().Contains("(ElectricBeam)"))
                     {
                         _elec = true;
                         modifier = 2;
                     }
+                }
+                
                   
                 Vector3 nextTarget = new Vector3(from.x + random.Next(-9 * modifier, 9 * modifier), from.y, from.z + random.Next(-9 * modifier, 9 * modifier));
                 Chances newChance = proj.GetComponent<Projectile>().chance;

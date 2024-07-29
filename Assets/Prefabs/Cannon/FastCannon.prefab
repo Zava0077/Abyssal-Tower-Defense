@@ -129,6 +129,7 @@ MonoBehaviour:
   - ColdConvert
   - LightningConvert
   - PhysicalConvert
+  - ProjectileSpeedUp
   chance: {fileID: 0}
 --- !u!114 &-8398714823835025777
 MonoBehaviour:
@@ -142,7 +143,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a05634f8d0489794f99c7a33026f3c21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 0}
 --- !u!1001 &1855076038094965592
 PrefabInstance:
   m_ObjectHideFlags: 0
