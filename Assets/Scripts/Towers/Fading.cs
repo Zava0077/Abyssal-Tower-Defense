@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Fading : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class Fading : MonoBehaviour
     {
         timer += Time.deltaTime;
         if (timer > liveTime)
-            Destroy(transform.parent.gameObject);
+            transform.parent.gameObject.SetActive(false);
         gameObject.GetComponent<Renderer>().material.color = new Color(color.r, color.g, color.b, ((liveTime - timer) / liveTime) * 255);
     }
 }

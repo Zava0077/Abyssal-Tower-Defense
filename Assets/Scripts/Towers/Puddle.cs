@@ -15,13 +15,24 @@ public class Puddle : MonoBehaviour
         if (time > 2f)//сделать длительность зависимой
             Destroy(gameObject);
     }
-    private void OnTriggerStay(Collider other)
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    if(damageTicks > 2/10)
+    //    {
+    //        if (damage != null && other.GetComponent<Entity>() != null)
+    //            DoDamage.DealDamage(other.GetComponent<Entity>(), null, damage);
+    //        damageTicks = 0;
+    //    }
+    //}
+    private void OnCollisionStay(Collision collision)
     {
-        if(damageTicks > 2/10)
+        if (damageTicks > 2 / 10)
         {
-            if (damage != null && other.GetComponent<Entity>() != null)
-                DoDamage.DealDamage(other.GetComponent<Entity>(), null, damage);
-            damageTicks = 0;
+            if (damage != null && collision.gameObject.GetComponent<Entity>())
+            {
+                DoDamage.DealDamage(collision.gameObject.GetComponent<Entity>(), null, damage);
+                damageTicks = 0;
+            }
         }
     }
 }

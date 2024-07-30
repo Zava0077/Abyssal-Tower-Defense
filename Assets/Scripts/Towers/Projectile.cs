@@ -17,6 +17,7 @@ public class Projectile : MonoBehaviour
         this.chance = chance;
     }
     public Chances chance;
+    public Color shadowColor;
     public float agroRadius;
     public GameObject owner;
     public Vector3 target;
@@ -45,7 +46,7 @@ public class Projectile : MonoBehaviour
             position = transform.position;
             distance = Vector3.Distance(position, target);
             targetMemory = target;
-            timeNeed = distance / (Vector3.forward * projSpeed).magnitude * 1.25f;
+            timeNeed = distance / ((target - position).normalized.magnitude * projSpeed);
             testTimer = 0f;
             collidable = true;
         }
@@ -76,6 +77,7 @@ public class Projectile : MonoBehaviour
                     effect.End(gameObject);
                 if (chance.pierce < Random.Range(1, 100) || collision.gameObject.tag == "Tower\'s Place" || collision.gameObject.tag == "Unpiercable")
                 {
+                    Entity.projsWShadows.Remove(gameObject);
                     Destroy(gameObject);
                     enabled = true;
                 }

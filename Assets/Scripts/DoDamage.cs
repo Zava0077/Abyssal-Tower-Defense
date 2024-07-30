@@ -18,7 +18,7 @@ public class DoDamage : MonoBehaviour
         TakeDamage.health -= damage._cold * (1 - TakeDamage.resistances._cold);
         TakeDamage.health -= damage._void * (1 - TakeDamage.resistances._void);
         TakeDamage.health -= damage._physical * (1 - TakeDamage.resistances._physical);
-        TakeDamage.ColorChanger();
+        TakeDamage.StartCoroutine(TakeDamage.ColorChanger());
     }
    
 }

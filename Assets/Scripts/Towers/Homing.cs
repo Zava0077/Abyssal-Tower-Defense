@@ -11,9 +11,8 @@ public class Homing : BulletEffects
     public override void OnStart(GameObject proj)
     {
         enemy = Tower.twr.FindEnemy(proj, proj.GetComponent<Projectile>().agroRadius, new Dictionary<float, Entity>(), proj.GetComponent<Projectile>().prevEnemy);
+        Entity.projsWShadows.Add(proj);
         proj.GetComponent<Projectile>().collidable = false;
-        //proj.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(proj.transform.forward, enemy.transform.position - proj.transform.position, 3.14f, 0f));
-        //Debug.Log("Изменена ротация!");
     }
     public override void Travel(GameObject proj)
     {
@@ -29,12 +28,5 @@ public class Homing : BulletEffects
         }
         proj.transform.position += proj.transform.forward * proj.GetComponent<Projectile>().projSpeed * Time.deltaTime;
         proj.transform.position = new Vector3(proj.transform.position.x, 1f, proj.transform.position.z);
-        if(shadCd > 0.1f)
-        {
-            GameObject shadow = Instantiate(Camera.main.GetComponent<Player>().particleShadow, proj.transform.position, proj.transform.rotation, proj.transform.parent);
-            shadow.GetComponentInChildren<Fading>().liveTime = 0.05f;
-            shadow.GetComponentInChildren<Fading>().color = new Color(125, 0, 125, 255);
-            shadCd = 0f;
-        }
     }
 }

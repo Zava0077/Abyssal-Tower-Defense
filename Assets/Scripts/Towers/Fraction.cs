@@ -28,7 +28,6 @@ public class Fraction : BulletEffects
                     }
                 }
                 
-                  
                 Vector3 nextTarget = new Vector3(from.x + random.Next(-9 * modifier, 9 * modifier), from.y, from.z + random.Next(-9 * modifier, 9 * modifier));
                 Chances newChance = new Chances(proj.GetComponent<Projectile>().chance.bounce, proj.GetComponent<Projectile>().chance.splash, proj.GetComponent<Projectile>().chance.puddle,
                     proj.GetComponent<Projectile>().chance.shatter/1.5f, proj.GetComponent<Projectile>().chance.doubleAttack, proj.GetComponent<Projectile>().chance.crit,

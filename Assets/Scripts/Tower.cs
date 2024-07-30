@@ -118,7 +118,6 @@ public class Tower : Entity
 
             if (time > 1 / attackSpeed)
             {
-                //Shoot(this.gameObject, enemy.GetComponent<Transform>().position, damage, missle, agroRadius);
                 Vector3 fromWhere = gameObject.transform.position;
                 foreach (var element in gameObject.GetComponentsInChildren<Transform>())
                 {
@@ -136,80 +135,99 @@ public class Tower : Entity
     }
     public Entity FindEnemy(GameObject tower, float agroRadius, Dictionary<float, Entity> enemiesCanShooted, List<Mob> lastEnemy = null)
     {
-        //enemiesCanShooted = new Dictionary<float, Entity>();
-        enemies = GameObject.FindGameObjectsWithTag("Enemy"); //мб переделать, а то слишком дохуя чекать
-        bool loop = true;
-        bool secLoop = true;
-        while (loop)
-        {
-            int enemyCount = 0;
-            foreach (var enemy in enemies)
-                if (Vector3.Distance(enemy.transform.position, tower.transform.position) < agroRadius)
-                    enemyCount++;
-            while(secLoop)
-            {
-                secLoop = false;
-                if (lastEnemy != null)
-                    foreach (var enemy in lastEnemy)
-                        if (Vector3.Distance(enemy.transform.position, tower.transform.position) > agroRadius)
-                        {
-                            lastEnemy.Remove(enemy);
-                            secLoop = true;
-                            break;
-                        }
+        //enemies = GameObject.FindGameObjectsWithTag("Enemy"); //мб переделать, а то слишком дохуя чекать
+        //bool loop = true;
+        //bool secLoop = true;
+        //while (loop)
+        //{
+        //    int enemyCount = 0;
+        //    foreach (var enemy in enemies)
+        //        if (Vector3.Distance(enemy.transform.position, tower.transform.position) < agroRadius)
+        //            enemyCount++;
+        //    while(secLoop)
+        //    {
+        //        secLoop = false;
+        //        if (lastEnemy != null)
+        //            foreach (var enemy in lastEnemy)
+        //                if (Vector3.Distance(enemy.transform.position, tower.transform.position) > agroRadius)
+        //                {
+        //                    lastEnemy.Remove(enemy);
+        //                    secLoop = true;
+        //                    break;
+        //                }
 
-            }
-            foreach (var enemy in enemies)
+        //    }
+        //    foreach (var enemy in enemies)
+        //    {
+        //        if (Vector3.Distance(enemy.transform.position, tower.transform.position) < agroRadius)
+        //        {
+        //            if (lastEnemy != null && enemyCount == lastEnemy.Count && loop)
+        //            {
+        //                lastEnemy.Clear();
+        //                loop = false;
+        //            }
+        //            if (lastEnemy != null && lastEnemy.Contains(enemy.GetComponent<Mob>())) continue;
+        //            if (!enemiesCanShooted.ContainsValue(enemy.GetComponent<Mob>()) || !enemiesCanShooted.ContainsKey(Vector3.Distance(enemy.transform.position, tower.transform.position)))
+        //                enemiesCanShooted.TryAdd(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
+        //            else
+        //            {
+        //                enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(x => x.Value == enemy.GetComponent<Mob>()).Key);
+        //                enemiesCanShooted.TryAdd(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
+        //            }
+        //        }
+        //        else if (enemy != enemies[enemies.Length - 1]) continue;
+        //        else
+        //            if (lastEnemy != null && enemiesCanShooted.Count == 0 && lastEnemy.Count > 0)
+        //            lastEnemy.Clear();
+        //        loop = false;
+        //    }
+
+        //}
+        //return enemiesCanShooted.Count > 0 ? enemiesCanShooted[enemiesCanShooted.Keys.Min()] : null; //на всякий случай оставил этот код вдруг новый не работает))00
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        List<Mob> currentEnemiesInRange = new List<Mob>();
+        foreach (var enemy in enemies)
+        {
+            float distance = Vector3.Distance(enemy.transform.position, tower.transform.position);
+            if (distance < agroRadius)
             {
-                if (Vector3.Distance(enemy.transform.position, tower.transform.position) < agroRadius)
+                Mob mob = enemy.GetComponent<Mob>();
+                currentEnemiesInRange.Add(mob);
+                enemiesCanShooted[distance] = mob;
+            }
+        }
+
+        if (lastEnemy != null)
+        {
+            lastEnemy.RemoveAll(mob => Vector3.Distance(mob.transform.position, tower.transform.position) > agroRadius);
+
+            if (currentEnemiesInRange.Count == lastEnemy.Count)
+            {
+                lastEnemy.Clear();
+            }
+            else
+            {
+                foreach (var mob in lastEnemy)
                 {
-                    if (lastEnemy != null && enemyCount == lastEnemy.Count && loop)
+                    float distance = Vector3.Distance(mob.transform.position, tower.transform.position);
+                    if (currentEnemiesInRange.Contains(mob))
                     {
-                        lastEnemy.Clear();
-                        loop = false;
-                    }
-                    if (lastEnemy != null && lastEnemy.Contains(enemy.GetComponent<Mob>())) continue;
-                    if (!enemiesCanShooted.ContainsValue(enemy.GetComponent<Mob>()) || !enemiesCanShooted.ContainsKey(Vector3.Distance(enemy.transform.position, tower.transform.position)))
-                        enemiesCanShooted.TryAdd(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
-                    else
-                    {
-                        enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(x => x.Value == enemy.GetComponent<Mob>()).Key);
-                        enemiesCanShooted.Add(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
+                        enemiesCanShooted.Remove(distance);
                     }
                 }
-                else if (enemy != enemies[enemies.Length - 1]) continue;
-                else
-                    if (lastEnemy != null && enemiesCanShooted.Count == 0 && lastEnemy.Count > 0)
-                    lastEnemy.Clear();
-                loop = false;
             }
-
         }
-        return enemiesCanShooted.Count > 0 ? enemiesCanShooted[enemiesCanShooted.Keys.Min()] : null;
-    }
 
-    //public void Shoot(GameObject turret, Vector3 target, Damage damage, GameObject missle, float agroRadius)
-    //{
-    //    Quaternion rotation = new Quaternion(turret.transform.rotation.x, turret.transform.rotation.y, turret.transform.rotation.z, turret.transform.rotation.w);
-    //    rotation.SetEulerAngles((3.14f / 180) * rotation.eulerAngles.x, (3.14f / 180) * rotation.eulerAngles.y - (3.14f / 180) * 90, (3.14f / 180) * rotation.eulerAngles.z);
-    //    Vector3 projectile = Vector3.forward;
-    //    foreach (var element in turret.GetComponentsInChildren<Transform>())
-    //    {
-    //        if (element.tag == "Projectile")
-    //            projectile = element.position;
-    //    }
-    //    GameObject _missle = Instantiate(missle, projectile, Quaternion.identity, turret.transform.parent);
-    //    _missle.transform.rotation = rotation;
-    //    _missle.GetComponent<Projectile>().target = target;
-    //    _missle.GetComponent<Projectile>().damage = damage;
-    //    //_missle.GetComponent<Projectile>().owner = turret;
-    //    _missle.GetComponent<Projectile>().chance = chance;
-    //    _missle.GetComponent<Projectile>().agroRadius = agroRadius;
-    //    if (turret.GetComponent<Tower>())
-    //        _missle.GetComponent<Projectile>().effects = turret.GetComponent<Tower>().effects;
-    //    if (turret.GetComponent<Tower>())
-    //        _missle.GetComponent<Projectile>().projSpeed = turret.GetComponent<Tower>().projSpeed;
-    //}
+        if (enemiesCanShooted.Count > 0)
+        {
+            float minDistance = enemiesCanShooted.Keys.Min();
+            return enemiesCanShooted[minDistance];
+        }
+        else
+        {
+            return null;
+        }
+    }   
     public void Shoot(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius,float archMultiplier, Chances chances, List<BulletEffects> effects, float projSpeed, Transform parent, [Optional] List<Mob> prevEnemy, [Optional] Vector3 scale)
     {
         GameObject _missle = Instantiate(missle, turret, Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0)), parent.transform.parent);
@@ -224,7 +242,7 @@ public class Tower : Entity
         _missle.GetComponent<Projectile>().projSpeed = projSpeed;
         _missle.GetComponent<Projectile>().effects.Clear();
         foreach (var effect in effects)
-            _missle.GetComponent<Projectile>().effects.Add(effect.Clone() as BulletEffects);;
+            _missle.GetComponent<Projectile>().effects.Add(effect.Clone() as BulletEffects);
         _missle.GetComponent<Projectile>().liveTime = 0f;
     }
 }
