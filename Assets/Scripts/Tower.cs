@@ -29,6 +29,7 @@ public class Tower : Entity
     [SerializeField] List<int> chances = new List<int>();
     [SerializeField] Dictionary<GameObject, bool> keyValuePairs = new Dictionary<GameObject, bool>();
     public List<BulletEffects> effects = new List<BulletEffects>();
+    Dictionary<float, Entity> enemiesCanShooted = new Dictionary<float, Entity>();
     public Dictionary<string, LevelUpCallback> lUCLinks = new Dictionary<string, LevelUpCallback>()
     {
         { "FireUp",FireUp },
@@ -109,7 +110,7 @@ public class Tower : Entity
         }
         base.Update();
         Quaternion newDir;
-        Entity enemy = FindEnemy(tower, tower.GetComponent<Tower>().agroRadius);
+        Entity enemy = FindEnemy(tower, tower.GetComponent<Tower>().agroRadius, enemiesCanShooted);
         if (enemy)
         {
             time += Time.deltaTime;
@@ -133,9 +134,9 @@ public class Tower : Entity
             newDir = Quaternion.Lerp(transform.rotation,  Quaternion.Euler(0, currentRotationAngle, 0), 0.05f);
         transform.rotation = newDir;
     }
-    public Entity FindEnemy(GameObject tower, float agroRadius, List<Mob> lastEnemy = null)
+    public Entity FindEnemy(GameObject tower, float agroRadius, Dictionary<float, Entity> enemiesCanShooted, List<Mob> lastEnemy = null)
     {
-        Dictionary<float, Entity> enemiesCanShooted = new Dictionary<float, Entity>();
+        //enemiesCanShooted = new Dictionary<float, Entity>();
         enemies = GameObject.FindGameObjectsWithTag("Enemy"); //мб переделать, а то слишком дохуя чекать
         bool loop = true;
         bool secLoop = true;

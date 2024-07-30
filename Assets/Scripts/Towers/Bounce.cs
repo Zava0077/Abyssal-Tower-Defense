@@ -16,7 +16,7 @@ public class Bounce : BulletEffects
             foreach (var element in proj.GetComponentsInChildren<Transform>())
                 if (element.gameObject.tag == "Projectile")
                     from = element.position;
-            Entity nextEnemy = Tower.twr.FindEnemy(proj, proj.GetComponent<Projectile>().agroRadius, proj.GetComponent<Projectile>().prevEnemy);//иногда баунс всё равно может считать противником самого себя
+            Entity nextEnemy = Tower.twr.FindEnemy(proj, proj.GetComponent<Projectile>().agroRadius, new Dictionary<float, Entity>() ,proj.GetComponent<Projectile>().prevEnemy);//иногда баунс всё равно может считать противником самого себя
             Vector3 nextTarget = nextEnemy ? nextEnemy.GetComponent<Transform>().position : Vector3.zero;
             if (nextEnemy == null || (proj.GetComponent<Projectile>().prevEnemy != null && proj.GetComponent<Projectile>().prevEnemy.Count > 0 && nextTarget == proj.GetComponent<Projectile>().prevEnemy[0].gameObject.transform.position)) //
             {

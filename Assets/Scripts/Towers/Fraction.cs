@@ -30,8 +30,9 @@ public class Fraction : BulletEffects
                 
                   
                 Vector3 nextTarget = new Vector3(from.x + random.Next(-9 * modifier, 9 * modifier), from.y, from.z + random.Next(-9 * modifier, 9 * modifier));
-                Chances newChance = proj.GetComponent<Projectile>().chance;
-                //newChance.shatter /= 2;
+                Chances newChance = new Chances(proj.GetComponent<Projectile>().chance.bounce, proj.GetComponent<Projectile>().chance.splash, proj.GetComponent<Projectile>().chance.puddle,
+                    proj.GetComponent<Projectile>().chance.shatter/1.5f, proj.GetComponent<Projectile>().chance.doubleAttack, proj.GetComponent<Projectile>().chance.crit,
+                    proj.GetComponent<Projectile>().chance.status, proj.GetComponent<Projectile>().chance.pierce);
                 Tower.twr.Shoot(from, nextTarget, new Damage(proj.GetComponent<Projectile>().damage._fire / 2, proj.GetComponent<Projectile>().damage._cold / 2,
                     proj.GetComponent<Projectile>().damage._lightning / 2, proj.GetComponent<Projectile>().damage._void / 2, proj.GetComponent<Projectile>().damage._physical / 2), proj, proj.GetComponent<Projectile>().agroRadius, 3f,
                     newChance, proj.GetComponent<Projectile>().effects, proj.GetComponent<Projectile>().projSpeed, proj.transform, !_elec ? null : proj.GetComponent<Projectile>().prevEnemy,
