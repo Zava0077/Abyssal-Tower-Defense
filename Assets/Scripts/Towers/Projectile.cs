@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
+using UnityEngine.UI;
 using static LevelUp;
 
 public class Projectile : MonoBehaviour
@@ -32,7 +33,8 @@ public class Projectile : MonoBehaviour
     public float projHeight = 0f;
     public float liveTime = 0f;
     public float timeNeed;
-    public float testTimer;
+    public float testTimer; 
+    public bool waitCast = false;
     public bool collidable;
     public List<BulletEffects> effects; //то, что происходит во время полёта, в начале и в конце
     private void Awake()
@@ -55,7 +57,9 @@ public class Projectile : MonoBehaviour
     }
     private void Update()
     {
-        liveTime += Time.deltaTime;
+        liveTime += Time.deltaTime; 
+        if (waitCast)
+            StartCoroutine(shadowCaster());
         foreach (BulletEffects effect in effects)
             effect.Travel(gameObject);//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
     }
@@ -77,7 +81,6 @@ public class Projectile : MonoBehaviour
                     effect.End(gameObject);
                 if (chance.pierce < Random.Range(1, 100) || collision.gameObject.tag == "Tower\'s Place" || collision.gameObject.tag == "Unpiercable")
                 {
-                    Entity.projsWShadows.Remove(gameObject);
                     Destroy(gameObject);
                     enabled = true;
                 }
@@ -85,5 +88,30 @@ public class Projectile : MonoBehaviour
             //Debug.Log(timeNeed.ToString() + " " + liveTime);
             liveTime = 0f;
         }
+    }
+    public IEnumerator shadowCaster()
+    {
+        waitCast = false;
+        while (gameObject)
+        {
+            GameObject shadow = null;
+            if (Entity.shadows.Count > 0)
+                shadow = Entity.shadows.Find(s => !s.activeSelf);
+            if (shadow == null && Entity.shadows.Count < 64)
+            {
+                shadow = Instantiate(Camera.main.GetComponent<Player>().particleShadow, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
+                Entity.shadows.Add(shadow);
+            }
+            else yield return null;
+            shadow.transform.position = gameObject.transform.position;
+            shadow.transform.rotation = gameObject.transform.rotation;
+            shadow.SetActive(true);
+            Fading fadingComponent = shadow.GetComponentInChildren<Fading>();
+            fadingComponent.liveTime = 0.1f;
+            fadingComponent.timer = 0f;
+            fadingComponent.color = shadowColor;
+            yield return new WaitForNextFrameUnit();
+        }
+        waitCast = true;
     }
 }

@@ -8,8 +8,6 @@ using UnityEngine.UIElements;
 
 public class Entity : MonoBehaviour
 {
-    public static bool doCast = false; 
-    public static bool waitCast = true;
 
     public float maxHealth;
     public float health;
@@ -18,7 +16,6 @@ public class Entity : MonoBehaviour
     public List<Status> statuses = new List<Status>();
     public List<float> _damage = new List<float>();
     public List<float> _resist = new List<float>();
-    public static List<GameObject> projsWShadows = new List<GameObject>(); 
     public static List<GameObject> shadows = new List<GameObject>();
     public Damage damage;
     public float attackSpeed;
@@ -52,8 +49,7 @@ public class Entity : MonoBehaviour
     {
         foreach(Status status in statuses)
             status.DoStatus();
-        if (waitCast && projsWShadows.Count > 0)
-            StartCoroutine(shadowCaster(projsWShadows));
+     
         if (health <= 0)
             Death();
     }
@@ -67,33 +63,5 @@ public class Entity : MonoBehaviour
         }
         yield return null;
     }
-    public IEnumerator shadowCaster(List<GameObject> projs)
-    {
-        waitCast = false;
-        int i = 0;
-        while (i < projs.Count && projs[i])
-        {
-            GameObject shadow = null;
-            if (shadows.Count > 0)
-                shadow = shadows.Find(s => !s.activeSelf);
-            if (shadow == null || (projs.Count/shadows.Count == 1/6 && shadows.Count < 256))
-            {
-                shadow = Instantiate(Camera.main.GetComponent<Player>().particleShadow, projs[i].transform.position, projs[i].transform.rotation, projs[i].transform.parent);
-                shadows.Add(shadow);
-            }
-            shadow.transform.position = projs[i].transform.position;
-            shadow.transform.rotation = projs[i].transform.rotation;
-            shadow.SetActive(true);
-
-            Fading fadingComponent = shadow.GetComponentInChildren<Fading>();
-            fadingComponent.liveTime = 0.1f;
-            fadingComponent.timer = 0f;
-            fadingComponent.color = projs[i].GetComponent<Projectile>().shadowColor;
-            if (i < projs.Count - 1)
-                i++;
-            else i = 0;
-            yield return new WaitForEndOfFrameUnit();
-        }
-        waitCast = true;
-    }
+   
 }

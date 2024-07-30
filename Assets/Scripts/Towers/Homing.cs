@@ -11,8 +11,8 @@ public class Homing : BulletEffects
     public override void OnStart(GameObject proj)
     {
         enemy = Tower.twr.FindEnemy(proj, proj.GetComponent<Projectile>().agroRadius, new Dictionary<float, Entity>(), proj.GetComponent<Projectile>().prevEnemy);
-        Entity.projsWShadows.Add(proj);
-        proj.GetComponent<Projectile>().collidable = false;
+        proj.GetComponent<Projectile>().collidable = false; 
+        proj.GetComponent<Projectile>().waitCast = true;
     }
     public override void Travel(GameObject proj)
     {
