@@ -11,6 +11,7 @@ public class Status : MonoBehaviour
         this.type = type;
         this.time = Time;
         this.entity = entity;
+        status = this;
         Type damage1 = typeof(Damage);
         foreach(var num in damage1.GetFields())
         {
@@ -26,7 +27,7 @@ public class Status : MonoBehaviour
             multiplierTakeDamage = entity.multiplierTakeDamage; 
         }
     }
-
+    public static Status status;
     private float time;
     private float strength;
     private float damage;

@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +6,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static LevelUp;
 using static UnityEngine.GraphicsBuffer;
-
-
 
 public class Tower : Entity
 {
@@ -200,7 +197,6 @@ public class Tower : Entity
         if (lastEnemy != null)
         {
             lastEnemy.RemoveAll(mob => Vector3.Distance(mob.transform.position, tower.transform.position) > agroRadius);
-
             if (currentEnemiesInRange.Count == lastEnemy.Count)
             {
                 lastEnemy.Clear();

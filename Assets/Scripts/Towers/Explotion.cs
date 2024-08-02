@@ -11,7 +11,10 @@ public class Explotion : MonoBehaviour
     {
         time += Time.deltaTime;
         if (time > 1f)
-            Destroy(gameObject);
+        {
+            time = 0f;
+            gameObject.SetActive(false);
+        }
     }
     private void OnTriggerEnter(Collider other)
     {

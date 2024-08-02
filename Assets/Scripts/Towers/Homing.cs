@@ -29,4 +29,8 @@ public class Homing : BulletEffects
         proj.transform.position += proj.transform.forward * proj.GetComponent<Projectile>().projSpeed * Time.deltaTime;
         proj.transform.position = new Vector3(proj.transform.position.x, 1f, proj.transform.position.z);
     }
+    public override void End(GameObject proj)
+    {
+
+    }
 }

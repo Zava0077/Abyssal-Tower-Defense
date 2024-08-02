@@ -13,7 +13,10 @@ public class Puddle : MonoBehaviour
         time += Time.deltaTime;
         damageTicks += Time.deltaTime;
         if (time > 2f)//сделать длительность зависимой
-            Destroy(gameObject);
+        {
+            time = 0f;
+            gameObject.SetActive(false);
+        }
     }
     //private void OnTriggerStay(Collider other)
     //{
@@ -35,4 +38,17 @@ public class Puddle : MonoBehaviour
             }
         }
     }
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if(damage != null && collision.gameObject.GetComponent<Entity>())
+    //        StartCoroutine(Damage(collision));
+    //}
+    //IEnumerator Damage(Collision collision)
+    //{
+    //    while (collision.gameObject && gameObject)
+    //    {
+    //        DoDamage.DealDamage(collision.gameObject.GetComponent<Entity>(), null, damage);
+    //        yield return new WaitForSeconds(0.2f);
+    //    }
+    //}
 }

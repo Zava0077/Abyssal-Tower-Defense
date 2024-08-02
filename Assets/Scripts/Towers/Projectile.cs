@@ -46,9 +46,12 @@ public class Projectile : MonoBehaviour
         if (target != null)
         {
             position = transform.position;
+            Vector3 direction = (target - position).normalized;
             distance = Vector3.Distance(position, target);
+            //float speed = (Vector3.forward * projSpeed * Time.deltaTime * direction.magnitude).magnitude ;
+            float speed = projSpeed * direction.magnitude * 0.85f;
+            timeNeed = distance / speed; //0,36 - 0,42
             targetMemory = target;
-            timeNeed = distance / ((target - position).normalized.magnitude * projSpeed);
             testTimer = 0f;
             collidable = true;
         }
@@ -60,8 +63,12 @@ public class Projectile : MonoBehaviour
         liveTime += Time.deltaTime; 
         if (waitCast)
             StartCoroutine(shadowCaster());
+    }
+    private void FixedUpdate()
+    {
         foreach (BulletEffects effect in effects)
             effect.Travel(gameObject);//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
+
     }
     private void OnCollisionStay(Collision collision)
     {

@@ -25,5 +25,8 @@ public class Laser : BulletEffects
         proj.transform.position = new Vector3(proj.transform.position.x, 1f, proj.transform.position.z);
         proj.transform.rotation.SetEulerRotation(0f, proj.transform.rotation.y, 0f);
     }
- 
+    public override void End(GameObject proj)
+    {
+
+    }
 }

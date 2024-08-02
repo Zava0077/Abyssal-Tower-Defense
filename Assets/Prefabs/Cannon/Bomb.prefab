@@ -420,6 +420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chance: {fileID: 0}
+  shadowColor: {r: 0, g: 0, b: 0, a: 0}
   agroRadius: 0
   owner: {fileID: 0}
   target: {x: -8.14, y: 7, z: 37.04}
@@ -435,6 +436,7 @@ MonoBehaviour:
   liveTime: 0
   timeNeed: 0
   testTimer: 0
+  waitCast: 0
   collidable: 0
   effects:
   - {fileID: 0}
@@ -463,6 +465,6 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_Constraints: 112
   m_CollisionDetection: 2

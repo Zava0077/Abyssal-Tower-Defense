@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     [SerializeField] public List<GameObject> Towers;
     public Sprite[] levelUpSprites;
     [SerializeField] public GameObject explotion;
+    public static List<GameObject> explotions = new List<GameObject>();
+    public static List<GameObject> puddles = new List<GameObject>();
     [SerializeField] public GameObject puddle;
     [SerializeField] public GameObject particleShadow;
     public float levelUpBonus = 2f;

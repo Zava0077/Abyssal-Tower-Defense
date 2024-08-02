@@ -44,7 +44,7 @@ public class LevelUp
     public static LevelUpCallback RangeUp = (Tower tower) =>
     {
         tower.agroRadius += Camera.main.GetComponent<Player>().levelUpBonus;
-        if (tower.agroRadius > 80)
+        if (tower.agroRadius > 40)
             tower.levelUpCallbacks.Remove(RangeUp);
         tower.levelUpsRemain--;
         tower.updateLvlUp = true;
@@ -52,6 +52,8 @@ public class LevelUp
     public static LevelUpCallback AttackSpUp = (Tower tower) =>
     {
         tower.attackSpeed += Camera.main.GetComponent<Player>().levelUpBonus/10;//~
+        if (tower.attackSpeed >= 10)
+            tower.levelUpCallbacks.Remove(AttackSpUp);
         tower.levelUpsRemain--;
         tower.updateLvlUp = true;
     };
@@ -95,7 +97,9 @@ public class LevelUp
     };
     public static LevelUpCallback ProjectileSpeedUp = (Tower tower) =>
     {
-        tower.projSpeed += Camera.main.GetComponent<Player>().levelUpBonus;
+        tower.projSpeed += Camera.main.GetComponent<Player>().levelUpBonus; 
+        if (tower.projSpeed >= 35)
+            tower.levelUpCallbacks.Remove(ProjectileSpeedUp);
         tower.levelUpsRemain--;
         tower.updateLvlUp = true;
     };

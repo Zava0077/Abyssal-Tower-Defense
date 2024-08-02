@@ -8,6 +8,14 @@ public class Bomb : BulletEffects
 {
     GameObject expl;
     public bool little;
+    public override void OnStart(GameObject proj)
+    {
+
+    }
+    public override void Travel(GameObject proj)
+    {
+
+    }
     public override void End(GameObject proj)
     {
         System.Random random = new System.Random();
@@ -21,9 +29,21 @@ public class Bomb : BulletEffects
                     from = element.position;
             foreach (var damage in proj.GetComponent<Projectile>().damage.GetType().GetFields())//
                 size += (float)damage.GetValue(proj.GetComponent<Projectile>().damage) / 7;
-            expl = Instantiate(Camera.main.GetComponent<Player>().explotion, from, Quaternion.identity, proj.transform.parent);
+            if(Player.explotions.Count > 0)
+                expl = Player.explotions.Find(s => !s.activeSelf);
+            if (!expl)
+            {
+                if(Player.explotions.Count < 128)
+                {
+                    expl = Instantiate(Camera.main.GetComponent<Player>().explotion, from, Quaternion.identity, proj.transform.parent);
+                    Player.explotions.Add(expl);
+                }
+                else expl = Player.explotions[Player.explotions.Count - 1];
+            }
+            expl.SetActive(true);
+            expl.transform.position = from;
             expl.GetComponent<Explotion>().damage = new Damage(15f, 0f, 0f, 0f, 50f);
-            expl.transform.localScale = new Vector3(expl.transform.localScale.x + size, expl.transform.localScale.y + size, expl.transform.localScale.z + size);
+            expl.transform.localScale = new Vector3(5f + size, 5f + size, 5f + size);
         }
     }
 }

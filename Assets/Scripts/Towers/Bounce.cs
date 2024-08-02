@@ -6,6 +6,14 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Bounce : BulletEffects
 {
+    public override void OnStart(GameObject proj)
+    {
+
+    }
+    public override void Travel(GameObject proj)
+    {
+
+    }
     public override void End(GameObject proj)
     {
         System.Random random = new System.Random();
