@@ -66,7 +66,7 @@ public class Projectile : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        foreach (BulletEffects effect in effects)
+                foreach (BulletEffects effect in effects)
             effect.Travel(gameObject);//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
 
     }
@@ -104,12 +104,19 @@ public class Projectile : MonoBehaviour
             GameObject shadow = null;
             if (Entity.shadows.Count > 0)
                 shadow = Entity.shadows.Find(s => !s.activeSelf);
-            if (shadow == null && Entity.shadows.Count < 64)
+            if (shadow == null)
             {
-                shadow = Instantiate(Camera.main.GetComponent<Player>().particleShadow, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
-                Entity.shadows.Add(shadow);
+                if (Entity.shadows.Count < 64)
+                {
+                    shadow = Instantiate(Camera.main.GetComponent<Player>().particleShadow, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
+                    Entity.shadows.Add(shadow);
+                }
+                else
+                {
+                    yield return new WaitForNextFrameUnit();
+                    shadow = Entity.shadows[Entity.shadows.Count - 1];
+                }
             }
-            else yield return null;
             shadow.transform.position = gameObject.transform.position;
             shadow.transform.rotation = gameObject.transform.rotation;
             shadow.SetActive(true);

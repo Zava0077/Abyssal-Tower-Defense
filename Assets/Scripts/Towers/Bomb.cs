@@ -42,6 +42,7 @@ public class Bomb : BulletEffects
             }
             expl.SetActive(true);
             expl.transform.position = from;
+            expl.GetComponent<Renderer>().material.color = new Color(1,0.08f,0f, 0.6f);
             expl.GetComponent<Explotion>().damage = new Damage(15f, 0f, 0f, 0f, 50f);
             expl.transform.localScale = new Vector3(5f + size, 5f + size, 5f + size);
         }

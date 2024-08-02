@@ -90,7 +90,7 @@ public class LevelUp
     public static LevelUpCallback ProjectileSpeedDown = (Tower tower) =>
     {
         tower.projSpeed -= Camera.main.GetComponent<Player>().levelUpBonus;
-        if (tower.projSpeed <= 20)
+        if (tower.projSpeed <= 10)
             tower.levelUpCallbacks.Remove(ProjectileSpeedDown);
         tower.levelUpsRemain--;
         tower.updateLvlUp = true;

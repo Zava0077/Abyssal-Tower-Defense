@@ -51,7 +51,7 @@ public class WaterPocket : BulletEffects
             pudd.SetActive(true);
             pudd.transform.position = puddPosition;
             pudd.GetComponent<Puddle>().damage = proj.GetComponent<Projectile>().damage;
-            pudd.GetComponent<Renderer>().material.color = new Color(colors[0], colors[1], colors[2]);
+            pudd.GetComponent<Renderer>().material.color = new Color(colors[0], colors[1], colors[2], 0.6f);
             pudd.transform.localScale = new Vector3(size, pudd.transform.localScale.y, size);
 
         }

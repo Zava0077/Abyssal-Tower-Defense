@@ -50,7 +50,7 @@ public class ElectricBeam : BulletEffects
         expl.SetActive(true);
         expl.transform.position = from;
         expl.GetComponent<Explotion>().damage = new Damage(0f, 0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f);
-        expl.GetComponent<Renderer>().material.color = new Color(0f, 0.35f, 1f);
+        expl.GetComponent<Renderer>().material.color = new Color(0f, 0.35f, 1f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
     }
 }
