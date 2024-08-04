@@ -7,7 +7,7 @@ public class Puddle : MonoBehaviour
 {
     public Damage damage;
     public Chances chance;
-    bool doDamage = true;
+    private HashSet<GameObject> objectsOnPuddle = new HashSet<GameObject>();
     private void OnEnable()
     {
         StartCoroutine(Damage());
@@ -18,18 +18,22 @@ public class Puddle : MonoBehaviour
         yield return new WaitForSeconds(2);
         gameObject.SetActive(false);
     }
-    private void OnTriggerStay(Collider other)
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (!doDamage) return;
-        if (damage != null && other.gameObject.GetComponent<Entity>())
-        {
-            DoDamage.DealDamage(other.gameObject.GetComponent<Entity>(), null, damage);
-        }
+        if(other.GetComponent<Entity>()) objectsOnPuddle.Add(other.gameObject);
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<Entity>()) objectsOnPuddle.Remove(other.gameObject);
     }
     IEnumerator Damage()
     {
-        doDamage = false;
-        yield return new WaitForSeconds(0.2f);
-        doDamage = true;
+        while(enabled)
+        {
+            foreach (var enemy in objectsOnPuddle)
+                DoDamage.DealDamage(enemy.GetComponent<Entity>(), null, damage);
+            yield return new WaitForSeconds(0.2f);
+        }
     }
 }

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2011189355239585380}
   - component: {fileID: 8937428846708967392}
   - component: {fileID: 1004954847654883184}
+  - component: {fileID: -786055179897019197}
   m_Layer: 7
   m_Name: Puddle
   m_TagString: Effect
@@ -147,3 +148,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chance: {fileID: 0}
+--- !u!114 &-786055179897019197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6213966059812680312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ca1c7c616b346449ee9c8a53ab1fce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

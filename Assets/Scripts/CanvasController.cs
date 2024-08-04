@@ -116,6 +116,7 @@ public class CanvasController : MonoBehaviour
             Debug.Log(tower);
             buildObject.SetActive(false);
             menu.gameObject.SetActive(false);
+            Player.instance.create.Play();
         }
         else
         {

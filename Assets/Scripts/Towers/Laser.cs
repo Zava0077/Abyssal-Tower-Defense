@@ -6,16 +6,19 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Laser : BulletEffects
 {
+    Collider collider;
     public override void OnStart(GameObject proj)
     {
         _proj.collidable = false;
+        collider = proj.GetComponent<Collider>();
+        collider.enabled = false;
         _proj.waitCast = true;
         Player.instance.laser.Play();
     }
     public override void Travel(GameObject proj)
     {
         if (_proj.liveTime > 0.08f)
-            _proj.collidable = true;
+            collider.enabled = true;
         if (_proj.liveTime > 1.5f)
         {
             Destroy(proj.gameObject);

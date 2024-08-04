@@ -72,57 +72,58 @@ public class Projectile : MonoBehaviour
         foreach (BulletEffects effect in effects)
             effect.Travel(gameObject);//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
     }
-    private void OnCollisionStay(Collision collision)
-    {
-        //prevEnemy ??= new List<Mob>();
-        //if (collidable)
-        //{
-        //    if (prevEnemy.Contains(collision.gameObject.GetComponent<Mob>()))
-        //        return;
-        //    if (collision.gameObject.tag == "Enemy" && damage != null)
-        //    {
-        //        DoDamage.DealDamage(collision.gameObject.GetComponent<Entity>(), null, damage);
-        //        prevEnemy.Add(collision.gameObject.GetComponent<Mob>());
-        //    }
-        //    if (collision.gameObject.tag != "Effect")
-        //    {
-        //        foreach (BulletEffects effect in effects)
-        //            effect.End(gameObject);
-        //        if (chance.pierce < Random.Range(1, 100) || collision.gameObject.tag == "Tower\'s Place" || collision.gameObject.tag == "Unpiercable")
-        //        {
-        //            Destroy(gameObject);
-        //            enabled = true;
-        //        }
-        //    }
-        //    liveTime = 0f;
-        //}
-    }
-    private void OnTriggerStay(Collider other)
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    prevEnemy ??= new List<Mob>();
+    //    if (collidable)
+    //    {
+    //        if (prevEnemy.Contains(other.gameObject.GetComponent<Mob>()))
+    //            return;
+    //        if (other.gameObject.tag == "Enemy" && damage != null)
+    //        {
+    //            DoDamage.DealDamage(other.gameObject.GetComponent<Entity>(), null, damage);
+    //            prevEnemy.Add(other.gameObject.GetComponent<Mob>());
+    //        }
+    //        if (other.gameObject.tag != "Effect")
+    //        {
+    //            foreach (BulletEffects effect in effects)
+    //                effect.End(gameObject);
+    //            if (chance.pierce < Random.Range(1, 100) || other.gameObject.tag == "Tower\'s Place" || other.gameObject.tag == "Unpiercable")
+    //            {
+    //                Player.instance.hit.Play();
+    //                Destroy(gameObject);
+    //                enabled = true;
+    //            }
+    //            else Player.instance.pierce.Play();
+    //        }
+    //        liveTime = 0f;
+    //    }
+    //}
+    private void OnTriggerEnter(Collider other)
     {
         prevEnemy ??= new List<Mob>();
-        if (collidable)
+
+        if (prevEnemy.Contains(other.gameObject.GetComponent<Mob>()))
+            return;
+        if (other.gameObject.tag == "Enemy" && damage != null)
         {
-            if (prevEnemy.Contains(other.gameObject.GetComponent<Mob>()))
-                return;
-            if (other.gameObject.tag == "Enemy" && damage != null)
-            {
-                DoDamage.DealDamage(other.gameObject.GetComponent<Entity>(), null, damage);
-                prevEnemy.Add(other.gameObject.GetComponent<Mob>());
-            }
-            if (other.gameObject.tag != "Effect")
-            {
-                foreach (BulletEffects effect in effects)
-                    effect.End(gameObject);
-                if (chance.pierce < Random.Range(1, 100) || other.gameObject.tag == "Tower\'s Place" || other.gameObject.tag == "Unpiercable")
-                {
-                    Player.instance.hit.Play();
-                    Destroy(gameObject);
-                    enabled = true;
-                }
-                else Player.instance.pierce.Play();
-            }
-            liveTime = 0f;
+            DoDamage.DealDamage(other.gameObject.GetComponent<Entity>(), null, damage);
+            prevEnemy.Add(other.gameObject.GetComponent<Mob>());
         }
+        if (other.gameObject.tag != "Effect")
+        {
+            foreach (BulletEffects effect in effects)
+                effect.End(gameObject);
+            if (chance.pierce < Random.Range(1, 100) || other.gameObject.tag == "Tower\'s Place" || other.gameObject.tag == "Unpiercable")
+            {
+                Player.instance.hit.Play();
+                Destroy(gameObject);
+                enabled = true;
+            }
+            else Player.instance.pierce.Play();
+        }
+        liveTime = 0f;
+
     }
     public IEnumerator shadowCaster()
     {

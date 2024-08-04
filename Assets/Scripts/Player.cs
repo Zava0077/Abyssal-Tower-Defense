@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
     public float levelUpBonus = 2f;
     public List<GameObject> Ferms;
     RaycastHit[] hits;
-    public AudioSource shoot, laser, expl, expl2, bounce, fraction, pudd, hit, pierce;
+    public AudioSource shoot, laser, expl, expl2, bounce, fraction, pudd, hit, pierce, create, hot, snow;
 
 
     private void Start()
@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
         {
             moveSpeed = speed;
         }
-        float moveDirection = Input.GetAxis("Vertical") * -1;
+        float moveDirection = Input.GetAxisRaw("Vertical") * -1;
         if (camera.transform.position.x <= 230 && moveDirection == 1)
         {
             camera.transform.position = camera.transform.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);

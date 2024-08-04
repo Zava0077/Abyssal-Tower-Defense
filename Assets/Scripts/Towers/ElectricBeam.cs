@@ -6,11 +6,14 @@ public class ElectricBeam : BulletEffects
 {
     private Vector3 positionMemory;
     Transform transformChildren;
+    Collider collider;
     public override void OnStart(GameObject proj)
     {
         transformChildren = proj.GetComponentInChildren<Transform>();
         positionMemory = proj.transform.position;
-        proj.GetComponent<Projectile>().collidable = false;
+        collider = proj.GetComponent<Collider>();
+        collider.enabled = false;
+        _proj.collidable = false;
         Damage damage = proj.GetComponent<Projectile>().damage;
         proj.GetComponent<Projectile>().damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
     }
@@ -20,7 +23,7 @@ public class ElectricBeam : BulletEffects
         transformChildren.position = Vector3.MoveTowards(positionMemory, _proj.targetMemory, Vector3.Distance(positionMemory, _proj.targetMemory) / 2);
         transformChildren.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.right, _proj.targetMemory - proj.transform.position, 3.14f, 0));
         if (_proj.liveTime > 0.2f)
-            _proj.collidable = true;
+            collider.enabled = true;
         if (_proj.liveTime > 0.25f)
         {
             foreach (BulletEffects effect in _proj.effects)
