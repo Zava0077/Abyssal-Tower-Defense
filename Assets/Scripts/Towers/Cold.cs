@@ -6,8 +6,8 @@ public class Cold : BulletEffects
 {
     public override void OnStart(GameObject proj)
     {
-        Damage damage = proj.GetComponent<Projectile>().damage;
-        proj.GetComponent<Projectile>().damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
+        Damage damage = _proj.damage;
+        _proj.damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
     }
     public override void Travel(GameObject proj)
     {
@@ -17,7 +17,7 @@ public class Cold : BulletEffects
     public override void End(GameObject proj)
     {
         Vector3 from = proj.transform.position;
-        Damage damage1 = proj.GetComponent<Projectile>().damage;
+        Damage damage1 = _proj.damage;
         foreach (var element in proj.GetComponentsInChildren<Transform>())
             if (element.gameObject.tag == "Projectile")
                 from = element.position;

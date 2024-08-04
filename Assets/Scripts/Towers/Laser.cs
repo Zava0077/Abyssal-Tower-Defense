@@ -6,22 +6,21 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Laser : BulletEffects
 {
-    float shadCd = 0f;
     public override void OnStart(GameObject proj)
     {
-        proj.GetComponent<Projectile>().collidable = false;
-        proj.GetComponent<Projectile>().waitCast = true;    
+        _proj.collidable = false;
+        _proj.waitCast = true;
+        Player.instance.laser.Play();
     }
     public override void Travel(GameObject proj)
     {
-        shadCd += Time.deltaTime;
-        if (proj.GetComponent<Projectile>().liveTime > 0.08f)
-            proj.GetComponent<Projectile>().collidable = true;
-        if (proj.GetComponent<Projectile>().liveTime > 1.5f)
+        if (_proj.liveTime > 0.08f)
+            _proj.collidable = true;
+        if (_proj.liveTime > 1.5f)
         {
             Destroy(proj.gameObject);
         }
-        proj.transform.position += proj.transform.forward * Vector3.Distance(proj.GetComponent<Projectile>().position, proj.GetComponent<Projectile>().target) / 10;
+        proj.transform.position += proj.transform.forward * Vector3.Distance(_proj.position, _proj.target) / 10;
         proj.transform.position = new Vector3(proj.transform.position.x, 1f, proj.transform.position.z);
         proj.transform.rotation.SetEulerRotation(0f, proj.transform.rotation.y, 0f);
     }

@@ -7,6 +7,11 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     public Camera camera;
+    public static Player instance;
+    Player()
+    {
+        instance = this;
+    }
     private float moveSpeed;
     private float speed = 40f;
     [SerializeField] private List<GameObject> _res;
@@ -21,12 +26,12 @@ public class Player : MonoBehaviour
     public float levelUpBonus = 2f;
     public List<GameObject> Ferms;
     RaycastHit[] hits;
+    public AudioSource shoot, laser, expl, expl2, bounce, fraction, pudd, hit, pierce;
 
 
     private void Start()
     {
         Camera.main.GetComponentInChildren<Image>().gameObject.SetActive(false);
-        
     }
     private void Update()
     {

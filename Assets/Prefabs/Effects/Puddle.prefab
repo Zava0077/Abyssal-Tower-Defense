@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2011189355239585380}
   - component: {fileID: 8937428846708967392}
   - component: {fileID: 1004954847654883184}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Puddle
   m_TagString: Effect
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

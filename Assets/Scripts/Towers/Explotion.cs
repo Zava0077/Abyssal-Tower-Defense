@@ -1,20 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Explotion : MonoBehaviour
 {
-    float time = 0f;
     public Damage damage;
-    private void Update()
+    private void OnEnable()
     {
-        time += Time.deltaTime;
-        if (time > 1f)
-        {
-            time = 0f;
-            gameObject.SetActive(false);
-        }
+        StartCoroutine(DeathSentence());
+    }
+    IEnumerator DeathSentence()
+    {
+        yield return new WaitForSeconds(2);
+        gameObject.SetActive(false);
     }
     private void OnTriggerEnter(Collider other)
     {

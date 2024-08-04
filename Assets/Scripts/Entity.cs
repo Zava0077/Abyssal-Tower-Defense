@@ -61,7 +61,6 @@ public class Entity : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             gameObject.GetComponent<Renderer>().materials[0].color = defaultColor;
         }
-        yield return null;
     }
    
 }

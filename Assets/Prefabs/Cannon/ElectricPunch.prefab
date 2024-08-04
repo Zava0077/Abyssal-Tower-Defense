@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chance: {fileID: 0}
+  shadowColor: {r: 0, g: 0, b: 0, a: 0}
   agroRadius: 0
   owner: {fileID: 0}
   target: {x: 0, y: 0, z: 0}
@@ -94,6 +95,7 @@ MonoBehaviour:
   liveTime: 0
   timeNeed: 0
   testTimer: 0
+  waitCast: 0
   collidable: 0
   effects: []
 --- !u!54 &4222858382983931280
@@ -138,7 +140,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

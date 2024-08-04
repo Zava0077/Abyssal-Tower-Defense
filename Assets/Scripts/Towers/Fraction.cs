@@ -7,7 +7,6 @@ public class Fraction : BulletEffects
 {
     public override void OnStart(GameObject proj)
     {
-
     }
     public override void Travel(GameObject proj)
     {
@@ -17,7 +16,7 @@ public class Fraction : BulletEffects
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
-        if (testrnd < proj.GetComponent<Projectile>().chance.shatter)//заменить на шанс от башни
+        if (testrnd < _proj.chance.shatter)//заменить на шанс от башни
         {
             for (int i = 0; i < 2; i++)
             {
@@ -27,7 +26,7 @@ public class Fraction : BulletEffects
                 foreach (var element in proj.GetComponentsInChildren<Transform>())
                     if (element.gameObject.tag == "Projectile")
                         from = element.position;
-                foreach (var _effect in proj.GetComponent<Projectile>().effects)
+                foreach (var _effect in _proj.effects)
                 {
                     if (_effect.ToString().Contains("(ElectricBeam)"))
                     {
@@ -37,14 +36,15 @@ public class Fraction : BulletEffects
                 }
                 
                 Vector3 nextTarget = new Vector3(from.x + random.Next(-9 * modifier, 9 * modifier), from.y, from.z + random.Next(-9 * modifier, 9 * modifier));
-                Chances newChance = new Chances(proj.GetComponent<Projectile>().chance.bounce, proj.GetComponent<Projectile>().chance.splash, proj.GetComponent<Projectile>().chance.puddle,
-                    proj.GetComponent<Projectile>().chance.shatter/1.5f, proj.GetComponent<Projectile>().chance.doubleAttack, proj.GetComponent<Projectile>().chance.crit,
-                    proj.GetComponent<Projectile>().chance.status, proj.GetComponent<Projectile>().chance.pierce);
-                Tower.twr.Shoot(from, nextTarget, new Damage(proj.GetComponent<Projectile>().damage._fire / 2, proj.GetComponent<Projectile>().damage._cold / 2,
-                    proj.GetComponent<Projectile>().damage._lightning / 2, proj.GetComponent<Projectile>().damage._void / 2, proj.GetComponent<Projectile>().damage._physical / 2), proj, proj.GetComponent<Projectile>().agroRadius, 3f,
-                    newChance, proj.GetComponent<Projectile>().effects, proj.GetComponent<Projectile>().projSpeed, proj.transform, !_elec ? null : proj.GetComponent<Projectile>().prevEnemy,
+                Chances newChance = new Chances(_proj.chance.bounce, _proj.chance.splash, _proj.chance.puddle,
+                    _proj.chance.shatter/2f, _proj.chance.doubleAttack, _proj.chance.crit,
+                    _proj.chance.status, _proj.chance.pierce);
+                Tower.twr.Shoot(from, nextTarget, new Damage(_proj.damage._fire / 2, _proj.damage._cold / 2,
+                    _proj.damage._lightning / 2, _proj.damage._void / 2, _proj.damage._physical / 2), proj, _proj.agroRadius, 3f,
+                    newChance, _proj.effects, _proj.projSpeed, proj.transform, !_elec ? null : _proj.prevEnemy,
                     new Vector3(proj.transform.localScale.x / 1.5f, proj.transform.localScale.y / 1.5f, proj.transform.localScale.z / 1.5f));
             }
+            Player.instance.fraction.Play();
         }
     }
   

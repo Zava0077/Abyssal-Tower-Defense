@@ -99,7 +99,6 @@ public class Tower : Entity
                 value.Key.active = true;
             }
         }
-        //enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(x => x.Value == null).Key);
         currentRotationAngle += attackSpeed * Time.deltaTime * 30;
         if (currentRotationAngle >= 360f)
         {
@@ -132,55 +131,6 @@ public class Tower : Entity
     }
     public Entity FindEnemy(GameObject tower, float agroRadius, Dictionary<float, Entity> enemiesCanShooted, List<Mob> lastEnemy = null)
     {
-        //enemies = GameObject.FindGameObjectsWithTag("Enemy"); //мб переделать, а то слишком дохуя чекать
-        //bool loop = true;
-        //bool secLoop = true;
-        //while (loop)
-        //{
-        //    int enemyCount = 0;
-        //    foreach (var enemy in enemies)
-        //        if (Vector3.Distance(enemy.transform.position, tower.transform.position) < agroRadius)
-        //            enemyCount++;
-        //    while(secLoop)
-        //    {
-        //        secLoop = false;
-        //        if (lastEnemy != null)
-        //            foreach (var enemy in lastEnemy)
-        //                if (Vector3.Distance(enemy.transform.position, tower.transform.position) > agroRadius)
-        //                {
-        //                    lastEnemy.Remove(enemy);
-        //                    secLoop = true;
-        //                    break;
-        //                }
-
-        //    }
-        //    foreach (var enemy in enemies)
-        //    {
-        //        if (Vector3.Distance(enemy.transform.position, tower.transform.position) < agroRadius)
-        //        {
-        //            if (lastEnemy != null && enemyCount == lastEnemy.Count && loop)
-        //            {
-        //                lastEnemy.Clear();
-        //                loop = false;
-        //            }
-        //            if (lastEnemy != null && lastEnemy.Contains(enemy.GetComponent<Mob>())) continue;
-        //            if (!enemiesCanShooted.ContainsValue(enemy.GetComponent<Mob>()) || !enemiesCanShooted.ContainsKey(Vector3.Distance(enemy.transform.position, tower.transform.position)))
-        //                enemiesCanShooted.TryAdd(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
-        //            else
-        //            {
-        //                enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(x => x.Value == enemy.GetComponent<Mob>()).Key);
-        //                enemiesCanShooted.TryAdd(Vector3.Distance(enemy.transform.position, tower.transform.position), enemy.GetComponent<Mob>());
-        //            }
-        //        }
-        //        else if (enemy != enemies[enemies.Length - 1]) continue;
-        //        else
-        //            if (lastEnemy != null && enemiesCanShooted.Count == 0 && lastEnemy.Count > 0)
-        //            lastEnemy.Clear();
-        //        loop = false;
-        //    }
-
-        //}
-        //return enemiesCanShooted.Count > 0 ? enemiesCanShooted[enemiesCanShooted.Keys.Min()] : null; //на всякий случай оставил этот код вдруг новый не работает))00
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         List<Mob> currentEnemiesInRange = new List<Mob>();
         foreach (var enemy in enemies)
@@ -190,6 +140,7 @@ public class Tower : Entity
             {
                 Mob mob = enemy.GetComponent<Mob>();
                 currentEnemiesInRange.Add(mob);
+                enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(s => s.Value == mob).Key);
                 enemiesCanShooted[distance] = mob;
             }
         }

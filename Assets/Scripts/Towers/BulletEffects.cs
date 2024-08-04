@@ -6,6 +6,7 @@ using UnityEngine;
 
 public abstract class BulletEffects : MonoBehaviour
 {
+    public Projectile _proj;
     public object Clone()
     {
         return MemberwiseClone();

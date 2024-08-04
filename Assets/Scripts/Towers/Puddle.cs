@@ -1,54 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Puddle : MonoBehaviour
 {
-    float time = 0f;
-    float damageTicks = 0f;
     public Damage damage;
     public Chances chance;
-    private void Update()
+    bool doDamage = true;
+    private void OnEnable()
     {
-        time += Time.deltaTime;
-        damageTicks += Time.deltaTime;
-        if (time > 2f)//сделать длительность зависимой
+        StartCoroutine(Damage());
+        StartCoroutine(DeathSentence());
+    }
+    IEnumerator DeathSentence()
+    {
+        yield return new WaitForSeconds(2);
+        gameObject.SetActive(false);
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (!doDamage) return;
+        if (damage != null && other.gameObject.GetComponent<Entity>())
         {
-            time = 0f;
-            gameObject.SetActive(false);
+            DoDamage.DealDamage(other.gameObject.GetComponent<Entity>(), null, damage);
         }
     }
-    //private void OnTriggerStay(Collider other)
-    //{
-    //    if(damageTicks > 2/10)
-    //    {
-    //        if (damage != null && other.GetComponent<Entity>() != null)
-    //            DoDamage.DealDamage(other.GetComponent<Entity>(), null, damage);
-    //        damageTicks = 0;
-    //    }
-    //}
-    private void OnCollisionStay(Collision collision)
+    IEnumerator Damage()
     {
-        if (damageTicks > 2 / 10)
-        {
-            if (damage != null && collision.gameObject.GetComponent<Entity>())
-            {
-                DoDamage.DealDamage(collision.gameObject.GetComponent<Entity>(), null, damage);
-                damageTicks = 0;
-            }
-        }
+        doDamage = false;
+        yield return new WaitForSeconds(0.2f);
+        doDamage = true;
     }
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if(damage != null && collision.gameObject.GetComponent<Entity>())
-    //        StartCoroutine(Damage(collision));
-    //}
-    //IEnumerator Damage(Collision collision)
-    //{
-    //    while (collision.gameObject && gameObject)
-    //    {
-    //        DoDamage.DealDamage(collision.gameObject.GetComponent<Entity>(), null, damage);
-    //        yield return new WaitForSeconds(0.2f);
-    //    }
-    //}
 }

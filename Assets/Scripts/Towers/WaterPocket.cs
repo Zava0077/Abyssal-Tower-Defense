@@ -8,7 +8,6 @@ public class WaterPocket : BulletEffects
     GameObject pudd;
     public override void OnStart(GameObject proj)
     {
-
     }
     public override void Travel(GameObject proj)
     {
@@ -19,13 +18,13 @@ public class WaterPocket : BulletEffects
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
         
-        if (testrnd < proj.GetComponent<Projectile>().chance.puddle)
+        if (testrnd < _proj.chance.puddle)
         {
             float size = 0;
             float[] colors = new float[3];
-            colors[0] = (proj.GetComponent<Projectile>().damage._fire + proj.GetComponent<Projectile>().damage._physical < 255 ? proj.GetComponent<Projectile>().damage._fire + proj.GetComponent<Projectile>().damage._physical : 255) / 255;
-            colors[1] = (proj.GetComponent<Projectile>().damage._lightning + proj.GetComponent<Projectile>().damage._void < 255 ? proj.GetComponent<Projectile>().damage._lightning + proj.GetComponent<Projectile>().damage._void : 255) / 255;
-            colors[2] = (proj.GetComponent<Projectile>().damage._cold < 255 ? proj.GetComponent<Projectile>().damage._cold : 255) / 255;
+            colors[0] = (_proj.damage._fire + _proj.damage._physical < 255 ? _proj.damage._fire + _proj.damage._physical : 255) / 255;
+            colors[1] = (_proj.damage._lightning + _proj.damage._void < 255 ? _proj.damage._lightning + _proj.damage._void : 255) / 255;
+            colors[2] = (_proj.damage._cold < 255 ? _proj.damage._cold : 255) / 255;
             for (int i = 0; i < colors.Length; i++)
                 if (colors[i] == colors.Max())
                     colors[i] = 1;
@@ -34,8 +33,8 @@ public class WaterPocket : BulletEffects
             foreach (var element in proj.GetComponentsInChildren<Transform>())
                 if (element.gameObject.tag == "Projectile")
                     from = element.position;
-            foreach (var damage in proj.GetComponent<Projectile>().damage.GetType().GetFields())//
-                size += (float)damage.GetValue(proj.GetComponent<Projectile>().damage) / 4;
+            foreach (var damage in _proj.damage.GetType().GetFields())//
+                size += (float)damage.GetValue(_proj.damage) / 4;
             GameObject[] ground = GameObject.FindGameObjectsWithTag("Ground");
             Vector3 puddPosition = new Vector3(from.x, ground[0].transform.position.y, from.z);
             if (Player.puddles.Count > 0) pudd = Player.puddles.Find(s => !s.activeSelf);
@@ -50,10 +49,10 @@ public class WaterPocket : BulletEffects
             }
             pudd.SetActive(true);
             pudd.transform.position = puddPosition;
-            pudd.GetComponent<Puddle>().damage = proj.GetComponent<Projectile>().damage;
+            pudd.GetComponent<Puddle>().damage = _proj.damage;
             pudd.GetComponent<Renderer>().material.color = new Color(colors[0], colors[1], colors[2], 0.6f);
             pudd.transform.localScale = new Vector3(size, pudd.transform.localScale.y, size);
-
+            Player.instance.pudd.Play();
         }
     }
 }

@@ -5,8 +5,10 @@ using UnityEngine;
 public class ElectricBeam : BulletEffects
 {
     private Vector3 positionMemory;
+    Transform transformChildren;
     public override void OnStart(GameObject proj)
     {
+        transformChildren = proj.GetComponentInChildren<Transform>();
         positionMemory = proj.transform.position;
         proj.GetComponent<Projectile>().collidable = false;
         Damage damage = proj.GetComponent<Projectile>().damage;
@@ -14,15 +16,14 @@ public class ElectricBeam : BulletEffects
     }
     public override void Travel(GameObject proj)
     {
-        var element = proj.GetComponentInChildren<Transform>();
-        element.localScale = new Vector3(element.localScale.x, element.localScale.y, Vector3.Distance(positionMemory, proj.GetComponent<Projectile>().targetMemory));
-        element.position = Vector3.MoveTowards(positionMemory, proj.GetComponent<Projectile>().targetMemory, Vector3.Distance(positionMemory, proj.GetComponent<Projectile>().targetMemory) / 2);
-        element.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.right, proj.GetComponent<Projectile>().targetMemory - proj.transform.position, 3.14f, 0));
-        if (proj.GetComponent<Projectile>().liveTime > 0.2f)
-            proj.GetComponent<Projectile>().collidable = true;
-        if (proj.GetComponent<Projectile>().liveTime > 0.25f)
+        transformChildren.localScale = new Vector3(transformChildren.localScale.x, transformChildren.localScale.y, Vector3.Distance(positionMemory, _proj.targetMemory));
+        transformChildren.position = Vector3.MoveTowards(positionMemory, _proj.targetMemory, Vector3.Distance(positionMemory, _proj.targetMemory) / 2);
+        transformChildren.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.right, _proj.targetMemory - proj.transform.position, 3.14f, 0));
+        if (_proj.liveTime > 0.2f)
+            _proj.collidable = true;
+        if (_proj.liveTime > 0.25f)
         {
-            foreach (BulletEffects effect in proj.GetComponent<Projectile>().effects)
+            foreach (BulletEffects effect in _proj.effects)
                 effect.End(proj);
             Destroy(proj);
         }
@@ -31,7 +32,7 @@ public class ElectricBeam : BulletEffects
     public override void End(GameObject proj)
     {
         Vector3 from = proj.transform.position;
-        Damage damage1 = proj.GetComponent<Projectile>().damage;
+        Damage damage1 = _proj.damage;
         foreach (var element in proj.GetComponentsInChildren<Transform>())
             if (element.gameObject.tag == "Projectile")
                 from = element.position;

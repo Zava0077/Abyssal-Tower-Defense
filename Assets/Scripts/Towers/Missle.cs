@@ -6,21 +6,19 @@ public class Missle : BulletEffects
 {
     public override void OnStart(GameObject proj)
     {
-
+        Player.instance.shoot.Play();
     }
     public override void Travel(GameObject proj)
     {
-        proj.GetComponent<Projectile>().testTimer += Time.deltaTime;
-        if (proj.GetComponent<Projectile>().liveTime > 5f)
-            Destroy(proj.gameObject);
-        if (proj.GetComponent<Projectile>().liveTime > proj.GetComponent<Projectile>().timeNeed)
-            proj.GetComponent<Projectile>().projHeight = -50;
+        if (_proj.liveTime > 5f)
+            Destroy(proj);
+        if (_proj.liveTime > _proj.timeNeed)
+            _proj.projHeight = -50;
         else
-        if (proj.GetComponent<Projectile>().liveTime > proj.GetComponent<Projectile>().timeNeed / 2 && proj.GetComponent<Projectile>().projHeight > 0)
-            proj.GetComponent<Projectile>().projHeight *= -1;
-        proj.GetComponent<Projectile>().transform.position += proj.transform.forward * proj.GetComponent<Projectile>().projSpeed * Time.deltaTime;
-        proj.GetComponent<Projectile>().transform.position += new Vector3(0, proj.GetComponent<Projectile>().projHeight * Time.deltaTime, 0);
-        
+        if (_proj.liveTime > _proj.timeNeed / 2 && _proj.projHeight > 0)
+            _proj.projHeight *= -1;
+        _proj.transform.position += proj.transform.forward * _proj.projSpeed * Time.deltaTime;
+        _proj.transform.position += new Vector3(0, _proj.projHeight * Time.deltaTime, 0);
     }
     public override void End(GameObject proj)
     {
