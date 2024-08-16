@@ -120,8 +120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d65597ba17705714fbe7ed65255eedd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1000
-  health: 1000
+  maxHealth: 250
+  health: 250
   transform: {fileID: 4876084960904833997}
   statuses: []
   _damage:

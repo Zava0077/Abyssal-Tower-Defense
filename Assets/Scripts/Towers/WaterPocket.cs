@@ -6,6 +6,7 @@ using UnityEngine;
 public class WaterPocket : BulletEffects
 {
     GameObject pudd;
+       
     public override void OnStart(GameObject proj)
     {
     }
@@ -52,6 +53,7 @@ public class WaterPocket : BulletEffects
             pudd.GetComponent<Puddle>().damage = _proj.damage;
             pudd.GetComponent<Renderer>().material.color = new Color(colors[0], colors[1], colors[2], 0.6f);
             pudd.transform.localScale = new Vector3(size, pudd.transform.localScale.y, size);
+            pudd.GetComponent<Puddle>().producer = proj.GetComponent<Projectile>();
             if (Player.instance.pudd.isPlaying) Player.instance.pudd.Stop();
 
             Player.instance.pudd.Play();

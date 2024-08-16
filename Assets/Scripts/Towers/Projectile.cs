@@ -1,4 +1,5 @@
 using Palmmedia.ReportGenerator.Core.Reporting.Builders;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -40,6 +41,7 @@ public class Projectile : MonoBehaviour
     private void Awake()
     {
         projHeight = archMultiplier;
+        Entity.onEntityDeath += OnEntityDeath;
     }
     private void Start()
     {
@@ -48,7 +50,7 @@ public class Projectile : MonoBehaviour
             position = transform.position;
             Vector3 direction = (target - position).normalized;
             distance = Vector3.Distance(position, target);
-            //float speed = (Vector3.forward * projSpeed * Time.deltaTime * direction.magnitude).magnitude ;
+            //float speed = (Vector3.forward * projSpeed * Time.deltaTime * direction.magnitude).magnitude;
             float speed = projSpeed * direction.magnitude * 0.85f;
             timeNeed = distance / speed; //0,36 - 0,42
             targetMemory = target;
@@ -60,6 +62,11 @@ public class Projectile : MonoBehaviour
             effect._proj = gameObject.GetComponent<Projectile>();
             effect.OnStart(gameObject);  //дополнительные эффекты снаряда в начале полета,например, изменение стартового направления, изменение модельки.
         }
+    }
+    private void OnEntityDeath(object sender)
+    {
+        if (sender.GetType() == typeof(Mob) && prevEnemy != null && prevEnemy.Count > 0)
+            prevEnemy.Remove((Mob)sender);
     }
     private void Update()
     {
@@ -88,7 +95,7 @@ public class Projectile : MonoBehaviour
         {
             foreach (BulletEffects effect in effects)
                 effect.End(gameObject);
-            if (chance.pierce < Random.Range(1, 100) || other.gameObject.tag == "Tower\'s Place" || other.gameObject.tag == "Unpiercable")
+            if (chance.pierce < UnityEngine.Random.Range(1, 100) || other.gameObject.tag == "Tower\'s Place" || other.gameObject.tag == "Unpiercable")
             {
                 if (Player.instance.hit.isPlaying) Player.instance.hit.Stop();
                 Player.instance.hit.Play();

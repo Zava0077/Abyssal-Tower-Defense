@@ -6,6 +6,7 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     public GameObject[] mobs;
+    [SerializeField] private float spawnTime = 10f;
     private void OnEnable()
     {
         StartCoroutine(StartSpawning());
@@ -14,7 +15,7 @@ public class Spawner : MonoBehaviour
     {
         while(enabled)
         {
-            yield return new WaitForSeconds(10f);
+            yield return new WaitForSeconds(spawnTime);
             GameObject mob = Instantiate(mobs[Random.Range(0, mobs.Length)],transform.position,Quaternion.identity,transform.parent); 
         }
     }

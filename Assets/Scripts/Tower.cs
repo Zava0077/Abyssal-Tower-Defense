@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,8 +122,9 @@ public class Tower : Entity
                     if (element.tag == "Projectile")
                         fromWhere = element.position;
    
-                Shoot(fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed/10), damage, missle, agroRadius,missle.GetComponent<Projectile>().archMultiplier, chance, effects, projSpeed, gameObject.transform, new List<Mob>());
-                if (Random.Range(1,99) > chance.doubleAttack)
+                Shoot(fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed/10), damage, missle,
+                    agroRadius,missle.GetComponent<Projectile>().archMultiplier, chance, effects, projSpeed, gameObject.transform, new List<Mob>());
+                if (UnityEngine.Random.Range(1,99) > chance.doubleAttack)
                     time = 0f;
             }
         }
@@ -145,7 +147,7 @@ public class Tower : Entity
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         List<Mob> currentEnemiesInRange = new List<Mob>();
-
+       
         foreach (var enemy in enemies)
         {
             Mob mob = enemy.GetComponent<Mob>();
@@ -160,7 +162,15 @@ public class Tower : Entity
 
         if (lastEnemy != null)
         {
-            lastEnemy.RemoveAll(mob => Vector3.Distance(mob.transform.position, tower.transform.position) > agroRadius);
+            try
+            {
+                lastEnemy.RemoveAll(mob => Vector3.Distance(mob.transform.position, tower.transform.position) > agroRadius);
+            }
+            catch
+            {
+                Debug.Log("dsadsa");
+            }
+
             if (currentEnemiesInRange.Count == lastEnemy.Count)
             {
                 lastEnemy.Clear();

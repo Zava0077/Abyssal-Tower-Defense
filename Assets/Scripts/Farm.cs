@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,19 +13,14 @@ public class Farm : Entity
 
     private void Awake()
     {
-        _entity.Awake();
+        base.Awake();
         resCost = new Resources(costs[0], costs[1], costs[2], costs[3]);
         resGain = new Resources(gains[0], gains[1], gains[2], 0);
     }
 
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        _entity.Update();
+        base.Update();
         timer += Time.deltaTime;
         if (timer >= timeToGainRes)
         {

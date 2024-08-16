@@ -8,7 +8,8 @@ public class Mob : Entity
 {
     NavMeshAgent agent;
     [SerializeField] private Transform finish;
-    public float speed;
+    public float speed; 
+
     public Vector3 Direction
     {
         get
