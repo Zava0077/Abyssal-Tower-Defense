@@ -12,7 +12,7 @@ public class Tower : Entity
     public GameObject missle;
     static GameObject[] enemies;
     Entity enemy;
-    [SerializeField] GameObject tower;
+    [SerializeField] private GameObject tower;
     public float time;
     public float incDamage = 1;
     public float incAttackSpeed;
@@ -58,47 +58,47 @@ public class Tower : Entity
     }
     public Chances chance;
 
-    protected void Awake()
+    new protected void Awake()
     {
         base.Awake();
-        levelUpCallbackNames = new Dictionary<LevelUpCallback, Sprite>()
-        {
-        { FireUp , Camera.main.GetComponent<Player>().levelUpSprites[0] },
-        { ColdUp , Camera.main.GetComponent<Player>().levelUpSprites[1] },
-        { LightningUp , Camera.main.GetComponent<Player>().levelUpSprites[2] },
-        { VoidUp , Camera.main.GetComponent<Player>().levelUpSprites[3] },
-        { PhysUp , Camera.main.GetComponent<Player>().levelUpSprites[4] },
-        {RangeUp, Camera.main.GetComponent<Player>().levelUpSprites[5] },
-        {AttackSpUp, Camera.main.GetComponent<Player>().levelUpSprites[6] },
-        {DoubleAttackUp, Camera.main.GetComponent<Player>().levelUpSprites[7] },
-        {FractionUp , Camera.main.GetComponent<Player>().levelUpSprites[8] },
-        {SplashUp, Camera.main.GetComponent<Player>().levelUpSprites[9] },
-        {BounceUp, Camera.main.GetComponent<Player>().levelUpSprites[10] },
-        {PuddleUp, Camera.main.GetComponent<Player>().levelUpSprites[11] },
-        {FireConvert, Camera.main.GetComponent<Player>().levelUpSprites[12] },
-        {ColdConvert, Camera.main.GetComponent<Player>().levelUpSprites[13] },
-        {LightningConvert, Camera.main.GetComponent<Player>().levelUpSprites[14] },
-        {PhysicalConvert, Camera.main.GetComponent<Player>().levelUpSprites[15] },
-        {ProjectileSpeedDown, Camera.main.GetComponent<Player>().levelUpSprites[16] },
-        {ProjectileSpeedUp, Camera.main.GetComponent<Player>().levelUpSprites[17] },
-        };
+        Player player = Camera.main.GetComponent<Player>();
+
         foreach (var levelUp in levelUps)
             levelUpCallbacks.Add(lUCLinks[levelUp]);
+
         if (!tower)
             tower = GetComponent<GameObject>();
 
+        levelUpCallbackNames = new Dictionary<LevelUpCallback, Sprite>()
+        {
+            { FireUp , player.levelUpSprites[0] },
+            { ColdUp , player.levelUpSprites[1] },
+            { LightningUp , player.levelUpSprites[2] },
+            { VoidUp , player.levelUpSprites[3] },
+            { PhysUp , player.levelUpSprites[4] },
+            { RangeUp, player.levelUpSprites[5] },
+            { AttackSpUp, player.levelUpSprites[6] },
+            { DoubleAttackUp, player.levelUpSprites[7] },
+            { FractionUp , player.levelUpSprites[8] },
+            { SplashUp, player.levelUpSprites[9] },
+            { BounceUp, player.levelUpSprites[10] },
+            { PuddleUp, player.levelUpSprites[11] },
+            { FireConvert, player.levelUpSprites[12] },
+            { ColdConvert, player.levelUpSprites[13] },
+            { LightningConvert, player.levelUpSprites[14] },
+            { PhysicalConvert, player.levelUpSprites[15] },
+            { ProjectileSpeedDown, player.levelUpSprites[16] },
+            { ProjectileSpeedUp, player.levelUpSprites[17] },
+        };
+ 
         cost = new Resources(costs[0], costs[1], costs[2], costs[3]);
         chance = new Chances(chances[0], chances[1], chances[2], chances[3], chances[4], chances[5], chances[6], chances[7]);
     }
-    protected void Update()
+    new protected void Update()
     {
         foreach(var value in keyValuePairs)
-        {
             if (value.Value)
-            {
                 value.Key.active = true;
-            }
-        }
         currentRotationAngle += attackSpeed * Time.deltaTime * 30;
         if (currentRotationAngle >= 360f)
         {
@@ -106,7 +106,8 @@ public class Tower : Entity
         }
         base.Update();
         Quaternion newDir;
-        Entity enemy = FindEnemy(tower, tower.GetComponent<Tower>().agroRadius, enemiesCanShooted);
+        enemy = FindEnemy(tower, tower.GetComponent<Tower>().agroRadius, enemiesCanShooted); 
+  
         if (enemy)
         {
             time += Time.deltaTime;
@@ -115,13 +116,13 @@ public class Tower : Entity
             if (time > 1 / attackSpeed)
             {
                 Vector3 fromWhere = gameObject.transform.position;
+
                 foreach (var element in gameObject.GetComponentsInChildren<Transform>())
-                {
                     if (element.tag == "Projectile")
                         fromWhere = element.position;
-                }
-                Shoot(fromWhere, enemy.GetComponent<Transform>().position, damage, missle, agroRadius,missle.GetComponent<Projectile>().archMultiplier, chance, effects, projSpeed, gameObject.transform, new List<Mob>());
-                if (Random.Range(1,99) > chance.doubleAttack) //реализация двойной атаки
+   
+                Shoot(fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed/10), damage, missle, agroRadius,missle.GetComponent<Projectile>().archMultiplier, chance, effects, projSpeed, gameObject.transform, new List<Mob>());
+                if (Random.Range(1,99) > chance.doubleAttack)
                     time = 0f;
             }
         }
@@ -129,18 +130,30 @@ public class Tower : Entity
             newDir = Quaternion.Lerp(transform.rotation,  Quaternion.Euler(0, currentRotationAngle, 0), 0.05f);
         transform.rotation = newDir;
     }
+    private void OnDrawGizmos()
+    {
+        if(enemy)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(enemy.transform.position, new Vector3(enemy.transform.position.x, enemy.transform.position.y + 10f, enemy.transform.position.z));
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10),
+                new Vector3(enemy.transform.position.x, enemy.transform.position.y + 10f, enemy.transform.position.z) + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10));
+        }
+    }
     public Entity FindEnemy(GameObject tower, float agroRadius, Dictionary<float, Entity> enemiesCanShooted, List<Mob> lastEnemy = null)
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         List<Mob> currentEnemiesInRange = new List<Mob>();
+
         foreach (var enemy in enemies)
         {
+            Mob mob = enemy.GetComponent<Mob>();
             float distance = Vector3.Distance(enemy.transform.position, tower.transform.position);
+            enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(s => s.Value == mob).Key);
             if (distance < agroRadius)
             {
-                Mob mob = enemy.GetComponent<Mob>();
                 currentEnemiesInRange.Add(mob);
-                enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(s => s.Value == mob).Key);
                 enemiesCanShooted[distance] = mob;
             }
         }

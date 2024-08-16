@@ -6,6 +6,7 @@ public class Missle : BulletEffects
 {
     public override void OnStart(GameObject proj)
     {
+        if (Player.instance.shoot.isPlaying) Player.instance.shoot.Stop();
         Player.instance.shoot.Play();
     }
     public override void Travel(GameObject proj)

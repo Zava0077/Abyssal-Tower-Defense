@@ -24,7 +24,7 @@ public class Entity : MonoBehaviour
     public float agroRadius;
     public static Entity _entity;
     [SerializeField] Material damageMat;
-    Color defaultColor;
+    private Color defaultColor;
     public Entity()
     {
         _entity = this;

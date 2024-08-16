@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
     public float levelUpBonus = 2f;
     public List<GameObject> Ferms;
     RaycastHit[] hits;
-    public AudioSource shoot, laser, expl, expl2, bounce, fraction, pudd, hit, pierce, create, hot, snow;
+    public AudioSource shoot, laser, expl, expl2, bounce, fraction, pudd, hit, pierce, create, hot, snow, homing;
 
 
     private void Start()

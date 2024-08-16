@@ -45,8 +45,18 @@ public class Bomb : BulletEffects
             expl.GetComponent<Renderer>().material.color = new Color(1,0.08f,0f, 0.6f);
             expl.GetComponent<Explotion>().damage = new Damage(15f, 0f, 0f, 0f, 50f);
             expl.transform.localScale = new Vector3(5f + size, 5f + size, 5f + size);
-            if(sound == 1) Player.instance.expl.Play();
-            else Player.instance.expl2.Play();
+            if (sound == 1)
+            {
+                if (Player.instance.expl.isPlaying)
+                    Player.instance.expl.Stop();
+                Player.instance.expl.Play();
+            }
+            else
+            {
+                if (Player.instance.expl2.isPlaying)
+                    Player.instance.expl2.Stop();
+                Player.instance.expl2.Play();
+            }
         }
     }
 }

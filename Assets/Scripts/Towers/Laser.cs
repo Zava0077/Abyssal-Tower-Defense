@@ -13,6 +13,7 @@ public class Laser : BulletEffects
         collider = proj.GetComponent<Collider>();
         collider.enabled = false;
         _proj.waitCast = true;
+        if (Player.instance.laser.isPlaying) Player.instance.laser.Stop();
         Player.instance.laser.Play();
     }
     public override void Travel(GameObject proj)

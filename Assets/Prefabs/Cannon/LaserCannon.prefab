@@ -96,7 +96,7 @@ MonoBehaviour:
   - 0
   - 0
   attackSpeed: 0.5
-  projSpeed: 10
+  projSpeed: 35
   multiplierTakeDamage: 0
   agroRadius: 45
   damageMat: {fileID: 0}

@@ -44,6 +44,7 @@ public class Fraction : BulletEffects
                     newChance, _proj.effects, _proj.projSpeed, proj.transform, !_elec ? null : _proj.prevEnemy,
                     new Vector3(proj.transform.localScale.x / 1.5f, proj.transform.localScale.y / 1.5f, proj.transform.localScale.z / 1.5f));
             }
+            if (Player.instance.fraction.isPlaying) Player.instance.fraction.Stop();
             Player.instance.fraction.Play();
         }
     }

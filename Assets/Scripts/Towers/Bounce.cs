@@ -33,6 +33,8 @@ public class Bounce : BulletEffects
             }
             Tower.twr.Shoot(from, nextTarget, _proj.damage, proj, _proj.agroRadius, _proj.agroRadius, _proj.chance,
                 _proj.effects, _proj.projSpeed, proj.transform, _proj.prevEnemy);
+            if (Player.instance.bounce.isPlaying) Player.instance.bounce.Stop();
+
             Player.instance.bounce.Play();
         }
     }

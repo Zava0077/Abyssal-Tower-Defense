@@ -15,7 +15,12 @@ public class Homing : BulletEffects
         collider.enabled = false;
         _proj.collidable = false; 
         _proj.waitCast = true;
+        if (Player.instance.laser.isPlaying)
+            Player.instance.laser.Stop();
+        //if (Player.instance.laser.isPlaying)
+        //    Player.instance.homing.Stop();
         Player.instance.laser.Play();
+        Player.instance.homing.Play();
     }
     public override void Travel(GameObject proj)
     {
@@ -33,6 +38,6 @@ public class Homing : BulletEffects
     }
     public override void End(GameObject proj)
     {
-
+        Player.instance.homing.Stop();
     }
 }
