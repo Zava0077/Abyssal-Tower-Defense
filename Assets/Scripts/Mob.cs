@@ -14,7 +14,7 @@ public class Mob : Entity
     {
         get
         {
-            return agent.desiredVelocity.normalized;
+            return !agent ? Vector3.zero : agent.desiredVelocity.normalized;
         }
     }
     private void OnDrawGizmos()

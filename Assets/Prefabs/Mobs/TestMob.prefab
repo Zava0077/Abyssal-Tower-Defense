@@ -142,7 +142,7 @@ MonoBehaviour:
   agroRadius: 0
   damageMat: {fileID: 0}
   finish: {fileID: 0}
-  speed: 10
+  speed: 5
 --- !u!195 &6730308878948706872
 NavMeshAgent:
   m_ObjectHideFlags: 0

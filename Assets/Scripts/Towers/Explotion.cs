@@ -13,12 +13,8 @@ public class Explotion : MonoBehaviour
     {
         StartCoroutine(DeathSentence()); 
         Entity.onEntityDeath += OnEntityDeath;
-
     }
-    private void OnDisable()
-    {
-        Entity.onEntityDeath -= OnEntityDeath;
-    }
+    private void OnDisable() => Entity.onEntityDeath -= OnEntityDeath;
     IEnumerator DeathSentence()
     {
         yield return new WaitForSeconds(2);

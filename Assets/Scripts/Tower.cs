@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using static LevelUp;
+using static BulletEffects;
 using static UnityEngine.GraphicsBuffer;
 
 public class Tower : Entity
@@ -25,8 +27,12 @@ public class Tower : Entity
     public Resources cost;
     [SerializeField] List<int> costs = new List<int>();
     [SerializeField] List<int> chances = new List<int>();
+    [SerializeField] List<string> starterEffects = new List<string>();
     [SerializeField] Dictionary<GameObject, bool> keyValuePairs = new Dictionary<GameObject, bool>();
-    public List<BulletEffects> effects = new List<BulletEffects>();
+    public BulletEffect onStart;
+    public BulletEffect travel;
+    public BulletEffect onEnd;
+
     Dictionary<float, Entity> enemiesCanShooted = new Dictionary<float, Entity>();
     public Dictionary<string, LevelUpCallback> lUCLinks = new Dictionary<string, LevelUpCallback>()
     {
@@ -49,14 +55,21 @@ public class Tower : Entity
          { "ProjectileSpeedDown",ProjectileSpeedDown },
           { "ProjectileSpeedUp",ProjectileSpeedUp },
     };
+    public Dictionary<string, BulletEffect[]> effectLinks = new Dictionary<string, BulletEffect[]>()
+    {
+        { "Missle",new BulletEffect[] {missleStart,missleTravel,null } },
+        { "Laser",new BulletEffect[] {laserStart, laserTravel, null } },
+        { "Homing",new BulletEffect[] {homingStart,homingTravel,homingEnd } },
+        { "Bomb", new BulletEffect[] {null,null,explotionEnd } },
+        { "Ignite",new BulletEffect[] { igniteStart, null, igniteEnd } },
+        { "Cold",new BulletEffect[] { coldStart, null, coldEnd } },
+        { "Elec",new BulletEffect[] { elecStart, elecTravel, elecEnd} },
+    };
     public List<LevelUpCallback> levelUpCallbacks = new List<LevelUpCallback>();
     [SerializeField] string[] levelUps;
     public Dictionary<LevelUpCallback, Sprite> levelUpCallbackNames;
     public static Tower twr;
-    public Tower()
-    {
-        twr = this;
-    }
+    public Tower() => twr = this;
     public Chances chance;
 
     new protected void Awake()
@@ -66,7 +79,12 @@ public class Tower : Entity
 
         foreach (var levelUp in levelUps)
             levelUpCallbacks.Add(lUCLinks[levelUp]);
-
+        foreach(var eff in starterEffects)
+        {
+            onStart += effectLinks[eff][0];
+            travel += effectLinks[eff][1];
+            onEnd += effectLinks[eff][2];
+        }
         if (!tower)
             tower = GetComponent<GameObject>();
 
@@ -121,9 +139,12 @@ public class Tower : Entity
                 foreach (var element in gameObject.GetComponentsInChildren<Transform>())
                     if (element.tag == "Projectile")
                         fromWhere = element.position;
-   
-                Shoot(fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed/10), damage, missle,
-                    agroRadius,missle.GetComponent<Projectile>().archMultiplier, chance, effects, projSpeed, gameObject.transform, new List<Mob>());
+
+                //Shoot(fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed/10), damage, missle,
+                //    agroRadius,missle.GetComponent<Projectile>().archMultiplier, chance, effects, projSpeed, gameObject.transform, new List<Mob>());
+                Shoot(fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10), damage, missle,
+                    agroRadius, missle.GetComponent<Projectile>().archMultiplier, chance, onStart, travel, onEnd, projSpeed, gameObject.transform, new List<Mob>());
+
                 if (UnityEngine.Random.Range(1,99) > chance.doubleAttack)
                     time = 0f;
             }
@@ -147,7 +168,7 @@ public class Tower : Entity
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         List<Mob> currentEnemiesInRange = new List<Mob>();
-       
+
         foreach (var enemy in enemies)
         {
             Mob mob = enemy.GetComponent<Mob>();
@@ -162,15 +183,7 @@ public class Tower : Entity
 
         if (lastEnemy != null)
         {
-            try
-            {
-                lastEnemy.RemoveAll(mob => Vector3.Distance(mob.transform.position, tower.transform.position) > agroRadius);
-            }
-            catch
-            {
-                Debug.Log("dsadsa");
-            }
-
+            lastEnemy.RemoveAll(mob => Vector3.Distance(mob.transform.position, tower.transform.position) > agroRadius);
             if (currentEnemiesInRange.Count == lastEnemy.Count)
             {
                 lastEnemy.Clear();
@@ -197,8 +210,25 @@ public class Tower : Entity
         {
             return null;
         }
-    }   
-    public void Shoot(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius,float archMultiplier, Chances chances, List<BulletEffects> effects, float projSpeed, Transform parent, [Optional] List<Mob> prevEnemy, [Optional] Vector3 scale)
+    }
+    //public void Shoot(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius,float archMultiplier, Chances chances, List<BulletEffects> effects, float projSpeed, Transform parent, [Optional] List<Mob> prevEnemy, [Optional] Vector3 scale)
+    //{
+    //    GameObject _missle = Instantiate(missle, turret, Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0)), parent.transform.parent);
+    //    if (scale != Vector3.zero)
+    //        _missle.transform.localScale = scale;
+    //    _missle.GetComponent<Projectile>().target = target;
+    //    _missle.GetComponent<Projectile>().damage = damage;
+    //    _missle.GetComponent<Projectile>().archMultiplier = archMultiplier;
+    //    _missle.GetComponent<Projectile>().chance = chances;
+    //    _missle.GetComponent<Projectile>().agroRadius = agroRadius;
+    //    _missle.GetComponent<Projectile>().prevEnemy = prevEnemy;
+    //    _missle.GetComponent<Projectile>().projSpeed = projSpeed;
+    //    _missle.GetComponent<Projectile>().effects.Clear();
+    //    foreach (var effect in effects)
+    //        _missle.GetComponent<Projectile>().effects.Add(effect.Clone() as BulletEffects);
+    //    _missle.GetComponent<Projectile>().liveTime = 0f;
+    //}
+    public void Shoot(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius, float archMultiplier, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, float projSpeed, Transform parent, [Optional] List<Mob> prevEnemy, [Optional] Vector3 scale)
     {
         GameObject _missle = Instantiate(missle, turret, Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0)), parent.transform.parent);
         if (scale != Vector3.zero)
@@ -210,9 +240,10 @@ public class Tower : Entity
         _missle.GetComponent<Projectile>().agroRadius = agroRadius;
         _missle.GetComponent<Projectile>().prevEnemy = prevEnemy;
         _missle.GetComponent<Projectile>().projSpeed = projSpeed;
-        _missle.GetComponent<Projectile>().effects.Clear();
-        foreach (var effect in effects)
-            _missle.GetComponent<Projectile>().effects.Add(effect.Clone() as BulletEffects);
+        _missle.GetComponent<Projectile>().onStart = onStart;
+        _missle.GetComponent<Projectile>().travel = travel;
+        _missle.GetComponent<Projectile>().onEnd = onEnd;
         _missle.GetComponent<Projectile>().liveTime = 0f;
     }
+
 }

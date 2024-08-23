@@ -63,8 +63,8 @@ public class LevelUp
     };
     public static LevelUpCallback FractionUp = (Tower tower) =>
     {
-        if (!tower.GetComponent<Fraction>())
-            tower.effects.Add(tower.AddComponent<Fraction>());
+        if ((tower.onEnd - BulletEffects.fractionEnd) == tower.onEnd)
+            tower.onEnd += BulletEffects.fractionEnd;
         else
             tower.chance.shatter += Camera.main.GetComponent<Player>().levelUpBonus;//25
         if (tower.chance.shatter > 25)
@@ -74,10 +74,10 @@ public class LevelUp
     };
     public static LevelUpCallback SplashUp = (Tower tower) =>
     {
-        if (!tower.GetComponent<Bomb>())
-            tower.effects.Add(tower.AddComponent<Bomb>());
+        if ((tower.onEnd - BulletEffects.explotionEnd) == tower.onEnd)
+            tower.onEnd += BulletEffects.explotionEnd;
         else
-        tower.chance.splash += Camera.main.GetComponent<Player>().levelUpBonus;//75
+            tower.chance.splash += Camera.main.GetComponent<Player>().levelUpBonus;//75
         if (tower.chance.splash > 75)
             tower.levelUpCallbacks.Remove(SplashUp);
         tower.levelUpsRemain--;
@@ -101,8 +101,8 @@ public class LevelUp
     };
     public static LevelUpCallback BounceUp = (Tower tower) =>
     {
-        if (!tower.GetComponent<Bounce>())
-            tower.effects.Add(tower.AddComponent<Bounce>());
+        if ((tower.onEnd - BulletEffects.bounceEnd) == tower.onEnd)
+            tower.onEnd += BulletEffects.bounceEnd;
         else
             tower.chance.bounce += Camera.main.GetComponent<Player>().levelUpBonus;//25
         if (tower.chance.bounce > 25)
@@ -112,8 +112,8 @@ public class LevelUp
     };
     public static LevelUpCallback PuddleUp = (Tower tower) =>
     {
-        if (!tower.GetComponent<WaterPocket>())
-            tower.effects.Add(tower.AddComponent<WaterPocket>());
+        if ((tower.onEnd - BulletEffects.puddleEnd) == tower.onEnd)
+            tower.onEnd += BulletEffects.puddleEnd;
         else
             tower.chance.puddle += Camera.main.GetComponent<Player>().levelUpBonus;//75
         if (tower.chance.puddle > 75)

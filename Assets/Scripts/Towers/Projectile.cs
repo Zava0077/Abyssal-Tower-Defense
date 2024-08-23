@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using static LevelUp;
 
 public class Projectile : MonoBehaviour
@@ -21,6 +22,7 @@ public class Projectile : MonoBehaviour
     public Chances chance;
     public Color shadowColor;
     public float agroRadius;
+    private Entity followTarget;
     public GameObject owner;
     public Vector3 target;
     public Vector3 targetMemory;
@@ -37,7 +39,12 @@ public class Projectile : MonoBehaviour
     public float testTimer; 
     public bool waitCast = false;
     public bool collidable;
-    public List<BulletEffects> effects; //то, что происходит во время полёта, в начале и в конце
+
+    //public List<BulletEffects> effects; //то, что происходит во время полёта, в начале и в конце
+    public BulletEffect onStart;
+    public BulletEffect travel;
+    public BulletEffect onEnd;
+
     private void Awake()
     {
         projHeight = archMultiplier;
@@ -57,11 +64,12 @@ public class Projectile : MonoBehaviour
             testTimer = 0f;
             collidable = true;
         }
-        foreach (BulletEffects effect in effects)
-        {
-            effect._proj = gameObject.GetComponent<Projectile>();
-            effect.OnStart(gameObject);  //дополнительные эффекты снаряда в начале полета,например, изменение стартового направления, изменение модельки.
-        }
+        onStart?.Invoke(this,ref followTarget);
+        //foreach (BulletEffects effect in effects)
+        //{
+        //    effect._proj = gameObject.GetComponent<Projectile>();//надо заменить класс BulletEffects на делегат, каждый раз когда добавляется эффект снаряду, он добавляется не через AddComponent, а через +=
+        //    effect.OnStart(gameObject);  //дополнительные эффекты снаряда в начале полета,например, изменение стартового направления, изменение модельки.
+        //}
     }
     private void OnEntityDeath(object sender)
     {
@@ -76,8 +84,9 @@ public class Projectile : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        foreach (BulletEffects effect in effects)
-            effect.Travel(gameObject);//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
+        //foreach (BulletEffects effect in effects)
+        //    effect.Travel(gameObject);//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
+        travel?.Invoke(this,ref followTarget);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -93,8 +102,9 @@ public class Projectile : MonoBehaviour
         }
         if (other.gameObject.tag != "Effect")
         {
-            foreach (BulletEffects effect in effects)
-                effect.End(gameObject);
+            //foreach (BulletEffects effect in effects)
+            //    effect.End(gameObject);
+            onEnd?.Invoke(this, ref followTarget);
             if (chance.pierce < UnityEngine.Random.Range(1, 100) || other.gameObject.tag == "Tower\'s Place" || other.gameObject.tag == "Unpiercable")
             {
                 if (Player.instance.hit.isPlaying) Player.instance.hit.Stop();
