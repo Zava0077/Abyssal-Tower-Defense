@@ -25,8 +25,6 @@ public class Player : MonoBehaviour
     [SerializeField] public List<GameObject> Towers;
     public Sprite[] levelUpSprites;
     [SerializeField] public GameObject explotion;
-    public static List<GameObject> explotions = new List<GameObject>();
-    public static List<GameObject> puddles = new List<GameObject>();
     [SerializeField] public GameObject puddle;
     [SerializeField] public GameObject particleShadow;
     public float levelUpBonus = 2f;
@@ -39,9 +37,9 @@ public class Player : MonoBehaviour
     {
         Camera.main.GetComponentInChildren<Image>().gameObject.SetActive(false);
     }
-    private void Update()//дорого
+    private void Update()
     {
-        hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition));
+        hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition));//дорого
         if (Input.GetKey(KeyCode.LeftShift))
         {
             moveSpeed = speed * 2;

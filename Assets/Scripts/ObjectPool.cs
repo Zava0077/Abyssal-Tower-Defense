@@ -1,18 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
 {
     private List<T> pool = new();
     private List<Mesh> poolMeshes = new();
+    public T pulledObj;
     private int limit;
     public ObjectPool(int lim) 
     {
         limit = lim;
     }
-    public T PullObject(T prefab, Vector3 where, Mesh nMesh, bool activeFromDefault = true)
+    public IEnumerator<T> PullObject(T prefab, Vector3 where, Mesh nMesh, bool activeFromDefault = true, int delay = 0)
     {
+        //добавить паузу при наличии            
         T objectFromPool = pool.Find(item => !item.isActiveAndEnabled);
         if (objectFromPool == null)
         {
@@ -23,15 +27,18 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
                 poolMeshes.Add(nMesh);
             }
             else
+            {
+                for (int i = 0; i < delay; i++)
+                    new WaitForNextFrameUnit();
                 objectFromPool = pool.First();
+            }
         }
         int objIndex = pool.FindIndex(obj => obj == objectFromPool);
-        //Меняем меш, если требуется
         if (nMesh != poolMeshes[objIndex])
             poolMeshes[pool.FindIndex(obj => obj == objectFromPool)] = nMesh;
         objectFromPool.transform.position = where;
-        //Убрал окраску, она будет происходить после выполнения PullObject.
         objectFromPool.gameObject.SetActive(activeFromDefault);
-        return objectFromPool;
+        pulledObj = objectFromPool;
+        yield return objectFromPool;
     }
 }

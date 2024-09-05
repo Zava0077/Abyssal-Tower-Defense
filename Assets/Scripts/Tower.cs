@@ -14,7 +14,7 @@ public class Tower : Entity
     private static GameObject[] enemies;
     private Entity enemy;
     private float time;
-    private float currentRotationAngle = 0f;
+    private float ResultRotationAngle = 0f;
     [SerializeField] private GameObject tower;
     [SerializeField] private List<int> costs = new List<int>();
     [SerializeField] private List<int> chances = new List<int>();
@@ -116,10 +116,10 @@ public class Tower : Entity
         foreach(var value in keyValuePairs)
             if (value.Value)
                 value.Key.active = true;
-        currentRotationAngle += attackSpeed * Time.deltaTime * 30;
-        if (currentRotationAngle >= 360f)
+        ResultRotationAngle += attackSpeed * Time.deltaTime * 30;
+        if (ResultRotationAngle >= 360f)
         {
-            currentRotationAngle -= 360f;
+            ResultRotationAngle -= 360f;
         }
         base.Update();
         Quaternion newDir;
@@ -147,7 +147,7 @@ public class Tower : Entity
             }
         }
         else
-            newDir = Quaternion.Lerp(transform.rotation,  Quaternion.Euler(0, currentRotationAngle, 0), 0.05f);
+            newDir = Quaternion.Lerp(transform.rotation,  Quaternion.Euler(0, ResultRotationAngle, 0), 0.05f);
         transform.rotation = newDir;
     }
     private void OnDrawGizmos()
@@ -166,7 +166,7 @@ public class Tower : Entity
         //сменить на изучение статического списка. Который будет изменятся при объявлении нового моба в Awake класса.
         //надо проверить если поместить в конструтор поменяяется ли что-нибудь
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        List<Mob> currentEnemiesInRange = new List<Mob>();
+        List<Mob> ResultEnemiesInRange = new List<Mob>();
 
         foreach (var enemy in enemies)
         {
@@ -175,7 +175,7 @@ public class Tower : Entity
             enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(s => s.Value == mob).Key);
             if (distance < agroRadius)
             {
-                currentEnemiesInRange.Add(mob);
+                ResultEnemiesInRange.Add(mob);
                 enemiesCanShooted[distance] = mob;
             }
         }
@@ -183,7 +183,7 @@ public class Tower : Entity
         if (lastEnemy != null)
         {
             lastEnemy.RemoveAll(mob => Vector3.Distance(mob.transform.position, tower.transform.position) > agroRadius);
-            if (currentEnemiesInRange.Count == lastEnemy.Count)
+            if (ResultEnemiesInRange.Count == lastEnemy.Count)
             {
                 lastEnemy.Clear();
             }
@@ -192,7 +192,7 @@ public class Tower : Entity
                 foreach (var mob in lastEnemy)
                 {
                     float distance = Vector3.Distance(mob.transform.position, tower.transform.position);
-                    if (currentEnemiesInRange.Contains(mob))
+                    if (ResultEnemiesInRange.Contains(mob))
                     {
                         enemiesCanShooted.Remove(distance);
                     }

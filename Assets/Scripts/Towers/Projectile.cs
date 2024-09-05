@@ -75,7 +75,7 @@ public class Projectile : MonoBehaviour
     }
     private void FixedUpdate()//дорого. внутренние методы могут быть тяжелыми
     {
-        travel?.Invoke(this,ref followTarget);
+        travel?.Invoke(this, ref followTarget);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -108,31 +108,35 @@ public class Projectile : MonoBehaviour
     }
     public IEnumerator shadowCaster()//хз как это засунуть в дженерик. Потом
     {
-        waitCast = false;
+        waitCast = false; 
+        Fading fadingComponent;
+        Fading pref = Player.instance.particleShadow.GetComponentInChildren<Fading>();
+        Mesh mesh = pref.GetComponent<Mesh>();
         while (gameObject)
         {
-            GameObject shadow = null;
-            if (Entity.shadows.Count > 0)
-                shadow = Entity.shadows.Find(s => !s.activeSelf);
-            if (shadow == null)
-            {
-                if (Entity.shadows.Count < 64)
-                {
-                    shadow = Instantiate(Camera.main.GetComponent<Player>().particleShadow, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
-                    Entity.shadows.Add(shadow);
-                }
-                else
-                {
-                    yield return new WaitForNextFrameUnit();
-                    shadow = Entity.shadows[Entity.shadows.Count - 1];
-                }
-            }
-            shadow.transform.position = gameObject.transform.position;
-            shadow.transform.rotation = gameObject.transform.rotation;
-            shadow.SetActive(true);
-            Fading fadingComponent = shadow.GetComponentInChildren<Fading>();
+            Player.nShadows.PullObject(pref, gameObject.transform.position, mesh, true, 1).MoveNext();
+            fadingComponent = Player.nShadows.pulledObj;
+
+            //if (Entity.shadows.Count > 0)
+            //    shadow = Entity.shadows.Find(s => !s.activeSelf);
+            //if (shadow == null)
+            //{
+            //    if (Entity.shadows.Count < 64)
+            //    {
+            //        shadow = Instantiate(Player.instance.particleShadow, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
+            //        Entity.shadows.Add(shadow);
+            //    }
+            //    else
+            //    {
+            //        yield return new WaitForNextFrameUnit();
+            //        shadow = Entity.shadows[Entity.shadows.Count - 1];
+            //    }
+            //}
+            //shadow.transform.position = gameObject.transform.position;
+            fadingComponent.transform.rotation = gameObject.transform.rotation;
+            //shadow.SetActive(true);
+            //Fading fadingComponent = shadow.GetComponentInChildren<Fading>();
             fadingComponent.liveTime = 0.1f;
-            fadingComponent.timer = 0f;
             fadingComponent.color = shadowColor;
             yield return new WaitForNextFrameUnit();
         }

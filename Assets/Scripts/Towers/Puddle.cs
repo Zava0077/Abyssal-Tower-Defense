@@ -2,12 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-
-public interface IProducable
-{
-    Projectile producer { get; set; }
-}
-public class Puddle : MonoBehaviour, IProducable
+public class Puddle : MonoBehaviour
 {
     public Damage damage;
     public Chances chance;

@@ -37,6 +37,7 @@ public class BulletEffects : MonoBehaviour
     {
         proj.collidable = false;
         proj.GetComponent<Collider>().enabled = false;
+        proj.shadowColor = Color.red;
         proj.waitCast = true;
         if (Player.instance.laser.isPlaying) Player.instance.laser.Stop();
         Player.instance.laser.Play();
@@ -59,6 +60,7 @@ public class BulletEffects : MonoBehaviour
     {
         target = Tower.twr.FindEnemy(proj.gameObject, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
         proj.GetComponent<Collider>().enabled = false;
+        proj.shadowColor = Color.magenta;
         proj.collidable = false;
         proj.waitCast = true;
         if (Player.instance.laser.isPlaying)
@@ -103,7 +105,8 @@ public class BulletEffects : MonoBehaviour
         Explotion expl = null;
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
         Mesh mesh = pref.GetComponent<Mesh>();
-        expl = Player.nExplosions.PullObject(pref, from, mesh);
+        Player.nExplosions.PullObject(pref, from, mesh).MoveNext();
+        expl = Player.nExplosions.pulledObj;
         expl.producer = proj;
         expl.damage = new Damage(damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(1f, 0.35f, 0f, 0.6f);
@@ -129,7 +132,8 @@ public class BulletEffects : MonoBehaviour
         Explotion expl = null;
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
         Mesh mesh = pref.GetComponent<Mesh>();
-        expl = Player.nExplosions.PullObject(pref, from, mesh);
+        Player.nExplosions.PullObject(pref, from, mesh).MoveNext();
+        expl = Player.nExplosions.pulledObj;
         expl.damage = new Damage(0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(0f, 0.15f, 1f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
@@ -174,7 +178,8 @@ public class BulletEffects : MonoBehaviour
         Explotion expl = null;
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
         Mesh mesh = pref.GetComponent<Mesh>();
-        expl = Player.nExplosions.PullObject(pref, from, mesh);
+        Player.nExplosions.PullObject(pref, from, mesh).MoveNext();
+        expl = Player.nExplosions.pulledObj;
         expl.GetComponent<Explotion>().damage = new Damage(0f, 0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(0f, 0.35f, 1f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
@@ -259,8 +264,9 @@ public class BulletEffects : MonoBehaviour
                 if (element.gameObject.tag == "Projectile")
                     from = element.position;
             foreach (var damage in _proj.damage.GetType().GetFields())//
-                size += (float)damage.GetValue(_proj.damage) / 7; 
-            expl = Player.nExplosions.PullObject(pref, from, mesh);
+                size += (float)damage.GetValue(_proj.damage) / 7;
+            Player.nExplosions.PullObject(pref, from, mesh).MoveNext();
+            expl = Player.nExplosions.pulledObj;
             expl.GetComponent<Renderer>().material.color = new Color(1, 0.08f, 0f, 0.6f);
             expl.GetComponent<Explotion>().damage = new Damage(15f, 0f, 0f, 0f, 50f);
             expl.transform.localScale = new Vector3(5f + size, 5f + size, 5f + size);
@@ -308,8 +314,9 @@ public class BulletEffects : MonoBehaviour
                 size += (float)damage.GetValue(proj.damage) / 4;
             GameObject[] ground = GameObject.FindGameObjectsWithTag("Ground");
             Vector3 puddPosition = new Vector3(from.x, ground[0].transform.position.y, from.z);
-            pudd = Player.nPuddles.PullObject(pref, puddPosition, mesh); 
+            pudd = Player.nPuddles.PullObject(pref, puddPosition, mesh).Current; 
             Vector3 puddScale = new Vector3(size, pudd.transform.localScale.y, size);
+            pudd.transform.localScale = puddScale;
             pudd.damage = proj.damage;
             pudd.GetComponent<Renderer>().material.color = new Color(colors[0], colors[1], colors[2], 0.6f);
             pudd.producer = proj;
