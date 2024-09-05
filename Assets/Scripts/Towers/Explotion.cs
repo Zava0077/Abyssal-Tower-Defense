@@ -27,9 +27,10 @@ public class Explotion : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(damage != null && other.GetComponent<Entity>())
+        Entity otherEntity = other.GetComponent<Entity>();
+        if(otherEntity)
         {
-            DoDamage.DealDamage(other.GetComponent<Entity>(), null, damage);
+            otherEntity.GetDamage(damage);
         }
     }
 }

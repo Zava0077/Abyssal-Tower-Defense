@@ -41,7 +41,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5213378883116263550}
   - component: {fileID: 312111415878609934}
-  - component: {fileID: 2200307029809479997}
   - component: {fileID: 1500248849422271449}
   - component: {fileID: 4303856231167388408}
   m_Layer: 6
@@ -81,6 +80,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   health: 100
+  attackSpeed: 0.5
+  projSpeed: 35
+  multiplierTakeDamage: 0
+  agroRadius: 45
   transform: {fileID: 5213378883116263550}
   statuses: []
   _damage:
@@ -95,10 +98,6 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  attackSpeed: 0.5
-  projSpeed: 35
-  multiplierTakeDamage: 0
-  agroRadius: 45
   damageMat: {fileID: 0}
   missle: {fileID: 7686851911220215187, guid: 2599fac3fb6947a4582089d15f7d3806, type: 3}
   tower: {fileID: 5956137601538878063}
@@ -113,8 +112,6 @@ MonoBehaviour:
   chances: 0000000000000000000000000000000000000000000000000000000064000000
   starterEffects:
   - Laser
-  effects:
-  - {fileID: 2200307029809479997}
   levelUps:
   - FireUp
   - ColdUp
@@ -133,19 +130,6 @@ MonoBehaviour:
   - LightningConvert
   - PhysicalConvert
   chance: {fileID: 0}
---- !u!114 &2200307029809479997
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5956137601538878063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1db21bcca0bf3944c8af09694ba38495, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _proj: {fileID: 0}
 --- !u!23 &1500248849422271449
 MeshRenderer:
   m_ObjectHideFlags: 0

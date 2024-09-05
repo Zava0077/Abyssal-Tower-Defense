@@ -168,7 +168,9 @@ public class BulletEffects : MonoBehaviour
         proj.collidable = false;
         Damage damage = proj.GetComponent<Projectile>().damage;
         proj.GetComponent<Projectile>().damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
-
+        if (Player.instance.electric.isPlaying)
+            Player.instance.electric.Stop();
+        Player.instance.electric.Play();
     };
     public static BulletEffect elecTravel = (Projectile proj, ref Entity target) =>
     {
@@ -365,4 +367,19 @@ public class BulletEffects : MonoBehaviour
 
     };
     #endregion
+    public static bool Has(BulletEffect method, Tower storage)
+    {
+        if (method.GetInvocationList().Length > 1)
+            throw new IndexOutOfRangeException("—равниваемый делегат имеет больше одного метода");
+        foreach(BulletEffect _method in storage.onStart.GetInvocationList())
+            if (method == _method)
+                return true;
+        foreach (BulletEffect _method in storage.travel.GetInvocationList())
+            if (method == _method)
+                return true;
+        foreach (BulletEffect _method in storage.onEnd.GetInvocationList())
+            if (method == _method)
+                return true;
+        return false;
+    }
 }

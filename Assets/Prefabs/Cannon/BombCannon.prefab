@@ -41,8 +41,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5213378883116263550}
   - component: {fileID: 312111415878609934}
-  - component: {fileID: 7812720660362123708}
-  - component: {fileID: 1801172839644557239}
   - component: {fileID: -9003738750014985903}
   - component: {fileID: 2089748620776964545}
   m_Layer: 6
@@ -82,6 +80,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   health: 100
+  attackSpeed: 0.1
+  projSpeed: 35
+  multiplierTakeDamage: 0
+  agroRadius: 55
   transform: {fileID: 5213378883116263550}
   statuses: []
   _damage:
@@ -96,10 +98,6 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  attackSpeed: 0.1
-  projSpeed: 35
-  multiplierTakeDamage: 0
-  agroRadius: 55
   damageMat: {fileID: 0}
   missle: {fileID: 7686851911220215187, guid: b3a1e694e4142824b93d696f60b21b1d, type: 3}
   tower: {fileID: 5956137601538878063}
@@ -115,9 +113,6 @@ MonoBehaviour:
   starterEffects:
   - Missle
   - Bomb
-  effects:
-  - {fileID: 1801172839644557239}
-  - {fileID: 7812720660362123708}
   levelUps:
   - FireUp
   - ColdUp
@@ -135,33 +130,6 @@ MonoBehaviour:
   - LightningConvert
   - PhysicalConvert
   chance: {fileID: 0}
---- !u!114 &7812720660362123708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5956137601538878063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6704a172ee49bef478931a4810f39af5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _proj: {fileID: 0}
-  little: 0
---- !u!114 &1801172839644557239
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5956137601538878063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a05634f8d0489794f99c7a33026f3c21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _proj: {fileID: 0}
 --- !u!23 &-9003738750014985903
 MeshRenderer:
   m_ObjectHideFlags: 0

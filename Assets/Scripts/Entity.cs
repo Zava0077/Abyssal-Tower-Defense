@@ -8,26 +8,32 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 public delegate void MobDelete(object sender);
-
-public class Entity : MonoBehaviour
+interface IDamagable
 {
+    void GetDamage(Damage damage);
+}
+public class Entity : MonoBehaviour, IDamagable
+{
+    [Header("Stats")]
     public float maxHealth;
-    public float health;
+    public float health; 
+    public float attackSpeed;
+    public float projSpeed;
+    public float multiplierTakeDamage;
+    public float agroRadius;
+    public Damage damage;
     public Resistances resistances;
+
     public Transform transform;
     public List<Status> statuses = new List<Status>();
     public List<float> _damage = new List<float>();
     public List<float> _resist = new List<float>();
     public static List<GameObject> shadows = new List<GameObject>();
-    public Damage damage;
-    public float attackSpeed;
-    public float projSpeed;
-    public float multiplierTakeDamage;
-    public float agroRadius;
-    public static event MobDelete onEntityDeath;
+
     public static Entity entity;
     [SerializeField] private Material damageMat;
     private Color defaultColor;
+    public static event MobDelete onEntityDeath;
 
     public Entity()
     {
@@ -64,5 +70,15 @@ public class Entity : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             renderer.materials[0].color = defaultColor;
         }
+    }
+    public void GetDamage(Damage damage)
+    {
+        health -= damage._fire * (1 - resistances._fire);
+        health -= damage._lightning * (1 - resistances._lightning);
+        health -= damage._cold * (1 - resistances._cold);
+        health -= damage._void * (1 - resistances._void);
+        health -= damage._physical * (1 - resistances._physical);
+        StartCoroutine(ColorChanger());
+
     }
 }

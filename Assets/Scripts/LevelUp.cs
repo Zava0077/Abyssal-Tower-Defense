@@ -63,7 +63,7 @@ public class LevelUp
     };
     public static LevelUpCallback FractionUp = (Tower tower) =>
     {
-        if ((tower.onEnd - BulletEffects.fractionEnd) == tower.onEnd)
+        if (!BulletEffects.Has(BulletEffects.fractionEnd, tower))
             tower.onEnd += BulletEffects.fractionEnd;
         else
             tower.chance.shatter += Camera.main.GetComponent<Player>().levelUpBonus;//25
@@ -74,7 +74,7 @@ public class LevelUp
     };
     public static LevelUpCallback SplashUp = (Tower tower) =>
     {
-        if ((tower.onEnd - BulletEffects.explotionEnd) == tower.onEnd)
+        if (!BulletEffects.Has(BulletEffects.explotionEnd,tower))
             tower.onEnd += BulletEffects.explotionEnd;
         else
             tower.chance.splash += Camera.main.GetComponent<Player>().levelUpBonus;//75
@@ -101,7 +101,7 @@ public class LevelUp
     };
     public static LevelUpCallback BounceUp = (Tower tower) =>
     {
-        if ((tower.onEnd - BulletEffects.bounceEnd) == tower.onEnd)
+        if (!BulletEffects.Has(BulletEffects.bounceEnd, tower))
             tower.onEnd += BulletEffects.bounceEnd;
         else
             tower.chance.bounce += Camera.main.GetComponent<Player>().levelUpBonus;//25
@@ -112,7 +112,7 @@ public class LevelUp
     };
     public static LevelUpCallback PuddleUp = (Tower tower) =>
     {
-        if ((tower.onEnd - BulletEffects.puddleEnd) == tower.onEnd)
+        if (!BulletEffects.Has(BulletEffects.puddleEnd, tower))
             tower.onEnd += BulletEffects.puddleEnd;
         else
             tower.chance.puddle += Camera.main.GetComponent<Player>().levelUpBonus;//75

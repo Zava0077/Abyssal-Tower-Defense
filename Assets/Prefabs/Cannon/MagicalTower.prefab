@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5213378883116263550}
   - component: {fileID: 312111415878609934}
-  - component: {fileID: 1888474576763874313}
   - component: {fileID: -7592695139405660085}
   - component: {fileID: 7081728813878157579}
   m_Layer: 6
@@ -50,6 +49,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   health: 100
+  attackSpeed: 0.5
+  projSpeed: 40
+  multiplierTakeDamage: 0
+  agroRadius: 25
   transform: {fileID: 5213378883116263550}
   statuses: []
   _damage:
@@ -64,10 +67,6 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  attackSpeed: 0.5
-  projSpeed: 40
-  multiplierTakeDamage: 0
-  agroRadius: 25
   damageMat: {fileID: 0}
   missle: {fileID: 7686851911220215187, guid: 669fa5d08c1681b458a7ee21d734b4a1, type: 3}
   tower: {fileID: 5956137601538878063}
@@ -82,8 +81,6 @@ MonoBehaviour:
   chances: 0000000000000000000000000000000000000000000000000000000000000000
   starterEffects:
   - Homing
-  effects:
-  - {fileID: 1888474576763874313}
   levelUps:
   - FireUp
   - ColdUp
@@ -103,19 +100,6 @@ MonoBehaviour:
   - PhysicalConvert
   - ProjectileSpeedDown
   chance: {fileID: 0}
---- !u!114 &1888474576763874313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5956137601538878063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68cb2efbb121c2545b5756a563d7290f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _proj: {fileID: 0}
 --- !u!23 &-7592695139405660085
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -17,39 +17,33 @@ public class CanvasController : MonoBehaviour
     [SerializeField] public Image menu;
     [SerializeField] private Button prefabButton;
     [SerializeField] private GameObject prefabStat;
-    [SerializeField] private GameObject buildObject;
-    [SerializeField] private GameObject marker;
-    [SerializeField] private GameObject levelUpMenu;
-    private bool setTower = false;
+    [SerializeField] private GameObject marker; 
+    private GameObject buildObject;
+    private GameObject levelUpMenu; 
+    private GameObject destroyButton;
     public bool showAgro = false;
-    int firstUp;
-    int secondUp;
+    private int firstUp;
+    private int secondUp;
     private GameObject _tower;
-    private Button[] levelUpBtns;
     [SerializeField] private GameObject cooldownRedBar;
     [SerializeField] private GameObject cooldownBar;
-    private float barLimit;
-    [SerializeField] private GameObject destroyButton;
     [SerializeField] private GameObject agroRadius;
     private void Awake()
     {
         menu = Camera.main.GetComponentInChildren<Image>();
         levelUpMenu = GameObject.FindGameObjectWithTag("LevelUpMenu");
         buildObject = GameObject.FindGameObjectWithTag("CreateMenu");
-        //barLimit = cooldownRedBar.transform.localScale.x;
+        destroyButton = GameObject.FindGameObjectWithTag("DestroyBtn");
     }
     private void Start()
     {
-        levelUpMenu.SetActive(false);
+        levelUpMenu.SetActive(false); 
+        destroyButton.SetActive(false);
     }
     private void Update()
     {
-        //cooldownBar.SetActive(setTower);
-        //agroRadius.SetActive(setTower && showAgro);
         if (_tower)
         {
-            //agroRadius.transform.localScale = new Vector3(_tower.GetComponent<Tower>().agroRadius/4, agroRadius.transform.localScale.y, _tower.GetComponent<Tower>().agroRadius/4);
-            //cooldownRedBar.transform.localScale = new Vector3((_tower.GetComponent<Tower>().time / (1 / _tower.GetComponent<Tower>().attackSpeed)) * barLimit, cooldownRedBar.transform.localScale.y, cooldownRedBar.transform.localScale.z);
             if (_tower.GetComponent<Tower>().updateLvlUp)
             {
                 GenerateUps();
@@ -61,20 +55,27 @@ public class CanvasController : MonoBehaviour
     public void Show()
     {
         menu.gameObject.SetActive(true);
-        buildObject.SetActive(!setTower);
-        levelUpMenu.SetActive(setTower && _tower.GetComponent<Tower>().levelUpsRemain > 0);
+        buildObject.SetActive(!_tower);
+        levelUpMenu.SetActive(_tower && _tower.GetComponent<Tower>().levelUpsRemain > 0);
+        destroyButton.GetComponent<Button>().onClick.AddListener(() => DestroyTower());
         foreach (var btn in GameObject.FindGameObjectsWithTag("LevelUpBtn"))
             Destroy(btn);
-        if(levelUpMenu.activeSelf && _tower && levelUpMenu.GetComponentsInChildren<Button>().Length > 0)
+        if (_tower)
         {
-            levelUpMenu.GetComponentsInChildren<Button>()[0].onClick.RemoveAllListeners();
-            levelUpMenu.GetComponentsInChildren<Button>()[1].onClick.RemoveAllListeners();
-            levelUpMenu.GetComponentsInChildren<Button>()[0].onClick.AddListener(() => _tower.GetComponent<Tower>().levelUpCallbacks[firstUp](_tower.GetComponent<Tower>()));
-            levelUpMenu.GetComponentsInChildren<Button>()[1].onClick.AddListener(() => _tower.GetComponent<Tower>().levelUpCallbacks[secondUp](_tower.GetComponent<Tower>()));
-            levelUpMenu.GetComponentsInChildren<Button>()[0].GetComponent<Image>().sprite = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[firstUp]];
-            levelUpMenu.GetComponentsInChildren<Button>()[1].GetComponent<Image>().sprite = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[secondUp]];
+            destroyButton.SetActive(true);
+            if (levelUpMenu.activeSelf && levelUpMenu.GetComponentsInChildren<Button>().Length > 0)
+            {
+                levelUpMenu.GetComponentsInChildren<Button>()[0].onClick.RemoveAllListeners();
+                levelUpMenu.GetComponentsInChildren<Button>()[1].onClick.RemoveAllListeners();
+                levelUpMenu.GetComponentsInChildren<Button>()[0].onClick.AddListener(() => _tower.GetComponent<Tower>().levelUpCallbacks[firstUp](_tower.GetComponent<Tower>()));
+                levelUpMenu.GetComponentsInChildren<Button>()[1].onClick.AddListener(() => _tower.GetComponent<Tower>().levelUpCallbacks[secondUp](_tower.GetComponent<Tower>()));
+                levelUpMenu.GetComponentsInChildren<Button>()[0].GetComponent<Image>().sprite = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[firstUp]];
+                levelUpMenu.GetComponentsInChildren<Button>()[1].GetComponent<Image>().sprite = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[secondUp]];
+            }
         }
-        if(!setTower)
+        else
+        {
+            destroyButton.SetActive(false);
             foreach (var tower in Camera.main.GetComponent<Player>().Towers)
             {
                 Button _button = Instantiate(prefabButton);
@@ -82,9 +83,10 @@ public class CanvasController : MonoBehaviour
                 _button.GetComponent<Image>().sprite = tower.GetComponent<Tower>().spriteButton;
                 _button.onClick.AddListener(() => SetTower(tower));
             }
+        }
     }
 
-    void GenerateUps()
+    private void GenerateUps()
     {
         firstUp = Random.Range(0, _tower.GetComponent<Tower>().levelUpCallbacks.Count);
         secondUp = 0;
@@ -95,14 +97,15 @@ public class CanvasController : MonoBehaviour
             else break;
         }
         menu.gameObject.SetActive(false);
+        destroyButton.GetComponent<Button>().onClick.RemoveAllListeners();
     }
 
     public void DestroyTower()
     {
         Destroy(_tower);
-        setTower = false;
         destroyButton.SetActive(false);
         menu.gameObject.SetActive(false);
+        destroyButton.GetComponent<Button>().onClick.RemoveAllListeners();
     }
 
     private void SetTower(GameObject tower)
@@ -111,11 +114,10 @@ public class CanvasController : MonoBehaviour
         _tower.transform.position = transform.position;
         if (Camera.main.GetComponent<Player>().resources.Subtract(_tower.GetComponent<Tower>().cost))
         {
-            setTower = true;
-            //destroyButton.SetActive(true);
-            Debug.Log(tower);
+            destroyButton.SetActive(true);
             buildObject.SetActive(false);
             menu.gameObject.SetActive(false);
+            destroyButton.GetComponent<Button>().onClick.RemoveAllListeners();
             Player.instance.create.Play();
         }
         else

@@ -13,6 +13,7 @@ TagManager:
   - CreateMenu
   - LevelUpBtn
   - Unpiercable
+  - DestroyBtn
   layers:
   - Default
   - TransparentFX

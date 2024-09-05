@@ -39,8 +39,6 @@ public class Projectile : MonoBehaviour
     public float testTimer; 
     public bool waitCast = false;
     public bool collidable;
-
-    //public List<BulletEffects> effects; //то, что происходит во время полёта, в начале и в конце
     public BulletEffect onStart;
     public BulletEffect travel;
     public BulletEffect onEnd;
@@ -57,19 +55,13 @@ public class Projectile : MonoBehaviour
             position = transform.position;
             Vector3 direction = (target - position).normalized;
             distance = Vector3.Distance(position, target);
-            //float speed = (Vector3.forward * projSpeed * Time.deltaTime * direction.magnitude).magnitude;
             float speed = projSpeed * direction.magnitude * 0.85f;
-            timeNeed = distance / speed; //0,36 - 0,42
+            timeNeed = distance / speed; 
             targetMemory = target;
             testTimer = 0f;
             collidable = true;
         }
         onStart?.Invoke(this,ref followTarget);
-        //foreach (BulletEffects effect in effects)
-        //{
-        //    effect._proj = gameObject.GetComponent<Projectile>();//надо заменить класс BulletEffects на делегат, каждый раз когда добавляется эффект снаряду, он добавляется не через AddComponent, а через +=
-        //    effect.OnStart(gameObject);  //дополнительные эффекты снаряда в начале полета,например, изменение стартового направления, изменение модельки.
-        //}
     }
     private void OnEntityDeath(object sender)
     {
@@ -84,42 +76,36 @@ public class Projectile : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        //foreach (BulletEffects effect in effects)
-        //    effect.Travel(gameObject);//дополнительные эффекты снаряда во время полёта,например, за ним остаётся ядовитое облако
         travel?.Invoke(this,ref followTarget);
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (damage == null) throw new ArgumentNullException("Урон неопознан");
         prevEnemy ??= new List<Mob>();
-
-        if (prevEnemy.Contains(other.gameObject.GetComponent<Mob>()))
-            return;
+        Entity otherEntity = other.GetComponent<Entity>();
+        Mob otherMob = otherEntity as Mob;
+        if (other.gameObject.tag == "Effect") return;
+        if (prevEnemy.Contains(otherMob)) return;
         if (other.gameObject.tag == "Enemy" && damage != null)
         {
-            DoDamage.DealDamage(other.gameObject.GetComponent<Entity>(), null, damage);
+            otherEntity.GetDamage(damage);
             prevEnemy.Add(other.gameObject.GetComponent<Mob>());
         }
-        if (other.gameObject.tag != "Effect")
+        onEnd?.Invoke(this, ref followTarget);
+        if (chance.pierce < UnityEngine.Random.Range(1, 100) || other.gameObject.tag == "Tower\'s Place" || other.gameObject.tag == "Unpiercable")
         {
-            //foreach (BulletEffects effect in effects)
-            //    effect.End(gameObject);
-            onEnd?.Invoke(this, ref followTarget);
-            if (chance.pierce < UnityEngine.Random.Range(1, 100) || other.gameObject.tag == "Tower\'s Place" || other.gameObject.tag == "Unpiercable")
-            {
-                if (Player.instance.hit.isPlaying) Player.instance.hit.Stop();
-                Player.instance.hit.Play();
-                Destroy(gameObject);
-                enabled = true;
-            }
-            else
-            {
-                if (Player.instance.pierce.isPlaying) Player.instance.pierce.Stop();
-                Player.instance.pierce.Play();
-            }
+            if (Player.instance.hit.isPlaying) Player.instance.hit.Stop();
+            Player.instance.hit.Play();
+            Destroy(gameObject);
+            enabled = true;
+        }
+        else
+        {
+            if (Player.instance.pierce.isPlaying) Player.instance.pierce.Stop();
+            Player.instance.pierce.Play();
         }
         liveTime = 0f;
-
     }
     public IEnumerator shadowCaster()
     {

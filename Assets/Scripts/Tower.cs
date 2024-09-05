@@ -12,23 +12,23 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Tower : Entity
 {
-    public GameObject missle;
-    static GameObject[] enemies;
-    Entity enemy;
+    private static GameObject[] enemies;
+    private Entity enemy;
+    private float time;
+    private float currentRotationAngle = 0f;
     [SerializeField] private GameObject tower;
-    public float time;
+    [SerializeField] private List<int> costs = new List<int>();
+    [SerializeField] private List<int> chances = new List<int>();
+    [SerializeField] private List<string> starterEffects = new List<string>();
+    [SerializeField] private Dictionary<GameObject, bool> keyValuePairs = new Dictionary<GameObject, bool>();
+    public GameObject missle;
     public float incDamage = 1;
     public float incAttackSpeed;
     public float incHealth;
-    private float currentRotationAngle = 0f;
     public float levelUpsRemain = 2220f;
     public Sprite spriteButton;
     public bool updateLvlUp = true;
     public Resources cost;
-    [SerializeField] List<int> costs = new List<int>();
-    [SerializeField] List<int> chances = new List<int>();
-    [SerializeField] List<string> starterEffects = new List<string>();
-    [SerializeField] Dictionary<GameObject, bool> keyValuePairs = new Dictionary<GameObject, bool>();
     public BulletEffect onStart;
     public BulletEffect travel;
     public BulletEffect onEnd;
@@ -125,8 +125,7 @@ public class Tower : Entity
         }
         base.Update();
         Quaternion newDir;
-        enemy = FindEnemy(tower, tower.GetComponent<Tower>().agroRadius, enemiesCanShooted); 
-  
+        enemy = FindEnemy(tower, tower.GetComponent<Tower>().agroRadius, enemiesCanShooted);
         if (enemy)
         {
             time += Time.deltaTime;
@@ -211,23 +210,7 @@ public class Tower : Entity
             return null;
         }
     }
-    //public void Shoot(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius,float archMultiplier, Chances chances, List<BulletEffects> effects, float projSpeed, Transform parent, [Optional] List<Mob> prevEnemy, [Optional] Vector3 scale)
-    //{
-    //    GameObject _missle = Instantiate(missle, turret, Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0)), parent.transform.parent);
-    //    if (scale != Vector3.zero)
-    //        _missle.transform.localScale = scale;
-    //    _missle.GetComponent<Projectile>().target = target;
-    //    _missle.GetComponent<Projectile>().damage = damage;
-    //    _missle.GetComponent<Projectile>().archMultiplier = archMultiplier;
-    //    _missle.GetComponent<Projectile>().chance = chances;
-    //    _missle.GetComponent<Projectile>().agroRadius = agroRadius;
-    //    _missle.GetComponent<Projectile>().prevEnemy = prevEnemy;
-    //    _missle.GetComponent<Projectile>().projSpeed = projSpeed;
-    //    _missle.GetComponent<Projectile>().effects.Clear();
-    //    foreach (var effect in effects)
-    //        _missle.GetComponent<Projectile>().effects.Add(effect.Clone() as BulletEffects);
-    //    _missle.GetComponent<Projectile>().liveTime = 0f;
-    //}
+
     public void Shoot(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius, float archMultiplier, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, float projSpeed, Transform parent, [Optional] List<Mob> prevEnemy, [Optional] Vector3 scale)
     {
         GameObject _missle = Instantiate(missle, turret, Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0)), parent.transform.parent);

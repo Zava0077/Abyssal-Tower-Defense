@@ -8,18 +8,16 @@ public class Puddle : MonoBehaviour
     public Damage damage;
     public Chances chance;
     public Projectile producer;
-    private HashSet<GameObject> objectsOnPuddle = new HashSet<GameObject>();
+    private HashSet<IDamagable> objectsOnPuddle = new HashSet<IDamagable>();
     private void OnEnable()
     {
         StartCoroutine(Damage());
         StartCoroutine(DeathSentence());
         Entity.onEntityDeath += OnEntityDeath;
-
     }
     private void OnDisable()
     {
         Entity.onEntityDeath -= OnEntityDeath;
-
     }
     IEnumerator DeathSentence()
     {
@@ -33,18 +31,20 @@ public class Puddle : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.GetComponent<Entity>()) objectsOnPuddle.Add(other.gameObject);
+        Entity otherEntity = other.GetComponent<Entity>();
+        if(otherEntity) objectsOnPuddle.Add(otherEntity);
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<Entity>()) objectsOnPuddle.Remove(other.gameObject);
+        Entity otherEntity = other.GetComponent<Entity>();
+        if (otherEntity) objectsOnPuddle.Remove(otherEntity);
     }
     IEnumerator Damage()
     {
         while(enabled)
         {
             foreach (var enemy in objectsOnPuddle)
-                DoDamage.DealDamage(enemy.GetComponent<Entity>(), null, damage);
+                enemy.GetDamage(damage);
             yield return new WaitForSeconds(0.2f);
         }
     }
