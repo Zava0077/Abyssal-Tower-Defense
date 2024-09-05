@@ -22,7 +22,7 @@ public class BulletEffects : MonoBehaviour
     public static BulletEffect missleTravel = (Projectile proj, ref Entity target) =>
     {
         if (proj.liveTime > 5f)
-            Destroy(proj);
+            Destroy(proj);//
         if (proj.liveTime > proj.timeNeed)
             proj.projHeight = -50;
         else
@@ -47,7 +47,7 @@ public class BulletEffects : MonoBehaviour
             proj.GetComponent<Collider>().enabled = true;
         if (proj.liveTime > 1.5f)
         {
-            Destroy(proj.gameObject);
+            Destroy(proj.gameObject);//
         }
         proj.transform.position += proj.transform.forward * Vector3.Distance(proj.position, proj.target) / 10;
         proj.transform.position = new Vector3(proj.transform.position.x, 1f, proj.transform.position.z);
@@ -71,7 +71,7 @@ public class BulletEffects : MonoBehaviour
         if (!target)
             target = Tower.twr.FindEnemy(proj.gameObject, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
         if (proj.liveTime > (2.5f / proj.projSpeed) * 35f)
-            Destroy(proj.gameObject);
+            Destroy(proj.gameObject);//
         if (proj.liveTime > (0.15f / proj.projSpeed) * 35f && target)
         {
             proj.transform.rotation = Quaternion.Lerp(proj.transform.rotation, Quaternion.LookRotation(Vector3.RotateTowards(proj.transform.forward, target.transform.position - proj.transform.position, 3.14f, 0f)), (0.02f * 35f) / proj.projSpeed);
@@ -100,21 +100,12 @@ public class BulletEffects : MonoBehaviour
             if (element.gameObject.tag == "Projectile")
                 from = element.position;
 
-        GameObject expl = null;
-        if (Player.explotions.Count > 0)
-            expl = Player.explotions.Find(s => !s.activeSelf);
-        if (!expl)
-        {
-            if (Player.explotions.Count < 128)
-            {
-                expl = Instantiate(Camera.main.GetComponent<Player>().explotion, from, Quaternion.identity, proj.transform.parent);
-                Player.explotions.Add(expl);
-            }
-            else expl = Player.explotions[Player.explotions.Count - 1];
-        }
-        expl.SetActive(true);
-        expl.transform.position = from;
-        expl.GetComponent<Explotion>().damage = new Damage(damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f, 0f);
+        Explotion expl = null;
+        Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
+        Mesh mesh = pref.GetComponent<Mesh>();
+        expl = Player.nExplosions.PullObject(pref, from, mesh);
+        expl.producer = proj;
+        expl.damage = new Damage(damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(1f, 0.35f, 0f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
         if (Player.instance.hot.isPlaying) Player.instance.hot.Stop();
@@ -135,23 +126,14 @@ public class BulletEffects : MonoBehaviour
         foreach (var element in proj.GetComponentsInChildren<Transform>())
             if (element.gameObject.tag == "Projectile")
                 from = element.position;
-        GameObject expl = null;
-        if (Player.explotions.Count > 0)
-            expl = Player.explotions.Find(s => !s.activeSelf);
-        if (!expl)
-        {
-            if (Player.explotions.Count < 128)
-            {
-                expl = Instantiate(Camera.main.GetComponent<Player>().explotion, from, Quaternion.identity, proj.transform.parent);
-                Player.explotions.Add(expl);
-            }
-            else expl = Player.explotions[Player.explotions.Count - 1];
-        }
-        expl.SetActive(true);
-        expl.transform.position = from;
-        expl.GetComponent<Explotion>().damage = new Damage(0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f);
+        Explotion expl = null;
+        Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
+        Mesh mesh = pref.GetComponent<Mesh>();
+        expl = Player.nExplosions.PullObject(pref, from, mesh);
+        expl.damage = new Damage(0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(0f, 0.15f, 1f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
+        expl.producer = proj;
         if (Player.instance.snow.isPlaying) Player.instance.snow.Stop();
         Player.instance.snow.Play();
     };
@@ -179,7 +161,7 @@ public class BulletEffects : MonoBehaviour
         if (proj.liveTime > 0.25f)
         {
             proj.onEnd(proj, ref target);
-            Destroy(proj.gameObject);
+            Destroy(proj.gameObject);//
         }
     };
     public static BulletEffect elecEnd = (Projectile proj, ref Entity target) =>
@@ -189,20 +171,10 @@ public class BulletEffects : MonoBehaviour
         foreach (var element in proj.GetComponentsInChildren<Transform>())
             if (element.gameObject.tag == "Projectile")
                 from = element.position;
-        GameObject expl = null;
-        if (Player.explotions.Count > 0)
-            expl = Player.explotions.Find(s => !s.activeSelf);
-        if (!expl)
-        {
-            if (Player.explotions.Count < 128)
-            {
-                expl = Instantiate(Camera.main.GetComponent<Player>().explotion, from, Quaternion.identity, proj.transform.parent);
-                Player.explotions.Add(expl);
-            }
-            else expl = Player.explotions[Player.explotions.Count - 1];
-        }
-        expl.SetActive(true);
-        expl.transform.position = from;
+        Explotion expl = null;
+        Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
+        Mesh mesh = pref.GetComponent<Mesh>();
+        expl = Player.nExplosions.PullObject(pref, from, mesh);
         expl.GetComponent<Explotion>().damage = new Damage(0f, 0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(0f, 0.35f, 1f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
@@ -280,25 +252,15 @@ public class BulletEffects : MonoBehaviour
         {
             float size = 0;
             Vector3 from = proj.transform.position;
-            GameObject expl = null;
+            Explotion expl = null;
+            Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
+            Mesh mesh = pref.GetComponent<Mesh>(); 
             foreach (var element in proj.GetComponentsInChildren<Transform>())
                 if (element.gameObject.tag == "Projectile")
                     from = element.position;
             foreach (var damage in _proj.damage.GetType().GetFields())//
-                size += (float)damage.GetValue(_proj.damage) / 7;
-            if (Player.explotions.Count > 0)
-                expl = Player.explotions.Find(s => !s.activeSelf);
-            if (!expl)
-            {
-                if (Player.explotions.Count < 128)
-                {
-                    expl = Instantiate(Camera.main.GetComponent<Player>().explotion, from, Quaternion.identity, proj.transform.parent);
-                    Player.explotions.Add(expl);
-                }
-                else expl = Player.explotions[Player.explotions.Count - 1];
-            }
-            expl.SetActive(true);
-            expl.transform.position = from;
+                size += (float)damage.GetValue(_proj.damage) / 7; 
+            expl = Player.nExplosions.PullObject(pref, from, mesh);
             expl.GetComponent<Renderer>().material.color = new Color(1, 0.08f, 0f, 0.6f);
             expl.GetComponent<Explotion>().damage = new Damage(15f, 0f, 0f, 0f, 50f);
             expl.transform.localScale = new Vector3(5f + size, 5f + size, 5f + size);
@@ -328,7 +290,9 @@ public class BulletEffects : MonoBehaviour
         {
             float size = 0;
             float[] colors = new float[3];
-            GameObject pudd = null;
+            Puddle pudd = null;
+            Puddle pref = Player.instance.puddle.GetComponent<Puddle>();
+            Mesh mesh = Player.instance.puddle.GetComponent<Mesh>();
             colors[0] = (proj.damage._fire + proj.damage._physical < 255 ? proj.damage._fire + proj.damage._physical : 255) / 255;
             colors[1] = (proj.damage._lightning + proj.damage._void < 255 ? proj.damage._lightning + proj.damage._void : 255) / 255;
             colors[2] = (proj.damage._cold < 255 ? proj.damage._cold : 255) / 255;
@@ -344,23 +308,11 @@ public class BulletEffects : MonoBehaviour
                 size += (float)damage.GetValue(proj.damage) / 4;
             GameObject[] ground = GameObject.FindGameObjectsWithTag("Ground");
             Vector3 puddPosition = new Vector3(from.x, ground[0].transform.position.y, from.z);
-            if (Player.puddles.Count > 0) 
-                pudd = Player.puddles.Find(s => !s.activeSelf);
-            if (!pudd)
-            {
-                if (Player.puddles.Count < 128)
-                {
-                    pudd = Instantiate(Camera.main.GetComponent<Player>().puddle, from, Quaternion.identity, proj.transform.parent);
-                    Player.puddles.Add(pudd);
-                }
-                else pudd = Player.puddles[Player.puddles.Count - 1].gameObject;
-            }
-            pudd.SetActive(true);
-            pudd.transform.position = puddPosition;
-            pudd.GetComponent<Puddle>().damage = proj.damage;
+            pudd = Player.nPuddles.PullObject(pref, puddPosition, mesh); 
+            Vector3 puddScale = new Vector3(size, pudd.transform.localScale.y, size);
+            pudd.damage = proj.damage;
             pudd.GetComponent<Renderer>().material.color = new Color(colors[0], colors[1], colors[2], 0.6f);
-            pudd.transform.localScale = new Vector3(size, pudd.transform.localScale.y, size);
-            pudd.GetComponent<Puddle>().producer = proj.GetComponent<Projectile>();
+            pudd.producer = proj;
             if (Player.instance.pudd.isPlaying) Player.instance.pudd.Stop();
             Player.instance.pudd.Play();
         }

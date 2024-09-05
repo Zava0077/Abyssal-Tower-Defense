@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Unity.VisualScripting;
@@ -57,26 +56,25 @@ public class Tower : Entity
     };
     public Dictionary<string, BulletEffect[]> effectLinks = new Dictionary<string, BulletEffect[]>()
     {
-        { "Missle",new BulletEffect[] {missleStart,missleTravel,null } },
-        { "Laser",new BulletEffect[] {laserStart, laserTravel, null } },
-        { "Homing",new BulletEffect[] {homingStart,homingTravel,homingEnd } },
-        { "Bomb", new BulletEffect[] {null,null,explotionEnd } },
-        { "Ignite",new BulletEffect[] { igniteStart, null, igniteEnd } },
-        { "Cold",new BulletEffect[] { coldStart, null, coldEnd } },
-        { "Elec",new BulletEffect[] { elecStart, elecTravel, elecEnd} },
+        { "Missle",new[] {missleStart,missleTravel,null } },
+        { "Laser",new[] {laserStart, laserTravel, null } },
+        { "Homing",new[] {homingStart,homingTravel,homingEnd } },
+        { "Bomb", new[] {null,null,explotionEnd } },
+        { "Ignite",new[] { igniteStart, null, igniteEnd } },
+        { "Cold",new[] { coldStart, null, coldEnd } },
+        { "Elec",new[] { elecStart, elecTravel, elecEnd} },
     };
     public List<LevelUpCallback> levelUpCallbacks = new List<LevelUpCallback>();
-    [SerializeField] string[] levelUps;
+    [SerializeField] private string[] levelUps;
     public Dictionary<LevelUpCallback, Sprite> levelUpCallbackNames;
     public static Tower twr;
     public Tower() => twr = this;
     public Chances chance;
-
     new protected void Awake()
     {
         base.Awake();
         Player player = Camera.main.GetComponent<Player>();
-
+        
         foreach (var levelUp in levelUps)
             levelUpCallbacks.Add(lUCLinks[levelUp]);
         foreach(var eff in starterEffects)
@@ -165,6 +163,8 @@ public class Tower : Entity
     }
     public Entity FindEnemy(GameObject tower, float agroRadius, Dictionary<float, Entity> enemiesCanShooted, List<Mob> lastEnemy = null)
     {
+        //сменить на изучение статического списка. Который будет изменятся при объявлении нового моба в Awake класса.
+        //надо проверить если поместить в конструтор поменяяется ли что-нибудь
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         List<Mob> currentEnemiesInRange = new List<Mob>();
 
@@ -213,20 +213,26 @@ public class Tower : Entity
 
     public void Shoot(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius, float archMultiplier, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, float projSpeed, Transform parent, [Optional] List<Mob> prevEnemy, [Optional] Vector3 scale)
     {
+        //Заменить создание объекта на перетаскивание уже существующего из пула объектов.
+        //Чтобы сменить модель можно поменять меш, но для этого нужно все существующие модели заменить на obj модели
+        //Создать дженерик класс для быстрого создания пулов
+        
+        //Профайлер показывает как трудоёмий процесс. Необходима оптимизация.
         GameObject _missle = Instantiate(missle, turret, Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0)), parent.transform.parent);
+        Projectile pMissle = _missle.GetComponent<Projectile>();
         if (scale != Vector3.zero)
             _missle.transform.localScale = scale;
-        _missle.GetComponent<Projectile>().target = target;
-        _missle.GetComponent<Projectile>().damage = damage;
-        _missle.GetComponent<Projectile>().archMultiplier = archMultiplier;
-        _missle.GetComponent<Projectile>().chance = chances;
-        _missle.GetComponent<Projectile>().agroRadius = agroRadius;
-        _missle.GetComponent<Projectile>().prevEnemy = prevEnemy;
-        _missle.GetComponent<Projectile>().projSpeed = projSpeed;
-        _missle.GetComponent<Projectile>().onStart = onStart;
-        _missle.GetComponent<Projectile>().travel = travel;
-        _missle.GetComponent<Projectile>().onEnd = onEnd;
-        _missle.GetComponent<Projectile>().liveTime = 0f;
+        pMissle.target = target;
+        pMissle.damage = damage;
+        pMissle.archMultiplier = archMultiplier;
+        pMissle.chance = chances;
+        pMissle.agroRadius = agroRadius;
+        pMissle.prevEnemy = prevEnemy;
+        pMissle.projSpeed = projSpeed;
+        pMissle.onStart = onStart;
+        pMissle.travel = travel;
+        pMissle.onEnd = onEnd;
+        pMissle.liveTime = 0f;
     }
 
 }

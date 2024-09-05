@@ -12,6 +12,12 @@ public class Player : MonoBehaviour
     {
         instance = this;
     }
+    #region Pools
+    public static ObjectPool<Puddle> nPuddles = new ObjectPool<Puddle>(128);
+    public static ObjectPool<Explotion> nExplosions = new ObjectPool<Explotion>(128);
+    public static ObjectPool<Projectile> nProjectile = new ObjectPool<Projectile>(1024);
+    public static ObjectPool<Fading> nShadows = new ObjectPool<Fading>(64);
+    #endregion
     private float moveSpeed;
     private float speed = 40f;
     [SerializeField] private List<GameObject> _res;
@@ -33,7 +39,7 @@ public class Player : MonoBehaviour
     {
         Camera.main.GetComponentInChildren<Image>().gameObject.SetActive(false);
     }
-    private void Update()
+    private void Update()//дорого
     {
         hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition));
         if (Input.GetKey(KeyCode.LeftShift))

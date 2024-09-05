@@ -5,9 +5,9 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class Explotion : MonoBehaviour
+public class Explotion : MonoBehaviour, IProducable
 {
-    public Projectile producer;
+    public Projectile producer { get; set; }
     public Damage damage;
     private void OnEnable()
     {

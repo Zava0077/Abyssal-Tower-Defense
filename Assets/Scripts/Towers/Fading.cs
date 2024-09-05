@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Fading : MonoBehaviour
+public class Fading : MonoBehaviour, IProducable
 {
+    public Projectile producer { get; set; }
     public float liveTime;
     public float timer = 0f;
     public Color color;

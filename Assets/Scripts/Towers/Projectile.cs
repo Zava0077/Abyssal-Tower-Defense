@@ -42,7 +42,6 @@ public class Projectile : MonoBehaviour
     public BulletEffect onStart;
     public BulletEffect travel;
     public BulletEffect onEnd;
-
     private void Awake()
     {
         projHeight = archMultiplier;
@@ -74,7 +73,7 @@ public class Projectile : MonoBehaviour
         if (waitCast)
             StartCoroutine(shadowCaster());
     }
-    private void FixedUpdate()
+    private void FixedUpdate()//дорого. внутренние методы могут быть тяжелыми
     {
         travel?.Invoke(this,ref followTarget);
     }
@@ -97,7 +96,7 @@ public class Projectile : MonoBehaviour
         {
             if (Player.instance.hit.isPlaying) Player.instance.hit.Stop();
             Player.instance.hit.Play();
-            Destroy(gameObject);
+            Destroy(gameObject);//
             enabled = true;
         }
         else
@@ -107,7 +106,7 @@ public class Projectile : MonoBehaviour
         }
         liveTime = 0f;
     }
-    public IEnumerator shadowCaster()
+    public IEnumerator shadowCaster()//хз как это засунуть в дженерик. Потом
     {
         waitCast = false;
         while (gameObject)

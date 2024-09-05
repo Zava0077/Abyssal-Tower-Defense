@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Puddle : MonoBehaviour
+public interface IProducable
+{
+    Projectile producer { get; set; }
+}
+public class Puddle : MonoBehaviour, IProducable
 {
     public Damage damage;
     public Chances chance;
-    public Projectile producer;
+    [SerializeField] public Mesh mesh;
+    public Projectile producer { get; set; }
     private HashSet<IDamagable> objectsOnPuddle = new HashSet<IDamagable>();
     private void OnEnable()
     {

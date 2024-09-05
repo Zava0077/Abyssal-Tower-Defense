@@ -29,7 +29,7 @@ public class Entity : MonoBehaviour, IDamagable
     public List<float> _damage = new List<float>();
     public List<float> _resist = new List<float>();
     public static List<GameObject> shadows = new List<GameObject>();
-
+    Renderer renderer;
     public static Entity entity;
     [SerializeField] private Material damageMat;
     private Color defaultColor;
@@ -44,6 +44,7 @@ public class Entity : MonoBehaviour, IDamagable
     {
         damage = new Damage(_damage[0], _damage[1], _damage[2], _damage[3], _damage[4]);
         resistances = new Resistances(_resist[0], _resist[1], _resist[2], _resist[3], _resist[4]);
+        renderer = GetComponent<Renderer>();
 
         if (gameObject.GetComponent<Renderer>())
             defaultColor = gameObject.GetComponent<Renderer>().materials[0].color;
@@ -63,7 +64,6 @@ public class Entity : MonoBehaviour, IDamagable
     }
     public IEnumerator ColorChanger()
     {
-        Renderer renderer = gameObject.GetComponent<Renderer>();
         if (renderer)
         {
             renderer.materials[0].color = new Color(255, 0, 0, 75);

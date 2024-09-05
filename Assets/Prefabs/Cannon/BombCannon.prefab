@@ -99,20 +99,19 @@ MonoBehaviour:
   - 0
   - 0
   damageMat: {fileID: 0}
-  missle: {fileID: 7686851911220215187, guid: b3a1e694e4142824b93d696f60b21b1d, type: 3}
   tower: {fileID: 5956137601538878063}
-  time: 0
+  costs: 0a0000000a0000000a00000000000000
+  chances: 0000000064000000000000000000000000000000000000000000000000000000
+  starterEffects:
+  - Missle
+  - Bomb
+  missle: {fileID: 7686851911220215187, guid: b3a1e694e4142824b93d696f60b21b1d, type: 3}
   incDamage: 1
   incAttackSpeed: 0
   incHealth: 0
   levelUpsRemain: 2220
   spriteButton: {fileID: 21300000, guid: 1fe7aa07b0893f34eaa6d12f0b36295b, type: 3}
   updateLvlUp: 1
-  costs: 0a0000000a0000000a00000000000000
-  chances: 0000000064000000000000000000000000000000000000000000000000000000
-  starterEffects:
-  - Missle
-  - Bomb
   levelUps:
   - FireUp
   - ColdUp
@@ -247,6 +246,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b77c8db9223daf64faa2a3690546af2f, type: 3}
       propertyPath: m_Name
       value: BombCannon
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: b77c8db9223daf64faa2a3690546af2f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
