@@ -203,7 +203,7 @@ public class BulletEffects : MonoBehaviour
             {
                 return;
             }
-            Tower.twr.Shoot(from, nextTarget, proj.damage, proj.gameObject, proj.agroRadius, proj.agroRadius, proj.chance,
+            Tower.twr.Shoot(from, nextTarget, proj.damage, proj.gameObject, proj.agroRadius, proj.agroRadius, proj.chance, proj,
                 proj.onStart, proj.travel, proj.onEnd, proj.projSpeed, proj.transform, proj.prevEnemy);
             if (Player.instance.bounce.isPlaying) Player.instance.bounce.Stop();
 
@@ -238,7 +238,7 @@ public class BulletEffects : MonoBehaviour
                     proj.chance.status, proj.chance.pierce);
                 Tower.twr.Shoot(from, nextTarget, new Damage(proj.damage._fire / 2, proj.damage._cold / 2,
                     proj.damage._lightning / 2, proj.damage._void / 2, proj.damage._physical / 2), proj.gameObject, proj.agroRadius, 3f,
-                    newChance, proj.onStart,proj.travel,proj.onEnd, proj.projSpeed, proj.transform, !_elec ? null : proj.prevEnemy,
+                    newChance,proj, proj.onStart,proj.travel,proj.onEnd, proj.projSpeed, proj.transform, !_elec ? null : proj.prevEnemy,
                     new Vector3(proj.transform.localScale.x / 1.5f, proj.transform.localScale.y / 1.5f, proj.transform.localScale.z / 1.5f));
             }
             if (Player.instance.fraction.isPlaying) Player.instance.fraction.Stop();

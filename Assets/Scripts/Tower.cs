@@ -11,7 +11,6 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Tower : Entity
 {
-    private static GameObject[] enemies;
     private Entity enemy;
     private float time;
     private float ResultRotationAngle = 0f;
@@ -20,7 +19,6 @@ public class Tower : Entity
     [SerializeField] private List<int> chances = new List<int>();
     [SerializeField] private List<string> starterEffects = new List<string>();
     [SerializeField] private Dictionary<GameObject, bool> keyValuePairs = new Dictionary<GameObject, bool>();
-    public static List<Entity> towers = new List<Entity>();//useLater
     public GameObject missle;
     public float incDamage = 1;
     public float incAttackSpeed;
@@ -74,7 +72,6 @@ public class Tower : Entity
     {
         base.Awake();
         Player player = Player.instance;
-        //Player player = Camera.main.GetComponent<Player>();
         foreach (var levelUp in levelUps)
             levelUpCallbacks.Add(lUCLinks[levelUp]);
         foreach(var eff in starterEffects)
@@ -85,6 +82,7 @@ public class Tower : Entity
         }
         if (!tower)
             tower = GetComponent<GameObject>();
+        TeamId = 1;
         entities.Add(this);
         levelUpCallbackNames = new Dictionary<LevelUpCallback, Sprite>()
         {
@@ -139,11 +137,8 @@ public class Tower : Entity
                 foreach (var element in gameObject.GetComponentsInChildren<Transform>())
                     if (element.tag == "Projectile")
                         fromWhere = element.position;
-
-                //Shoot(fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed/10), damage, missle,
-                //    agroRadius,missle.GetComponent<Projectile>().archMultiplier, chance, effects, projSpeed, gameObject.transform, new List<Mob>());
                 Shoot(fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10), damage, missle,
-                    agroRadius, missle.GetComponent<Projectile>().archMultiplier, chance, onStart, travel, onEnd, projSpeed, gameObject.transform, new List<Mob>());
+                    agroRadius, missle.GetComponent<Projectile>().archMultiplier, chance, this,onStart, travel, onEnd, projSpeed, gameObject.transform, new List<Entity>());
 
                 if (UnityEngine.Random.Range(1,99) > chance.doubleAttack)
                     time = 0f;
@@ -164,22 +159,16 @@ public class Tower : Entity
                 new Vector3(enemy.transform.position.x, enemy.transform.position.y + 10f, enemy.transform.position.z) + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10));
         }
     }
-    public Entity FindEnemy<T>(T tower, float agroRadius, Dictionary<float, Entity> enemiesCanShooted, List<Mob> lastEnemy = null) where T : MonoBehaviour
+    public Entity FindEnemy<T>(T tower, float agroRadius, Dictionary<float, Entity> enemiesCanShooted, List<Entity> lastEnemy = null) where T : MonoBehaviour, ITeam
     {
-        //сменить на изучение статического списка. Который будет изменятся при объявлении нового моба в Awake класса.
-        //надо проверить если поместить в конструтор поменяяется ли что-нибудь
-        //сделать метод общедоступным. бля хочу яблок. тот, кто ищет противников должен искать существ IDamagable из другой команды.
-        //сколько команд столько и списков
-        //списки обобщенные типом интерфейса, обязующим реализовать номер команды. проверка по номеру команды
-        //
-        //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         List<Entity> enemies = entities;
         List<Entity> ResultEnemiesInRange = new List<Entity>();
-
+        //Надо создать интерфейс ITeam, который будет реализовываться через entity и projectile,
+        //Каждый проджектайл будет наследовать номер команды от продюсера
+        //продюсером может быть любой типа Entity
         foreach (var enemy in enemies)
         {
-            //Mob mob = enemy.GetComponent<Mob>();
-            if (typeof(T) == enemy.GetType() /*&& enemy.teamId == (tower as Entity).teamId*/) //руки мне не отрубайте пж
+            if (typeof(T) == enemy.GetType() || tower.TeamId == enemy.TeamId) //руки мне не отрубайте пж
                 continue; 
             float distance = Vector3.Distance(enemy.transform.position, tower.transform.position);
             enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(s => s.Value == enemy).Key);//||s.Team == enemy.Team
@@ -221,12 +210,10 @@ public class Tower : Entity
         }
     }
 
-    public void Shoot(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius, float archMultiplier, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, float projSpeed, Transform parent, [Optional] List<Mob> prevEnemy, [Optional] Vector3 scale)
+    public void Shoot<T>(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius, float archMultiplier, Chances chances,T producer, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, float projSpeed, Transform parent, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale) where T : MonoBehaviour, ITeam
     {
         //Заменить создание объекта на перетаскивание уже существующего из пула объектов.
-        //Чтобы сменить модель можно поменять меш, но для этого нужно все существующие модели заменить на obj модели
-        //Создать дженерик класс для быстрого создания пулов
-        
+        //Чтобы сменить модель можно поменять меш, но для этого нужно все существующие модели заменить на obj модели   
         //Профайлер показывает как трудоёмий процесс. Необходима оптимизация.
         GameObject _missle = Instantiate(missle, turret, Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0)), parent.transform.parent);
         Projectile pMissle = _missle.GetComponent<Projectile>();
@@ -234,6 +221,7 @@ public class Tower : Entity
             _missle.transform.localScale = scale;
         pMissle.target = target;
         pMissle.damage = damage;
+        pMissle.TeamId = producer.TeamId;
         pMissle.archMultiplier = archMultiplier;
         pMissle.chance = chances;
         pMissle.agroRadius = agroRadius;

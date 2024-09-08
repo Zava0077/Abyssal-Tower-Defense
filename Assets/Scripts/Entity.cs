@@ -12,11 +12,16 @@ interface IDamagable
 {
     void GetDamage(Damage damage);
 }
-public class Entity : MonoBehaviour, IDamagable
+public interface ITeam
+{
+    int TeamId { get; set; }
+}
+public class Entity : MonoBehaviour, IDamagable, ITeam
 {
     public static Entity entity;
     public static List<Entity> entities = new List<Entity>();
     public static event MobDelete onEntityDeath;
+    public static List<GameObject> shadows = new List<GameObject>();
     [Header("Stats")]
     public float maxHealth;
     public float health; 
@@ -30,11 +35,10 @@ public class Entity : MonoBehaviour, IDamagable
     public List<Status> statuses = new List<Status>();
     public List<float> _damage = new List<float>();
     public List<float> _resist = new List<float>();
-    public static List<GameObject> shadows = new List<GameObject>();
     Renderer renderer;
     [SerializeField] private Material damageMat;
     private Color defaultColor;
-
+    public int TeamId { get; set; }
     public Entity()
     {
         entity = this;
@@ -79,6 +83,5 @@ public class Entity : MonoBehaviour, IDamagable
         health -= damage._void * (1 - resistances._void);
         health -= damage._physical * (1 - resistances._physical);
         StartCoroutine(ColorChanger());
-
     }
 }

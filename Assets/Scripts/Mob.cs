@@ -29,6 +29,7 @@ public class Mob : Entity
     new private void Awake()
     {
         base.Awake();
+        TeamId = 0;
         entities.Add(this);
         agent = GetComponent<NavMeshAgent>();
     }

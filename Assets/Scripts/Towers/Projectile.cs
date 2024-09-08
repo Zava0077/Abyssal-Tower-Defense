@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static LevelUp;
 
-public class Projectile : MonoBehaviour
+public class Projectile : MonoBehaviour, ITeam
 {
     public Projectile(Damage damage, Vector3 target, GameObject owner, float agroRadius, Chances chance)
     {
@@ -19,6 +19,7 @@ public class Projectile : MonoBehaviour
         this.agroRadius = agroRadius;
         this.chance = chance;
     }
+    public int TeamId { get; set; }
     public Chances chance;
     public Color shadowColor;
     public float agroRadius;
@@ -28,7 +29,7 @@ public class Projectile : MonoBehaviour
     public Vector3 targetMemory;
     public Vector3 projection;
     public Vector3 position;
-    public List<Mob> prevEnemy = new List<Mob>();
+    public List<Entity> prevEnemy = new List<Entity>();
     public Damage damage;
     public float projSpeed;
     public float archMultiplier;
@@ -81,11 +82,10 @@ public class Projectile : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (damage == null) throw new ArgumentNullException("Урон неопознан");
-        prevEnemy ??= new List<Mob>();
+        prevEnemy ??= new List<Entity>();
         Entity otherEntity = other.GetComponent<Entity>();
-        Mob otherMob = otherEntity as Mob;
         if (other.gameObject.tag == "Effect") return;
-        if (prevEnemy.Contains(otherMob)) return;
+        if (prevEnemy.Contains(otherEntity) || otherEntity.TeamId == TeamId) return;
         if (other.gameObject.tag == "Enemy" && damage != null)
         {
             otherEntity.GetDamage(damage);
