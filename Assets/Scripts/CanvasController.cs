@@ -76,7 +76,7 @@ public class CanvasController : MonoBehaviour
         else
         {
             destroyButton.SetActive(false);
-            foreach (var tower in Camera.main.GetComponent<Player>().Towers)
+            foreach (var tower in Player.instance.Towers)//
             {
                 Button _button = Instantiate(prefabButton);
                 _button.transform.SetParent(buildObject.transform, false);
@@ -112,7 +112,7 @@ public class CanvasController : MonoBehaviour
     {
         _tower = Instantiate(tower);
         _tower.transform.position = transform.position;
-        if (Camera.main.GetComponent<Player>().resources.Subtract(_tower.GetComponent<Tower>().cost))
+        if (Player.instance.resources.Subtract(_tower.GetComponent<Tower>().cost))
         {
             destroyButton.SetActive(true);
             buildObject.SetActive(false);

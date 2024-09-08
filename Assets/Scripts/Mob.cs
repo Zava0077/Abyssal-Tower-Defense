@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public class Mob : Entity
 {
-    NavMeshAgent agent;
+    private NavMeshAgent agent;
     [SerializeField] private Transform finish;
     public float speed; 
-
     public Vector3 Direction
     {
         get
@@ -22,9 +22,14 @@ public class Mob : Entity
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.position, transform.position + Direction * 10);
     }
+    private void OnDestroy()
+    {
+        entities.Remove(this);
+    }
     new private void Awake()
     {
         base.Awake();
+        entities.Add(this);
         agent = GetComponent<NavMeshAgent>();
     }
     private void Start()
@@ -38,7 +43,7 @@ public class Mob : Entity
         }
     }
 
-    private void Update()
+    new private void Update()
     {
         base.Update();
         if(agent.isActiveAndEnabled)

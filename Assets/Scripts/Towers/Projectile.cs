@@ -116,28 +116,9 @@ public class Projectile : MonoBehaviour
         {
             Player.nShadows.PullObject(pref, gameObject.transform.position, mesh, true, 1).MoveNext();
             fadingComponent = Player.nShadows.pulledObj;
-
-            //if (Entity.shadows.Count > 0)
-            //    shadow = Entity.shadows.Find(s => !s.activeSelf);
-            //if (shadow == null)
-            //{
-            //    if (Entity.shadows.Count < 64)
-            //    {
-            //        shadow = Instantiate(Player.instance.particleShadow, gameObject.transform.position, gameObject.transform.rotation, gameObject.transform.parent);
-            //        Entity.shadows.Add(shadow);
-            //    }
-            //    else
-            //    {
-            //        yield return new WaitForNextFrameUnit();
-            //        shadow = Entity.shadows[Entity.shadows.Count - 1];
-            //    }
-            //}
-            //shadow.transform.position = gameObject.transform.position;
-            fadingComponent.transform.rotation = gameObject.transform.rotation;
-            //shadow.SetActive(true);
-            //Fading fadingComponent = shadow.GetComponentInChildren<Fading>();
-            fadingComponent.liveTime = 0.1f;
             fadingComponent.color = shadowColor;
+            fadingComponent.transform.rotation = gameObject.transform.rotation;
+            fadingComponent.liveTime = 0.1f;
             yield return new WaitForNextFrameUnit();
         }
         waitCast = true;

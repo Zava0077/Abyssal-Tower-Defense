@@ -58,7 +58,7 @@ public class BulletEffects : MonoBehaviour
     #region Homing
     public static BulletEffect homingStart = (Projectile proj, ref Entity target) =>
     {
-        target = Tower.twr.FindEnemy(proj.gameObject, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
+        target = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
         proj.GetComponent<Collider>().enabled = false;
         proj.shadowColor = Color.magenta;
         proj.collidable = false;
@@ -71,7 +71,7 @@ public class BulletEffects : MonoBehaviour
     public static BulletEffect homingTravel = (Projectile proj,ref Entity target) =>
     {
         if (!target)
-            target = Tower.twr.FindEnemy(proj.gameObject, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
+            target = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
         if (proj.liveTime > (2.5f / proj.projSpeed) * 35f)
             Destroy(proj.gameObject);//
         if (proj.liveTime > (0.15f / proj.projSpeed) * 35f && target)
@@ -197,7 +197,7 @@ public class BulletEffects : MonoBehaviour
             foreach (var element in proj.GetComponentsInChildren<Transform>())
                 if (element.gameObject.tag == "Projectile")
                     from = element.position;
-            Entity nextEnemy = Tower.twr.FindEnemy(proj.gameObject, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);//иногда баунс всё равно может считать противником самого себя
+            Entity nextEnemy = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);//иногда баунс всё равно может считать противником самого себя
             Vector3 nextTarget = nextEnemy ? nextEnemy.GetComponent<Transform>().position : Vector3.zero;
             if (nextEnemy == null || (proj.prevEnemy != null && proj.prevEnemy.Count > 0 && nextTarget == proj.prevEnemy[0].gameObject.transform.position)) //
             {
@@ -314,7 +314,8 @@ public class BulletEffects : MonoBehaviour
                 size += (float)damage.GetValue(proj.damage) / 4;
             GameObject[] ground = GameObject.FindGameObjectsWithTag("Ground");
             Vector3 puddPosition = new Vector3(from.x, ground[0].transform.position.y, from.z);
-            pudd = Player.nPuddles.PullObject(pref, puddPosition, mesh).Current; 
+            Player.nPuddles.PullObject(pref, puddPosition, mesh); 
+            pudd = Player.nPuddles.pulledObj; 
             Vector3 puddScale = new Vector3(size, pudd.transform.localScale.y, size);
             pudd.transform.localScale = puddScale;
             pudd.damage = proj.damage;
@@ -330,15 +331,18 @@ public class BulletEffects : MonoBehaviour
     {
         if (method.GetInvocationList().Length > 1)
             throw new IndexOutOfRangeException("Сравниваемый делегат имеет больше одного метода");
-        foreach(BulletEffect _method in storage.onStart.GetInvocationList())
-            if (method == _method)
-                return true;
-        foreach (BulletEffect _method in storage.travel.GetInvocationList())
-            if (method == _method)
-                return true;
-        foreach (BulletEffect _method in storage.onEnd.GetInvocationList())
-            if (method == _method)
-                return true;
+        if (storage.onStart != null)
+            foreach (BulletEffect _method in storage.onStart.GetInvocationList())
+                if (method == _method)
+                    return true;
+        if (storage.travel != null)
+            foreach (BulletEffect _method in storage.travel.GetInvocationList())
+                if (method == _method)
+                    return true;
+        if (storage.onEnd != null)
+            foreach (BulletEffect _method in storage.onEnd.GetInvocationList())
+                if (method == _method)
+                    return true;
         return false;
     }
 }

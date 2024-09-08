@@ -14,6 +14,9 @@ interface IDamagable
 }
 public class Entity : MonoBehaviour, IDamagable
 {
+    public static Entity entity;
+    public static List<Entity> entities = new List<Entity>();
+    public static event MobDelete onEntityDeath;
     [Header("Stats")]
     public float maxHealth;
     public float health; 
@@ -23,17 +26,14 @@ public class Entity : MonoBehaviour, IDamagable
     public float agroRadius;
     public Damage damage;
     public Resistances resistances;
-
     public Transform transform;
     public List<Status> statuses = new List<Status>();
     public List<float> _damage = new List<float>();
     public List<float> _resist = new List<float>();
     public static List<GameObject> shadows = new List<GameObject>();
     Renderer renderer;
-    public static Entity entity;
     [SerializeField] private Material damageMat;
     private Color defaultColor;
-    public static event MobDelete onEntityDeath;
 
     public Entity()
     {
