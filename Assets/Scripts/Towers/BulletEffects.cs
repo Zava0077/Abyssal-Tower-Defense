@@ -9,18 +9,18 @@ using UnityEditor.Build;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public delegate void BulletEffect(Projectile proj, ref Entity target);
+public delegate void BulletEffect(Projectile proj);
 
 public sealed class BulletEffects : MonoBehaviour
 {
     public Projectile _proj;
     #region Missle
-    public static BulletEffect missleStart = (Projectile proj, ref Entity target) =>
+    public static BulletEffect missleStart = (Projectile proj) =>
     {
         if (Player.instance.shoot.isPlaying) Player.instance.shoot.Stop();
             Player.instance.shoot.Play();
     };
-    public static BulletEffect missleTravel = (Projectile proj, ref Entity target) =>
+    public static BulletEffect missleTravel = (Projectile proj) =>
     {
         if (proj.liveTime > 5f)
             proj.gameObject.SetActive(false);
@@ -35,7 +35,7 @@ public sealed class BulletEffects : MonoBehaviour
     };
     #endregion
     #region Laser
-    public static BulletEffect laserStart = (Projectile proj, ref Entity target) =>
+    public static BulletEffect laserStart = (Projectile proj) =>
     {
         proj.collidable = false;
         proj.GetComponent<Collider>().enabled = false;
@@ -44,7 +44,7 @@ public sealed class BulletEffects : MonoBehaviour
         if (Player.instance.laser.isPlaying) Player.instance.laser.Stop();
         Player.instance.laser.Play();
     };
-    public static BulletEffect laserTravel = (Projectile proj, ref Entity target) =>
+    public static BulletEffect laserTravel = (Projectile proj) =>
     {
         if (proj.liveTime > 0.08f)
             proj.GetComponent<Collider>().enabled = true;
@@ -59,9 +59,9 @@ public sealed class BulletEffects : MonoBehaviour
     };
     #endregion
     #region Homing
-    public static BulletEffect homingStart = (Projectile proj, ref Entity target) =>
+    public static BulletEffect homingStart = (Projectile proj) =>
     {
-        target = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
+        proj.followTarget = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
         proj.GetComponent<Collider>().enabled = false;
         proj.shadowColor = Color.magenta;
         proj.collidable = false;
@@ -71,33 +71,33 @@ public sealed class BulletEffects : MonoBehaviour
         Player.instance.laser.Play();
         Player.instance.homing.Play();
     };
-    public static BulletEffect homingTravel = (Projectile proj,ref Entity target) =>
+    public static BulletEffect homingTravel = (Projectile proj) =>
     {
-        if (!target)
-            target = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
+        if (!proj.followTarget)
+            proj.followTarget = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
         if (proj.liveTime > (2.5f / proj.projSpeed) * 35f)
             proj.gameObject.SetActive(false);//
-        if (proj.liveTime > (0.15f / proj.projSpeed) * 35f && target)
+        if (proj.liveTime > (0.15f / proj.projSpeed) * 35f && proj.followTarget)
         {
-            proj.transform.rotation = Quaternion.Lerp(proj.transform.rotation, Quaternion.LookRotation(Vector3.RotateTowards(proj.transform.forward, target.transform.position - proj.transform.position, 3.14f, 0f)), (0.02f * 35f) / proj.projSpeed);
+            proj.transform.rotation = Quaternion.Lerp(proj.transform.rotation, Quaternion.LookRotation(Vector3.RotateTowards(proj.transform.forward, proj.followTarget.transform.position - proj.transform.position, 3.14f, 0f)), (0.02f * 35f) / proj.projSpeed);
             proj.GetComponent<Collider>().enabled = true;
         }
         proj.transform.position += proj.transform.forward * proj.projSpeed * Time.deltaTime;
         proj.transform.position = new Vector3(proj.transform.position.x, 1f, proj.transform.position.z);
     };
-    public static BulletEffect homingEnd = (Projectile proj, ref Entity target) =>
+    public static BulletEffect homingEnd = (Projectile proj) =>
     {
         Player.instance.homing.Stop();
     };
     #endregion
     #region Ignite
-    public static BulletEffect igniteStart = (Projectile proj, ref Entity target) =>
+    public static BulletEffect igniteStart = (Projectile proj) =>
     {
         Damage damage = proj.damage;
         proj.damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
 
     };
-    public static BulletEffect igniteEnd = (Projectile proj, ref Entity target) =>
+    public static BulletEffect igniteEnd = (Projectile proj) =>
     {
         Vector3 from = proj.transform.position;
         Damage damage1 = proj.damage;
@@ -118,12 +118,12 @@ public sealed class BulletEffects : MonoBehaviour
 
     #endregion
     #region Cold
-    public static BulletEffect coldStart = (Projectile proj, ref Entity target) =>
+    public static BulletEffect coldStart = (Projectile proj) =>
     {
         Damage damage = proj.damage;
         proj.damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
     };
-    public static BulletEffect coldEnd = (Projectile proj, ref Entity target) =>
+    public static BulletEffect coldEnd = (Projectile proj) =>
     {
         Vector3 from = proj.transform.position;
         Damage damage1 = proj.damage;
@@ -143,7 +143,7 @@ public sealed class BulletEffects : MonoBehaviour
     };
     #endregion
     #region Elec
-    public static BulletEffect elecStart = (Projectile proj, ref Entity target) =>
+    public static BulletEffect elecStart = (Projectile proj) =>
     {
         Transform transformChildren = proj.GetComponentInChildren<Transform>();
         Vector3 positionMemory = proj.transform.position;
@@ -158,18 +158,18 @@ public sealed class BulletEffects : MonoBehaviour
             Player.instance.electric.Stop();
         Player.instance.electric.Play();
     };
-    public static BulletEffect elecTravel = (Projectile proj, ref Entity target) =>
+    public static BulletEffect elecTravel = (Projectile proj) =>
     {
         if (proj.liveTime > 0.2f)
             proj.GetComponent<Collider>().enabled = true;
         if (proj.liveTime > 0.25f)
         {
-            proj.onEnd(proj, ref target);
+            proj.onEnd(proj);
             proj.gameObject.SetActive(false);
             //Destroy(proj.gameObject);//
         }
     };
-    public static BulletEffect elecEnd = (Projectile proj, ref Entity target) =>
+    public static BulletEffect elecEnd = (Projectile proj) =>
     {
         Vector3 from = proj.transform.position;
         Damage damage1 = proj.damage;
@@ -187,7 +187,7 @@ public sealed class BulletEffects : MonoBehaviour
 
     #endregion
     #region Bounce
-    public static BulletEffect bounceEnd = (Projectile proj, ref Entity target) =>
+    public static BulletEffect bounceEnd = (Projectile proj) =>
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
@@ -211,7 +211,7 @@ public sealed class BulletEffects : MonoBehaviour
     };
     #endregion
     #region Fraction
-    public static BulletEffect fractionEnd = (Projectile proj, ref Entity target) =>
+    public static BulletEffect fractionEnd = (Projectile proj) =>
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
@@ -245,7 +245,7 @@ public sealed class BulletEffects : MonoBehaviour
     };
     #endregion
     #region Explotion
-    public static BulletEffect explotionEnd = (Projectile proj, ref Entity target) =>
+    public static BulletEffect explotionEnd = (Projectile proj) =>
     {
         System.Random random = new System.Random();
         Projectile _proj = proj.GetComponent<Projectile>();
@@ -284,7 +284,7 @@ public sealed class BulletEffects : MonoBehaviour
     };
     #endregion
     #region Puddle
-    public static BulletEffect puddleEnd = (Projectile proj, ref Entity target) =>
+    public static BulletEffect puddleEnd = (Projectile proj) =>
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);

@@ -26,8 +26,8 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour, IMeshHolder
             {
                 pool.Add(Instantiate(prefab));
                 objectFromPool = pool.Last();
-                if(nMesh != null)
-                    poolMeshes.Add(prefab.MeshHolder);
+                //if(nMesh != null)
+                //    poolMeshes.Add(prefab.MeshHolder);
             }
             else if (forcedPull)
             {
@@ -37,8 +37,8 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour, IMeshHolder
             }
         }
         int objIndex = pool.FindIndex(obj => obj == objectFromPool);
-        if (nMesh != null && nMesh != poolMeshes[objIndex].Mesh)
-            poolMeshes[objIndex].Mesh = nMesh;
+        //if (nMesh != null && objIndex > 0 && nMesh != poolMeshes[objIndex].Mesh) //null exception
+        //    poolMeshes[objIndex].Mesh = nMesh;
         objectFromPool.transform.position = where;
         objectFromPool.gameObject.SetActive(activeFromDefault);
         pulledObj = objectFromPool;

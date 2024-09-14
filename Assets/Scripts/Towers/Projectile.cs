@@ -27,7 +27,7 @@ public class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
     public Chances chance;
     public Color shadowColor;
     public float agroRadius;
-    private Entity followTarget;
+    public Entity followTarget;
     public GameObject owner;
     public Vector3 target;
     public Vector3 targetMemory;
@@ -85,7 +85,7 @@ public class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
             testTimer = 0f;
             collidable = true;
         }
-        onStart?.Invoke(this, ref followTarget);
+        onStart?.Invoke(this);
     }
     private void OnEntityDeath(object sender)
     {
@@ -100,7 +100,7 @@ public class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
     }
     private void FixedUpdate()//дорого. внутренние методы могут быть тяжелыми
     {
-        travel?.Invoke(this, ref followTarget);
+        travel?.Invoke(this);
     }
     public void Shoot<T>(T producer, Vector3 turret, Vector3 target, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam
     {
@@ -119,7 +119,7 @@ public class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
             otherEntity.GetDamage(damage);
             prevEnemy.Add(otherEntity);
         }
-        onEnd?.Invoke(this, ref followTarget); //followTarget можно уже убрать
+        onEnd?.Invoke(this); //followTarget можно уже убрать
         if (chance.pierce < UnityEngine.Random.Range(1, 100) || other.gameObject.tag == "Tower\'s Place" || other.gameObject.tag == "Unpiercable")
         {
             if (Player.instance.hit.isPlaying) Player.instance.hit.Stop();
