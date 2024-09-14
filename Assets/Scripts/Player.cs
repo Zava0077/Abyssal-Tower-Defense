@@ -6,6 +6,18 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public AudioSource shoot, laser, expl, expl2, bounce, fraction, pudd, hit, pierce, create, hot, snow, homing, electric;
+
+    [SerializeField] private List<GameObject> _res;
+    public List<GameObject> Ferms;
+    public List<GameObject> Towers;
+    
+    private RaycastHit[] hits;
+
+    public GameObject explotion;
+    public GameObject puddle;
+    public GameObject particleShadow;
+
     public Camera camera;
     public static Player instance;
     Player()
@@ -15,22 +27,13 @@ public class Player : MonoBehaviour
     #region Pools
     public static ObjectPool<Puddle> nPuddles = new ObjectPool<Puddle>(128);
     public static ObjectPool<Explotion> nExplosions = new ObjectPool<Explotion>(128);
-    public static ObjectPool<Projectile> nProjectile = new ObjectPool<Projectile>(1024);
     public static ObjectPool<Fading> nShadows = new ObjectPool<Fading>(64);
     #endregion
     private float moveSpeed;
     private float speed = 40f;
-    [SerializeField] private List<GameObject> _res;
     public Resources resources = new Resources(50,50,50,0);
-    [SerializeField] public List<GameObject> Towers;
     public Sprite[] levelUpSprites;
-    [SerializeField] public GameObject explotion;
-    [SerializeField] public GameObject puddle;
-    [SerializeField] public GameObject particleShadow;
     public float levelUpBonus = 2f;
-    public List<GameObject> Ferms;
-    RaycastHit[] hits;
-    public AudioSource shoot, laser, expl, expl2, bounce, fraction, pudd, hit, pierce, create, hot, snow, homing, electric;
 
 
     private void Start()

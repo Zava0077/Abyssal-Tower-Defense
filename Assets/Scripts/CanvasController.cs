@@ -8,12 +8,12 @@ using static LevelUp;
 using static UnityEngine.ParticleSystem;
 
 public class CanvasController : MonoBehaviour
-{
+{    
+    public static CanvasController cnv;
     public CanvasController()
     {
         cnv = this;
     }
-    public static CanvasController cnv;
     [SerializeField] public Image menu;
     [SerializeField] private Button prefabButton;
     [SerializeField] private GameObject prefabStat;

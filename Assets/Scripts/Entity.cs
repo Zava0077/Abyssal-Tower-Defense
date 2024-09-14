@@ -1,14 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using Unity.Collections.LowLevel.Unsafe;
-using Unity.VisualScripting;
+using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public delegate void MobDelete(object sender);
-interface IDamagable
+internal interface IDamagable
 {
     void GetDamage(Damage damage);
 }
@@ -16,11 +12,18 @@ public interface ITeam
 {
     int TeamId { get; set; }
 }
-public class Entity : MonoBehaviour, IDamagable, ITeam
+internal interface IShootable
+{
+    void Shoot<T>(T producer, Vector3 turret, Vector3 target, Projectile missle, Chances chances, 
+        BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, 
+        [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam;
+}
+public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
 {
     public static Entity entity;
     public static List<Entity> entities = new List<Entity>();
     public static event MobDelete onEntityDeath;
+    protected ObjectPool<Projectile> nProjectile = new ObjectPool<Projectile>(256);
     public static List<GameObject> shadows = new List<GameObject>();
     [Header("Stats")]
     public float maxHealth;
@@ -31,7 +34,7 @@ public class Entity : MonoBehaviour, IDamagable, ITeam
     public float agroRadius;
     public Damage damage;
     public Resistances resistances;
-    public Transform transform;
+    //public Transform transform;
     public List<Status> statuses = new List<Status>();
     public List<float> _damage = new List<float>();
     public List<float> _resist = new List<float>();
@@ -50,8 +53,8 @@ public class Entity : MonoBehaviour, IDamagable, ITeam
         resistances = new Resistances(_resist[0], _resist[1], _resist[2], _resist[3], _resist[4]);
         renderer = GetComponent<Renderer>();
 
-        if (gameObject.GetComponent<Renderer>())
-            defaultColor = gameObject.GetComponent<Renderer>().materials[0].color;
+        if (renderer)
+            defaultColor = renderer.materials[0].color;
     }
     private void Death()
     {
@@ -74,6 +77,30 @@ public class Entity : MonoBehaviour, IDamagable, ITeam
             yield return new WaitForSeconds(0.1f);
             renderer.materials[0].color = defaultColor;
         }
+    }
+    public virtual void Shoot<T>(T producer, Vector3 turret, Vector3 target, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale,[Optional] Damage nDamage) where T : MonoBehaviour, ITeam
+    {
+        //Чтобы сменить модель можно поменять меш, но для этого нужно все существующие модели заменить на obj модели   
+        //Профайлер показывает как трудоёмий процесс. Необходима оптимизация. *
+        nProjectile.PullObject(missle, turret, missle.pMesh, false, false).MoveNext();//тут меняет демедж
+        //возможно придётся для каждой башни создавать свой пул проджектайлов
+        Projectile _missle = nProjectile.pulledObj;
+        _missle.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0));
+        Projectile pMissle = _missle;
+        if (scale != Vector3.zero)
+            _missle.transform.localScale = scale;
+        pMissle.target = target;
+        pMissle.damage = nDamage != null ? nDamage : damage;
+        pMissle.TeamId = producer.TeamId;
+        pMissle.chance = chances;
+        pMissle.agroRadius = agroRadius;
+        pMissle.prevEnemy = prevEnemy;
+        pMissle.projSpeed = projSpeed;
+        pMissle.onStart = onStart;
+        pMissle.travel = travel;
+        pMissle.onEnd = onEnd;
+        pMissle.liveTime = 0f;
+        _missle.gameObject.SetActive(true);
     }
     public void GetDamage(Damage damage)
     {

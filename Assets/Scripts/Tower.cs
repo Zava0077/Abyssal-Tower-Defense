@@ -13,7 +13,16 @@ public class Tower : Entity
 {
     private Entity enemy;
     private float time;
-    private float ResultRotationAngle = 0f;
+    private float rotationAngle = 0f;
+    private float ResultRotationAngle {
+        get => rotationAngle;
+        set
+        {
+            if (value > 360) value -= 360;
+            if (value < 0) value += 360;
+            rotationAngle = value;
+        }
+    } 
     [SerializeField] private GameObject tower;
     [SerializeField] private List<int> costs = new List<int>();
     [SerializeField] private List<int> chances = new List<int>();
@@ -30,7 +39,7 @@ public class Tower : Entity
     public BulletEffect onStart;
     public BulletEffect travel;
     public BulletEffect onEnd;
-    Dictionary<float, Entity> enemiesCanShooted = new Dictionary<float, Entity>();
+    private Dictionary<float, Entity> enemiesCanShooted = new Dictionary<float, Entity>();
     public static Dictionary<string, LevelUpCallback> lUCLinks = new Dictionary<string, LevelUpCallback>()
     {
         { "FireUp",FireUp },
@@ -72,6 +81,8 @@ public class Tower : Entity
     {
         base.Awake();
         Player player = Player.instance;
+        Mesh pMesh = gameObject.GetComponentInChildren<MeshFilter>().mesh; //надо поместить меш в объект и ссылаться на этот объект с мешем, а не на сам меш.
+        missle.GetComponent<Projectile>().MeshHolder = new MeshHolder(pMesh);
         foreach (var levelUp in levelUps)
             levelUpCallbacks.Add(lUCLinks[levelUp]);
         foreach(var eff in starterEffects)
@@ -84,6 +95,7 @@ public class Tower : Entity
             tower = GetComponent<GameObject>();
         TeamId = 1;
         entities.Add(this);
+        missle.GetComponent<Projectile>().damage = damage;
         levelUpCallbackNames = new Dictionary<LevelUpCallback, Sprite>()
         {
             { FireUp , player.levelUpSprites[0] },
@@ -112,19 +124,18 @@ public class Tower : Entity
     {
         entities.Remove(this);
     }
+    private void FixedUpdate()
+    {
+        enemy = FindEnemy(this, agroRadius, enemiesCanShooted);
+    }
     new protected void Update()
     {
-        foreach(var value in keyValuePairs)
-            if (value.Value)
-                value.Key.active = true;
-        ResultRotationAngle += attackSpeed * Time.deltaTime * 30;
-        if (ResultRotationAngle >= 360f)
-        {
-            ResultRotationAngle -= 360f;
-        }
+        //foreach(var value in keyValuePairs)
+        //    if (value.Value)
+        //        value.Key.active = true;
         base.Update();
+        ResultRotationAngle += attackSpeed * Time.deltaTime * 30;
         Quaternion newDir;
-        enemy = FindEnemy(this, agroRadius, enemiesCanShooted);
         if (enemy)
         {
             time += Time.deltaTime;
@@ -133,13 +144,12 @@ public class Tower : Entity
             if (time > 1 / attackSpeed)
             {
                 Vector3 fromWhere = gameObject.transform.position;
-
+                Projectile pMissle = missle.GetComponent<Projectile>();
                 foreach (var element in gameObject.GetComponentsInChildren<Transform>())
                     if (element.tag == "Projectile")
                         fromWhere = element.position;
-                Shoot(fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10), damage, missle,
-                    agroRadius, missle.GetComponent<Projectile>().archMultiplier, chance, this,onStart, travel, onEnd, projSpeed, gameObject.transform, new List<Entity>());
-
+                Shoot(this, fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10), pMissle,
+                    chance, onStart, travel, onEnd, new List<Entity>(), missle.transform.localScale, pMissle.damage);
                 if (UnityEngine.Random.Range(1,99) > chance.doubleAttack)
                     time = 0f;
             }
@@ -159,30 +169,28 @@ public class Tower : Entity
                 new Vector3(enemy.transform.position.x, enemy.transform.position.y + 10f, enemy.transform.position.z) + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10));
         }
     }
+    //перекинуть эти методы в Entity
     public Entity FindEnemy<T>(T tower, float agroRadius, Dictionary<float, Entity> enemiesCanShooted, List<Entity> lastEnemy = null) where T : MonoBehaviour, ITeam
     {
         List<Entity> enemies = entities;
-        List<Entity> ResultEnemiesInRange = new List<Entity>();
-        //Надо создать интерфейс ITeam, который будет реализовываться через entity и projectile,
-        //Каждый проджектайл будет наследовать номер команды от продюсера
-        //продюсером может быть любой типа Entity
+        List<Entity> resultEnemiesInRange = new List<Entity>();
+        
         foreach (var enemy in enemies)
         {
-            if (typeof(T) == enemy.GetType() || tower.TeamId == enemy.TeamId) //руки мне не отрубайте пж
+            if (tower.TeamId == enemy.TeamId) //руки мне не отрубайте пж
                 continue; 
             float distance = Vector3.Distance(enemy.transform.position, tower.transform.position);
-            enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(s => s.Value == enemy).Key);//||s.Team == enemy.Team
+            enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(s => s.Value == enemy).Key);
             if (distance < agroRadius)
             {
-                ResultEnemiesInRange.Add(enemy);
+                resultEnemiesInRange.Add(enemy);
                 enemiesCanShooted[distance] = enemy;
             }
         }
-
         if (lastEnemy != null)
         {
             lastEnemy.RemoveAll(mob => Vector3.Distance(mob.transform.position, tower.transform.position) > agroRadius);
-            if (ResultEnemiesInRange.Count == lastEnemy.Count)
+            if (resultEnemiesInRange.Count == lastEnemy.Count)
             {
                 lastEnemy.Clear();
             }
@@ -191,7 +199,7 @@ public class Tower : Entity
                 foreach (var mob in lastEnemy)
                 {
                     float distance = Vector3.Distance(mob.transform.position, tower.transform.position);
-                    if (ResultEnemiesInRange.Contains(mob))
+                    if (resultEnemiesInRange.Contains(mob))
                     {
                         enemiesCanShooted.Remove(distance);
                     }
@@ -209,28 +217,50 @@ public class Tower : Entity
             return null;
         }
     }
-
-    public void Shoot<T>(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius, float archMultiplier, Chances chances,T producer, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, float projSpeed, Transform parent, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale) where T : MonoBehaviour, ITeam
-    {
-        //Заменить создание объекта на перетаскивание уже существующего из пула объектов.
-        //Чтобы сменить модель можно поменять меш, но для этого нужно все существующие модели заменить на obj модели   
-        //Профайлер показывает как трудоёмий процесс. Необходима оптимизация.
-        GameObject _missle = Instantiate(missle, turret, Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0)), parent.transform.parent);
-        Projectile pMissle = _missle.GetComponent<Projectile>();
-        if (scale != Vector3.zero)
-            _missle.transform.localScale = scale;
-        pMissle.target = target;
-        pMissle.damage = damage;
-        pMissle.TeamId = producer.TeamId;
-        pMissle.archMultiplier = archMultiplier;
-        pMissle.chance = chances;
-        pMissle.agroRadius = agroRadius;
-        pMissle.prevEnemy = prevEnemy;
-        pMissle.projSpeed = projSpeed;
-        pMissle.onStart = onStart;
-        pMissle.travel = travel;
-        pMissle.onEnd = onEnd;
-        pMissle.liveTime = 0f;
-    }
-
+    //public void Shoot<T>(T producer, Vector3 turret, Vector3 target, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] Damage nDamage,[Optional] List<Entity> prevEnemy, [Optional] Vector3 scale) where T : MonoBehaviour, ITeam
+    //{
+    //    //Чтобы сменить модель можно поменять меш, но для этого нужно все существующие модели заменить на obj модели   
+    //    //Профайлер показывает как трудоёмий процесс. Необходима оптимизация. *
+    //    nProjectile.PullObject(missle, turret, missle.pMesh, false).MoveNext();
+    //    //возможно придётся для каждой башни создавать свой пул проджектайлов
+    //    Projectile _missle = nProjectile.pulledObj;
+    //    _missle.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0));
+    //    Projectile pMissle = _missle;
+    //    if (scale != Vector3.zero)
+    //        _missle.transform.localScale = scale;
+    //    pMissle.target = target;
+    //    pMissle.damage = nDamage != null ? nDamage : damage;//поместить в Entity
+    //    pMissle.TeamId = producer.TeamId;
+    //    pMissle.chance = chances;//поместить в Entity
+    //    pMissle.agroRadius = agroRadius;//поместить в Entity
+    //    pMissle.prevEnemy = prevEnemy;
+    //    pMissle.projSpeed = projSpeed;//поместить в Entity
+    //    pMissle.onStart = onStart;//поместить в Entity
+    //    pMissle.travel = travel;//поместить в Entity
+    //    pMissle.onEnd = onEnd;//поместить в Entity
+    //    pMissle.liveTime = 0f;
+    //}
+    //public void Shoot<T>(Vector3 turret, Vector3 target, Damage damage, GameObject missle, float agroRadius, float archMultiplier, Chances chances,T producer, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, float projSpeed, Transform parent, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale) where T : MonoBehaviour, ITeam
+    //{
+    //    //Заменить создание объекта на перетаскивание уже существующего из пула объектов.
+    //    //Чтобы сменить модель можно поменять меш, но для этого нужно все существующие модели заменить на obj модели   
+    //    //Профайлер показывает как трудоёмий процесс. Необходима оптимизация. *
+    //    //GameObject -> Projectile
+    //    GameObject _missle = Instantiate(missle, turret, Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0)), parent.transform.parent);
+    //    Projectile pMissle = _missle.GetComponent<Projectile>();
+    //    if (scale != Vector3.zero)
+    //        _missle.transform.localScale = scale;
+    //    pMissle.target = target;
+    //    pMissle.damage = damage;
+    //    pMissle.TeamId = producer.TeamId;
+    //    pMissle.archMultiplier = archMultiplier;
+    //    pMissle.chance = chances;
+    //    pMissle.agroRadius = agroRadius;
+    //    pMissle.prevEnemy = prevEnemy;
+    //    pMissle.projSpeed = projSpeed;
+    //    pMissle.onStart = onStart;
+    //    pMissle.travel = travel;
+    //    pMissle.onEnd = onEnd;
+    //    pMissle.liveTime = 0f;
+    //}
 }

@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.Licensing;
 
 public class Status : MonoBehaviour
-{
+{   
     public Status(StatusType type, float time, Damage damage, Entity entity)
     {
         this.type = type;
@@ -29,13 +29,6 @@ public class Status : MonoBehaviour
         }
         entity.statuses.Add(this);
     }
-    public static Status status;
-    private float time;
-    private float strength;
-    private float damage;
-    private Entity entity;
-    private float attackspeed;
-    private float multiplierTakeDamage;
     public enum StatusType
     {
         fire,
@@ -44,6 +37,13 @@ public class Status : MonoBehaviour
         shock
     }
     public StatusType type;
+    public static Status status;
+    private float time;
+    private float strength;
+    private float damage;
+    private Entity entity;
+    private float attackspeed;
+    private float multiplierTakeDamage;
 
     public void DoStatus()
     {

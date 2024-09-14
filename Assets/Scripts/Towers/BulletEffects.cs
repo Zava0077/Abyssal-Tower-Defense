@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Unity.VisualScripting;
@@ -10,7 +11,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 public delegate void BulletEffect(Projectile proj, ref Entity target);
 
-public class BulletEffects : MonoBehaviour
+public sealed class BulletEffects : MonoBehaviour
 {
     public Projectile _proj;
     #region Missle
@@ -22,7 +23,8 @@ public class BulletEffects : MonoBehaviour
     public static BulletEffect missleTravel = (Projectile proj, ref Entity target) =>
     {
         if (proj.liveTime > 5f)
-            Destroy(proj);//
+            proj.gameObject.SetActive(false);
+            //Destroy(proj);//
         if (proj.liveTime > proj.timeNeed)
             proj.projHeight = -50;
         else
@@ -48,7 +50,8 @@ public class BulletEffects : MonoBehaviour
             proj.GetComponent<Collider>().enabled = true;
         if (proj.liveTime > 1.5f)
         {
-            Destroy(proj.gameObject);//
+            proj.gameObject.SetActive(false);
+            //Destroy(proj.gameObject);//
         }
         proj.transform.position += proj.transform.forward * Vector3.Distance(proj.position, proj.target) / 10;
         proj.transform.position = new Vector3(proj.transform.position.x, 1f, proj.transform.position.z);
@@ -73,7 +76,7 @@ public class BulletEffects : MonoBehaviour
         if (!target)
             target = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
         if (proj.liveTime > (2.5f / proj.projSpeed) * 35f)
-            Destroy(proj.gameObject);//
+            proj.gameObject.SetActive(false);//
         if (proj.liveTime > (0.15f / proj.projSpeed) * 35f && target)
         {
             proj.transform.rotation = Quaternion.Lerp(proj.transform.rotation, Quaternion.LookRotation(Vector3.RotateTowards(proj.transform.forward, target.transform.position - proj.transform.position, 3.14f, 0f)), (0.02f * 35f) / proj.projSpeed);
@@ -101,11 +104,9 @@ public class BulletEffects : MonoBehaviour
         foreach (var element in proj.GetComponentsInChildren<Transform>())
             if (element.gameObject.tag == "Projectile")
                 from = element.position;
-
         Explotion expl = null;
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
-        Mesh mesh = pref.GetComponent<Mesh>();
-        Player.nExplosions.PullObject(pref, from, mesh).MoveNext();
+        Player.nExplosions.PullObject(pref, from, null).MoveNext();
         expl = Player.nExplosions.pulledObj;
         expl.producer = proj;
         expl.damage = new Damage(damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f, 0f);
@@ -131,8 +132,7 @@ public class BulletEffects : MonoBehaviour
                 from = element.position;
         Explotion expl = null;
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
-        Mesh mesh = pref.GetComponent<Mesh>();
-        Player.nExplosions.PullObject(pref, from, mesh).MoveNext();
+        Player.nExplosions.PullObject(pref, from, null).MoveNext();
         expl = Player.nExplosions.pulledObj;
         expl.damage = new Damage(0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(0f, 0.15f, 1f, 0.6f);
@@ -165,7 +165,8 @@ public class BulletEffects : MonoBehaviour
         if (proj.liveTime > 0.25f)
         {
             proj.onEnd(proj, ref target);
-            Destroy(proj.gameObject);//
+            proj.gameObject.SetActive(false);
+            //Destroy(proj.gameObject);//
         }
     };
     public static BulletEffect elecEnd = (Projectile proj, ref Entity target) =>
@@ -177,8 +178,7 @@ public class BulletEffects : MonoBehaviour
                 from = element.position;
         Explotion expl = null;
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
-        Mesh mesh = pref.GetComponent<Mesh>();
-        Player.nExplosions.PullObject(pref, from, mesh).MoveNext();
+        Player.nExplosions.PullObject(pref, from, null).MoveNext();
         expl = Player.nExplosions.pulledObj;
         expl.GetComponent<Explotion>().damage = new Damage(0f, 0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(0f, 0.35f, 1f, 0.6f);
@@ -199,14 +199,13 @@ public class BulletEffects : MonoBehaviour
                     from = element.position;
             Entity nextEnemy = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);//иногда баунс всё равно может считать противником самого себя
             Vector3 nextTarget = nextEnemy ? nextEnemy.GetComponent<Transform>().position : Vector3.zero;
-            if (nextEnemy == null || (proj.prevEnemy != null && proj.prevEnemy.Count > 0 && nextTarget == proj.prevEnemy[0].gameObject.transform.position)) //
+            if (nextEnemy == null || (proj.prevEnemy != null && proj.prevEnemy.Count > 0 /*&& nextTarget == proj.prevEnemy[0].gameObject.transform.position*/)) //
             {
                 return;
             }
-            Tower.twr.Shoot(from, nextTarget, proj.damage, proj.gameObject, proj.agroRadius, proj.agroRadius, proj.chance, proj,
-                proj.onStart, proj.travel, proj.onEnd, proj.projSpeed, proj.transform, proj.prevEnemy);
+            proj.Shoot(proj, from, nextTarget, proj, proj.chance,
+                proj.onStart, proj.travel, proj.onEnd, proj.prevEnemy);
             if (Player.instance.bounce.isPlaying) Player.instance.bounce.Stop();
-
             Player.instance.bounce.Play();
         }
     };
@@ -236,10 +235,9 @@ public class BulletEffects : MonoBehaviour
                 Chances newChance = new Chances(proj.chance.bounce, proj.chance.splash, proj.chance.puddle,
                     proj.chance.shatter / 2f, proj.chance.doubleAttack, proj.chance.crit,
                     proj.chance.status, proj.chance.pierce);
-                Tower.twr.Shoot(from, nextTarget, new Damage(proj.damage._fire / 2, proj.damage._cold / 2,
-                    proj.damage._lightning / 2, proj.damage._void / 2, proj.damage._physical / 2), proj.gameObject, proj.agroRadius, 3f,
-                    newChance,proj, proj.onStart,proj.travel,proj.onEnd, proj.projSpeed, proj.transform, !_elec ? null : proj.prevEnemy,
-                    new Vector3(proj.transform.localScale.x / 1.5f, proj.transform.localScale.y / 1.5f, proj.transform.localScale.z / 1.5f));
+                proj.Shoot(proj,from, nextTarget, proj, newChance, proj.onStart,proj.travel,proj.onEnd,!_elec ? null : proj.prevEnemy,
+                    new Vector3(proj.transform.localScale.x / 1.5f, proj.transform.localScale.y / 1.5f, proj.transform.localScale.z / 1.5f),
+                    new Damage(proj.damage._fire / 2, proj.damage._cold / 2, proj.damage._lightning / 2, proj.damage._void / 2, proj.damage._physical / 2));
             }
             if (Player.instance.fraction.isPlaying) Player.instance.fraction.Stop();
             Player.instance.fraction.Play();
@@ -259,13 +257,12 @@ public class BulletEffects : MonoBehaviour
             Vector3 from = proj.transform.position;
             Explotion expl = null;
             Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
-            Mesh mesh = pref.GetComponent<Mesh>(); 
             foreach (var element in proj.GetComponentsInChildren<Transform>())
                 if (element.gameObject.tag == "Projectile")
                     from = element.position;
             foreach (var damage in _proj.damage.GetType().GetFields())//
                 size += (float)damage.GetValue(_proj.damage) / 7;
-            Player.nExplosions.PullObject(pref, from, mesh).MoveNext();
+            Player.nExplosions.PullObject(pref, from, null).MoveNext();
             expl = Player.nExplosions.pulledObj;
             expl.GetComponent<Renderer>().material.color = new Color(1, 0.08f, 0f, 0.6f);
             expl.GetComponent<Explotion>().damage = new Damage(15f, 0f, 0f, 0f, 50f);
@@ -298,7 +295,6 @@ public class BulletEffects : MonoBehaviour
             float[] colors = new float[3];
             Puddle pudd = null;
             Puddle pref = Player.instance.puddle.GetComponent<Puddle>();
-            Mesh mesh = Player.instance.puddle.GetComponent<Mesh>();
             colors[0] = (proj.damage._fire + proj.damage._physical < 255 ? proj.damage._fire + proj.damage._physical : 255) / 255;
             colors[1] = (proj.damage._lightning + proj.damage._void < 255 ? proj.damage._lightning + proj.damage._void : 255) / 255;
             colors[2] = (proj.damage._cold < 255 ? proj.damage._cold : 255) / 255;
@@ -314,7 +310,7 @@ public class BulletEffects : MonoBehaviour
                 size += (float)damage.GetValue(proj.damage) / 4;
             GameObject[] ground = GameObject.FindGameObjectsWithTag("Ground");
             Vector3 puddPosition = new Vector3(from.x, ground[0].transform.position.y, from.z);
-            Player.nPuddles.PullObject(pref, puddPosition, mesh); 
+            Player.nPuddles.PullObject(pref, puddPosition, null).MoveNext(); 
             pudd = Player.nPuddles.pulledObj; 
             Vector3 puddScale = new Vector3(size, pudd.transform.localScale.y, size);
             pudd.transform.localScale = puddScale;

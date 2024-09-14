@@ -1,15 +1,17 @@
-using Palmmedia.ReportGenerator.Core.Reporting.Builders;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static LevelUp;
 
-public class Projectile : MonoBehaviour, ITeam
+public class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
 {
     public Projectile(Damage damage, Vector3 target, GameObject owner, float agroRadius, Chances chance)
     {
@@ -19,6 +21,8 @@ public class Projectile : MonoBehaviour, ITeam
         this.agroRadius = agroRadius;
         this.chance = chance;
     }
+    public MeshHolder MeshHolder { get; set; }
+    public Mesh pMesh;
     public int TeamId { get; set; }
     public Chances chance;
     public Color shadowColor;
@@ -46,22 +50,42 @@ public class Projectile : MonoBehaviour, ITeam
     private void Awake()
     {
         projHeight = archMultiplier;
+        var sda = this;
         Entity.onEntityDeath += OnEntityDeath;
     }
     private void Start()
     {
+        //if (target != null)
+        //{
+        //    position = transform.position;
+        //    projHeight = 0f; 
+        //    liveTime = 0f;
+        //    Vector3 direction = (target - position).normalized;
+        //    distance = Vector3.Distance(position, target);
+        //    float speed = projSpeed * direction.magnitude * 0.85f;
+        //    timeNeed = distance / speed; 
+        //    targetMemory = target;
+        //    testTimer = 0f;
+        //    collidable = true;
+        //}
+        //onStart?.Invoke(this,ref followTarget);
+    }
+    private void OnEnable()
+    {
         if (target != null)
         {
             position = transform.position;
+            projHeight = 0f;
+            liveTime = 0f;
             Vector3 direction = (target - position).normalized;
             distance = Vector3.Distance(position, target);
             float speed = projSpeed * direction.magnitude * 0.85f;
-            timeNeed = distance / speed; 
+            timeNeed = distance / speed;
             targetMemory = target;
             testTimer = 0f;
             collidable = true;
         }
-        onStart?.Invoke(this,ref followTarget);
+        onStart?.Invoke(this, ref followTarget);
     }
     private void OnEntityDeath(object sender)
     {
@@ -78,25 +102,30 @@ public class Projectile : MonoBehaviour, ITeam
     {
         travel?.Invoke(this, ref followTarget);
     }
+    public void Shoot<T>(T producer, Vector3 turret, Vector3 target, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam
+    {
+        Entity.entity.Shoot(producer, turret, target, missle, chance, onStart, travel, onEnd, prevEnemy, scale, nDamage);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (damage == null) throw new ArgumentNullException("Урон неопознан");
+        if (damage == null) throw new ArgumentNullException(nameof(damage));
         prevEnemy ??= new List<Entity>();
         Entity otherEntity = other.GetComponent<Entity>();
         if (other.gameObject.tag == "Effect") return;
-        if (prevEnemy.Contains(otherEntity) || otherEntity.TeamId == TeamId) return;
-        if (other.gameObject.tag == "Enemy" && damage != null)
+        if (otherEntity != null && (prevEnemy.Contains(otherEntity) || otherEntity.TeamId == TeamId)) return;
+        if (otherEntity)
         {
             otherEntity.GetDamage(damage);
-            prevEnemy.Add(other.gameObject.GetComponent<Mob>());
+            prevEnemy.Add(otherEntity);
         }
-        onEnd?.Invoke(this, ref followTarget);
+        onEnd?.Invoke(this, ref followTarget); //followTarget можно уже убрать
         if (chance.pierce < UnityEngine.Random.Range(1, 100) || other.gameObject.tag == "Tower\'s Place" || other.gameObject.tag == "Unpiercable")
         {
             if (Player.instance.hit.isPlaying) Player.instance.hit.Stop();
             Player.instance.hit.Play();
-            Destroy(gameObject);//
+            gameObject.SetActive(false);
+            //Destroy(gameObject);//
             enabled = true;
         }
         else
@@ -106,15 +135,14 @@ public class Projectile : MonoBehaviour, ITeam
         }
         liveTime = 0f;
     }
-    public IEnumerator shadowCaster()//хз как это засунуть в дженерик. Потом
+    public IEnumerator shadowCaster()
     {
         waitCast = false; 
         Fading fadingComponent;
         Fading pref = Player.instance.particleShadow.GetComponentInChildren<Fading>();
-        Mesh mesh = pref.GetComponent<Mesh>();
         while (gameObject)
         {
-            Player.nShadows.PullObject(pref, gameObject.transform.position, mesh, true, 1).MoveNext();
+            Player.nShadows.PullObject(pref, gameObject.transform.position, null, true, true, 1).MoveNext();
             fadingComponent = Player.nShadows.pulledObj;
             fadingComponent.color = shadowColor;
             fadingComponent.transform.rotation = gameObject.transform.rotation;

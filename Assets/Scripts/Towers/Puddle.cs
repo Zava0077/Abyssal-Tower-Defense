@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-public class Puddle : MonoBehaviour
+public class Puddle : MonoBehaviour, IMeshHolder
 {
+    public MeshHolder MeshHolder { get; set; }
     public Damage damage;
     public Chances chance;
     [SerializeField] public Mesh mesh;

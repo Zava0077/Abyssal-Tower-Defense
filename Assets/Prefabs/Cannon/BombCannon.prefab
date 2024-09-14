@@ -80,11 +80,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   health: 100
-  attackSpeed: 0.1
+  attackSpeed: 1.02
   projSpeed: 35
   multiplierTakeDamage: 0
   agroRadius: 55
-  transform: {fileID: 5213378883116263550}
   statuses: []
   _damage:
   - 0
