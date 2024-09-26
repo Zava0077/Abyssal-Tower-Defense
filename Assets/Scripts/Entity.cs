@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public delegate void MobDelete(Entity sender);
@@ -117,5 +119,10 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
         {
             Debug.Log($"Who damaged = {null}, damage = {damage}");
         }
+    }
+
+    public Type CheckEntity()
+    {
+        return this.GetType();
     }
 }

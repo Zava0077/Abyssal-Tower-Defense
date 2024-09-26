@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
-        hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition));//дорого
+        //hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition));//дорого
         if (Input.GetKey(KeyCode.LeftShift))
         {
             moveSpeed = speed * 2;
@@ -60,16 +60,21 @@ public class Player : MonoBehaviour
         {
             camera.transform.position = camera.transform.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
         }
-        if (hits.Length > 0 && !CanvasController.cnv.menu.IsActive())
-        {
-            foreach(RaycastHit hit in hits)
-                if (hit.transform.gameObject.tag == "Tower\'sPlace")
-                {
-                    if (Input.GetMouseButtonDown(0))
-                        hit.transform.gameObject.GetComponentInChildren<CanvasController>().Show();
-                    //hit.transform.gameObject.GetComponentInChildren<CanvasController>().showAgro = true;
-                }
-        }
+        //if (hits.Length > 0 && !CanvasController.cnv.menu.IsActive())
+        //{
+        //    foreach(RaycastHit hit in hits)
+        //        //if (hit.transform.gameObject.tag == "Tower\'sPlace")
+        //        //{
+        //            if (Input.GetMouseButtonDown(0))
+        //        {
+        //            hit.transform.gameObject.TryGetComponent<Entity>(out Entity.entity);
+        //            if(Entity.entity != null)
+        //            Debug.Log(Entity.entity.CheckEntity());
+        //        }
+        //                //hit.transform.gameObject.GetComponentInChildren<CanvasController>().Show();
+        //            //hit.transform.gameObject.GetComponentInChildren<CanvasController>().showAgro = true;
+        //        //}
+        //}
         for(int i = 0; i < _res.Count; i++)
         {
             _res[i].GetComponentInChildren<Text>().text = resources.GetMassive()[i].ToString();

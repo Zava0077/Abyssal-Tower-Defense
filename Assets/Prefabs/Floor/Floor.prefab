@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 2068687527323935176}
   - component: {fileID: 2936509544922089770}
   - component: {fileID: 5152299198297026315}
-  - component: {fileID: 8251398793336430229}
+  - component: {fileID: 3989264273316372384}
+  - component: {fileID: 8108460559711820852}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Tower'sPlace
@@ -110,7 +111,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4, y: 10, z: 4}
   m_Center: {x: 0, y: 5, z: 0}
---- !u!114 &8251398793336430229
+--- !u!114 &3989264273316372384
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,17 +120,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 6021328699420582404}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c27fdeb4dc3bab4d8b2998f77dcaa37, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menu: {fileID: 0}
-  prefabButton: {fileID: 1589337694094405330, guid: b09e81c1aacb46b4897c254894e0c6e0, type: 3}
-  prefabStat: {fileID: 5160030089848512819, guid: 8858c18a786a2044485069db01632154, type: 3}
-  buildObject: {fileID: 0}
-  marker: {fileID: 0}
-  levelUpMenu: {fileID: 0}
-  showAgro: 0
-  cooldownRedBar: {fileID: 0}
-  cooldownBar: {fileID: 0}
-  destroyButton: {fileID: 0}
-  agroRadius: {fileID: 0}
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8108460559711820852}
+          m_TargetAssemblyTypeName: GroundToPlace, Assembly-CSharp
+          m_MethodName: ClickOnGround
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &8108460559711820852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6021328699420582404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfa16169a09e4b843b04fa2f3392d341, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entity: {fileID: 0}
+  controller: {fileID: 0}
