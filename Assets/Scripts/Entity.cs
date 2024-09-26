@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public delegate void MobDelete(object sender);
-internal interface IDamagable
+public delegate void MobDelete(Entity sender);
+public interface IDamagable
 {
     void GetDamage(Damage damage);
 }
@@ -102,13 +102,20 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
         pMissle.liveTime = 0f;
         _missle.gameObject.SetActive(true);
     }
-    public void GetDamage(Damage damage)
+    public void GetDamage(Damage damage) //когда моб умирает иногда всё равно вызывается
     {
-        health -= damage._fire * (1 - resistances._fire);
-        health -= damage._lightning * (1 - resistances._lightning);
-        health -= damage._cold * (1 - resistances._cold);
-        health -= damage._void * (1 - resistances._void);
-        health -= damage._physical * (1 - resistances._physical);
-        StartCoroutine(ColorChanger());
+        try
+        {
+            health -= damage._fire * (1 - resistances._fire);
+            health -= damage._lightning * (1 - resistances._lightning);
+            health -= damage._cold * (1 - resistances._cold);
+            health -= damage._void * (1 - resistances._void);
+            health -= damage._physical * (1 - resistances._physical);
+            StartCoroutine(ColorChanger());
+        }
+        catch
+        {
+            Debug.Log($"Who damaged = {null}, damage = {damage}");
+        }
     }
 }

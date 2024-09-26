@@ -80,7 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   health: 100
-  attackSpeed: 1.02
+  attackSpeed: 0.1
   projSpeed: 35
   multiplierTakeDamage: 0
   agroRadius: 55

@@ -2684,7 +2684,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mobs:
   - {fileID: 1799106437749818673, guid: 493ae9caf1d17134495f728d7b1a9016, type: 3}
-  spawnTime: 600
+  spawnTime: 5
 --- !u!224 &355001780 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5151501273576699722, guid: 80e9bd6854501214aaba94170993e60b, type: 3}
@@ -5910,7 +5910,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -65.4, y: 0.027}
+  m_AnchoredPosition: {x: -65.4, y: 0.29}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &805391442
@@ -7450,12 +7450,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a956b55ba5d2ec4592c45c5ee6a8f5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 963194227}
+  shoot: {fileID: 1803902020}
+  laser: {fileID: 279764770}
+  expl: {fileID: 617341750}
+  expl2: {fileID: 813306616}
+  bounce: {fileID: 1881247346}
+  fraction: {fileID: 1403599640}
+  pudd: {fileID: 2118892569}
+  hit: {fileID: 663357678}
+  pierce: {fileID: 2009400215}
+  create: {fileID: 1198180680}
+  hot: {fileID: 1343057566}
+  snow: {fileID: 667346285}
+  homing: {fileID: 14348177}
+  electric: {fileID: 1327684592}
   _res:
   - {fileID: 1619060395}
   - {fileID: 22287320}
   - {fileID: 1016172069}
   - {fileID: 1033513520}
+  Ferms:
+  - {fileID: 5298552662675714086, guid: 67cacf2817709a047a3d3a0d6ad76259, type: 3}
   Towers:
   - {fileID: 5956137601538878063, guid: 58b5e006c2daff546ba26a718b37ca3a, type: 3}
   - {fileID: 5956137601538878063, guid: c0620af117212f24b9574c01bd8aaada, type: 3}
@@ -7466,6 +7481,10 @@ MonoBehaviour:
   - {fileID: 5956137601538878063, guid: 3f798e574d8233d4c99e209daed90754, type: 3}
   - {fileID: 5956137601538878063, guid: 9b95f280892b1bc4e82fa7e636bf052e, type: 3}
   - {fileID: 5956137601538878063, guid: 60a4f0447d5d53d4389dc24e25ee725c, type: 3}
+  explotion: {fileID: 6213966059812680312, guid: 64c76fe34414010408be8e89b0cd929c, type: 3}
+  puddle: {fileID: 6213966059812680312, guid: f0d415d6a03108b41974fe609a30a8af, type: 3}
+  particleShadow: {fileID: 6680726215642097420, guid: cb73c1a36d7b8c8438b376604eda6d2e, type: 3}
+  camera: {fileID: 963194227}
   levelUpSprites:
   - {fileID: 21300000, guid: e303c012223e05543901f83a6c29cc0b, type: 3}
   - {fileID: 21300000, guid: de487019120707f4f8ffa849e93ba5d7, type: 3}
@@ -7485,26 +7504,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 4bdd8547454c4d0458b529133ce634f6, type: 3}
   - {fileID: 21300000, guid: f97a1d12d0448224792a19dde7017c7f, type: 3}
   - {fileID: 21300000, guid: 3a535f24d150ffe43ad52c64ee50e3ca, type: 3}
-  explotion: {fileID: 6213966059812680312, guid: 64c76fe34414010408be8e89b0cd929c, type: 3}
-  puddle: {fileID: 6213966059812680312, guid: f0d415d6a03108b41974fe609a30a8af, type: 3}
-  particleShadow: {fileID: 6680726215642097420, guid: cb73c1a36d7b8c8438b376604eda6d2e, type: 3}
   levelUpBonus: 2
-  Ferms:
-  - {fileID: 5298552662675714086, guid: 67cacf2817709a047a3d3a0d6ad76259, type: 3}
-  shoot: {fileID: 1803902020}
-  laser: {fileID: 279764770}
-  expl: {fileID: 617341750}
-  expl2: {fileID: 813306616}
-  bounce: {fileID: 1881247346}
-  fraction: {fileID: 1403599640}
-  pudd: {fileID: 2118892569}
-  hit: {fileID: 663357678}
-  pierce: {fileID: 2009400215}
-  create: {fileID: 1198180680}
-  hot: {fileID: 1343057566}
-  snow: {fileID: 667346285}
-  homing: {fileID: 14348177}
-  electric: {fileID: 1327684592}
 --- !u!224 &965451626 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5151501273576699722, guid: 80e9bd6854501214aaba94170993e60b, type: 3}

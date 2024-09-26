@@ -1,13 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
-using Unity.VisualScripting;
-using UnityEditor.Build;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public delegate void BulletEffect(Projectile proj);
 
@@ -152,8 +146,8 @@ public sealed class BulletEffects : MonoBehaviour
         transformChildren.rotation = Quaternion.LookRotation(Vector3.RotateTowards(proj.transform.right, proj.targetMemory - proj.transform.position, 3.14f, 0));
         proj.GetComponent<Collider>().enabled = false;
         proj.collidable = false;
-        Damage damage = proj.GetComponent<Projectile>().damage;
-        proj.GetComponent<Projectile>().damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
+        Damage damage = proj.damage;
+        proj.damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
         if (Player.instance.electric.isPlaying)
             Player.instance.electric.Stop();
         Player.instance.electric.Play();
@@ -180,7 +174,7 @@ public sealed class BulletEffects : MonoBehaviour
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
         Player.nExplosions.PullObject(pref, from, null).MoveNext();
         expl = Player.nExplosions.pulledObj;
-        expl.GetComponent<Explotion>().damage = new Damage(0f, 0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f);
+        expl.damage = new Damage(0f, 0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(0f, 0.35f, 1f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
     };
@@ -248,7 +242,7 @@ public sealed class BulletEffects : MonoBehaviour
     public static BulletEffect explotionEnd = (Projectile proj) =>
     {
         System.Random random = new System.Random();
-        Projectile _proj = proj.GetComponent<Projectile>();
+        Projectile _proj = proj;
         float sound = UnityEngine.Random.Range(1, 3);
         float testrnd = random.Next(0, 99);
         if (testrnd < _proj.chance.splash)//
@@ -265,9 +259,9 @@ public sealed class BulletEffects : MonoBehaviour
             Player.nExplosions.PullObject(pref, from, null).MoveNext();
             expl = Player.nExplosions.pulledObj;
             expl.GetComponent<Renderer>().material.color = new Color(1, 0.08f, 0f, 0.6f);
-            expl.GetComponent<Explotion>().damage = new Damage(15f, 0f, 0f, 0f, 50f);
+            expl.damage = new Damage(15f, 0f, 0f, 0f, 50f);
             expl.transform.localScale = new Vector3(5f + size, 5f + size, 5f + size);
-            expl.GetComponent<Explotion>().producer = proj.GetComponent<Projectile>();
+            expl.producer = proj;
             if (sound == 1)
             {
                 if (Player.instance.expl.isPlaying)

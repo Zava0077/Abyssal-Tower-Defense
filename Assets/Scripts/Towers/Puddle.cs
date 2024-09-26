@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 public class Puddle : MonoBehaviour, IMeshHolder
@@ -18,6 +19,7 @@ public class Puddle : MonoBehaviour, IMeshHolder
     }
     private void OnDisable()
     {
+        objectsOnPuddle.Clear();
         Entity.onEntityDeath -= OnEntityDeath;
     }
     IEnumerator DeathSentence()
@@ -25,11 +27,9 @@ public class Puddle : MonoBehaviour, IMeshHolder
         yield return new WaitForSeconds(2);
         gameObject.SetActive(false);
     }
-    void OnEntityDeath(object sender)
-    {
-        if (producer != null && sender.GetType() == typeof(Mob) && producer.prevEnemy != null && producer.prevEnemy.Count > 0)
-            producer.prevEnemy.Remove((Mob)sender);
-    }
+    void OnEntityDeath(Entity sender) //или IDamagable
+        => objectsOnPuddle.Remove(sender);
+    
     private void OnTriggerEnter(Collider other)
     {
         Entity otherEntity = other.GetComponent<Entity>();
@@ -38,7 +38,8 @@ public class Puddle : MonoBehaviour, IMeshHolder
     private void OnTriggerExit(Collider other)
     {
         Entity otherEntity = other.GetComponent<Entity>();
-        if (otherEntity) objectsOnPuddle.Remove(otherEntity);
+        if (otherEntity) 
+            objectsOnPuddle.Remove(otherEntity);
     }
     IEnumerator Damage()
     {
@@ -46,6 +47,7 @@ public class Puddle : MonoBehaviour, IMeshHolder
         {
             foreach (var enemy in objectsOnPuddle)
                 enemy.GetDamage(damage);
+            objectsOnPuddle.ToList().ForEach(obj => Debug.Log(obj.ToString()));
             yield return new WaitForSeconds(0.2f);
         }
     }

@@ -122,7 +122,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 250
   health: 250
-  transform: {fileID: 4876084960904833997}
+  attackSpeed: 0
+  projSpeed: 0
+  multiplierTakeDamage: 0
+  agroRadius: 0
   statuses: []
   _damage:
   - 0
@@ -136,13 +139,9 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  attackSpeed: 0
-  projSpeed: 0
-  multiplierTakeDamage: 0
-  agroRadius: 0
   damageMat: {fileID: 0}
   finish: {fileID: 0}
-  speed: 5
+  speed: 1.5
 --- !u!195 &6730308878948706872
 NavMeshAgent:
   m_ObjectHideFlags: 0

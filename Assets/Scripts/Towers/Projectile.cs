@@ -11,7 +11,7 @@ using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static LevelUp;
 
-public class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
+public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
 {
     public Projectile(Damage damage, Vector3 target, GameObject owner, float agroRadius, Chances chance)
     {
@@ -50,8 +50,10 @@ public class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
     private void Awake()
     {
         projHeight = archMultiplier;
-        var sda = this;
-        Entity.onEntityDeath += OnEntityDeath;
+    }
+    private void OnDisable()
+    {
+        Entity.onEntityDeath -= OnEntityDeath;
     }
     private void Start()
     {
@@ -85,12 +87,13 @@ public class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
             testTimer = 0f;
             collidable = true;
         }
+        Entity.onEntityDeath += OnEntityDeath;
         onStart?.Invoke(this);
     }
-    private void OnEntityDeath(object sender)
+    private void OnEntityDeath(Entity sender)
     {
-        if (sender.GetType() == typeof(Mob) && prevEnemy != null && prevEnemy.Count > 0)
-            prevEnemy.Remove((Mob)sender);
+        if (prevEnemy != null && prevEnemy.Count > 0)
+            prevEnemy.Remove(sender as Entity);
     }
     private void Update()
     {
