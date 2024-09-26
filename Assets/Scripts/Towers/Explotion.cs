@@ -1,20 +1,35 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Explotion : MonoBehaviour
+public class Explotion : MonoBehaviour, IMeshHolder
 {
-    float time = 0f;
+    public MeshHolder MeshHolder { get; set; }
+
+    public Projectile producer { get; set; }//продюсеры не нужны лужам и взрыву. кто код писал бл€ть?
     public Damage damage;
-    private void Update()
+    private void OnEnable()
     {
-        time += Time.deltaTime;
-        if (time > 1f)
-            Destroy(gameObject);
+        StartCoroutine(DeathSentence()); 
+        //Entity.onEntityDeath += OnEntityDeath;
     }
+    //private void OnDisable() => 
+    //    Entity.onEntityDeath -= OnEntityDeath;
+    private IEnumerator DeathSentence()
+    {
+        yield return new WaitForSeconds(2);
+        gameObject.SetActive(false);
+    }
+    //void OnEntityDeath(Entity sender)
+    //{
+    //    if (producer.prevEnemy != null && producer.prevEnemy.Count > 0)
+    //        producer.prevEnemy.Remove(sender);
+    //}
     private void OnTriggerEnter(Collider other)
     {
-        if(damage != null && other.GetComponent<Entity>() != null)
-            DoDamage.DealDamage(other.GetComponent<Entity>(), null, damage);
+        Entity otherEntity = other.GetComponent<Entity>(); //
+        if(otherEntity)
+        {
+            otherEntity.GetDamage(damage);
+        }
     }
 }

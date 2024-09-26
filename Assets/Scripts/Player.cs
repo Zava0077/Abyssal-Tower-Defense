@@ -6,18 +6,35 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public AudioSource shoot, laser, expl, expl2, bounce, fraction, pudd, hit, pierce, create, hot, snow, homing, electric;
+
+    [SerializeField] private List<GameObject> _res;
+    public List<GameObject> Ferms;
+    public List<GameObject> Towers;
+    
+    private RaycastHit[] hits;
+
+    public GameObject explotion;
+    public GameObject puddle;
+    public GameObject particleShadow;
+
     public Camera camera;
+    public static Player instance;
+    Player()
+    {
+        instance = this;
+    }
+    #region Pools
+    public static ObjectPool<Puddle> nPuddles = new ObjectPool<Puddle>(128);
+    public static ObjectPool<Explotion> nExplosions = new ObjectPool<Explotion>(128);
+    public static ObjectPool<Fading> nShadows = new ObjectPool<Fading>(64);
+    #endregion
     private float moveSpeed;
     private float speed = 40f;
-    [SerializeField] private List<GameObject> _res;
     public Resources resources = new Resources(50,50,50,0);
-    [SerializeField] public List<GameObject> Towers;
     public Sprite[] levelUpSprites;
-    [SerializeField] public GameObject explotion;
-    [SerializeField] public GameObject puddle;
-    [SerializeField] public GameObject particleShadow;
     public float levelUpBonus = 2f;
-    public List<GameObject> Ferms;
+
 
     private void Start()
     {
@@ -25,6 +42,7 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
+        hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition));//дорого
         if (Input.GetKey(KeyCode.LeftShift))
         {
             moveSpeed = speed * 2;
@@ -33,7 +51,7 @@ public class Player : MonoBehaviour
         {
             moveSpeed = speed;
         }
-        float moveDirection = Input.GetAxis("Vertical") * -1;
+        float moveDirection = Input.GetAxisRaw("Vertical") * -1;
         if (camera.transform.position.x <= 230 && moveDirection == 1)
         {
             camera.transform.position = camera.transform.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
@@ -42,14 +60,15 @@ public class Player : MonoBehaviour
         {
             camera.transform.position = camera.transform.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
         }
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit) && !CanvasController.cnv.menu.IsActive())
+        if (hits.Length > 0 && !CanvasController.cnv.menu.IsActive())
         {
-            if (hit.transform.gameObject.tag == "Tower\'sPlace")
-            {
-                if (Input.GetMouseButtonDown(0))
-                    hit.transform.gameObject.GetComponentInChildren<CanvasController>().Show();
-                //hit.transform.gameObject.GetComponentInChildren<CanvasController>().showAgro = true;
-            }
+            foreach(RaycastHit hit in hits)
+                if (hit.transform.gameObject.tag == "Tower\'sPlace")
+                {
+                    if (Input.GetMouseButtonDown(0))
+                        hit.transform.gameObject.GetComponentInChildren<CanvasController>().Show();
+                    //hit.transform.gameObject.GetComponentInChildren<CanvasController>().showAgro = true;
+                }
         }
         for(int i = 0; i < _res.Count; i++)
         {

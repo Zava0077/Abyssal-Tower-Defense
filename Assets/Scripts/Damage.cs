@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class Damage
 {
     public Damage(float fire, float cold, float lightning, float _void, float phys)
@@ -17,4 +13,8 @@ public class Damage
     public float _lightning;
     public float _void;
     public float _physical;
+    public override string ToString()
+    {
+        return $"{typeof(Damage)} fire = {_fire} cold = {_cold} light = {_lightning} void = {_void} phys = {_physical}";
+    }
 }

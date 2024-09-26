@@ -12,6 +12,8 @@ TagManager:
   - LevelUpMenu
   - CreateMenu
   - LevelUpBtn
+  - Unpiercable
+  - DestroyBtn
   layers:
   - Default
   - TransparentFX
@@ -20,7 +22,7 @@ TagManager:
   - Water
   - UI
   - Friendly
-  - 
+  - Damage
   - 
   - 
   - 

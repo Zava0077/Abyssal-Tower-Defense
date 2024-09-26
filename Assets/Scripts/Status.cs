@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.Licensing;
 
 public class Status : MonoBehaviour
-{
-    Status(StatusType type, float Time, Damage damage, Entity entity)
+{   
+    public Status(StatusType type, float time, Damage damage, Entity entity)
     {
         this.type = type;
-        this.time = Time;
+        this.time = time;
         this.entity = entity;
+        status = this;
         Type damage1 = typeof(Damage);
         foreach(var num in damage1.GetFields())
         {
             this.damage += (float)num.GetValue(damage);
         }
-        this.strength = this.damage / entity.health;
+        strength = this.damage / entity.health;
         if(type == StatusType.chill) 
         {
             attackspeed = entity.attackSpeed;
@@ -25,14 +27,8 @@ public class Status : MonoBehaviour
         {
             multiplierTakeDamage = entity.multiplierTakeDamage; 
         }
+        entity.statuses.Add(this);
     }
-
-    private float time;
-    private float strength;
-    private float damage;
-    private Entity entity;
-    private float attackspeed;
-    private float multiplierTakeDamage;
     public enum StatusType
     {
         fire,
@@ -41,6 +37,13 @@ public class Status : MonoBehaviour
         shock
     }
     public StatusType type;
+    public static Status status;
+    private float time;
+    private float strength;
+    private float damage;
+    private Entity entity;
+    private float attackspeed;
+    private float multiplierTakeDamage;
 
     public void DoStatus()
     {

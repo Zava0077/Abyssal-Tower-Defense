@@ -1,27 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
-
-public class Puddle : MonoBehaviour
+public class Puddle : MonoBehaviour, IMeshHolder
 {
-    float time = 0f;
-    float damageTicks = 0f;
+    public MeshHolder MeshHolder { get; set; }
     public Damage damage;
     public Chances chance;
-    private void Update()
+    [SerializeField] public Mesh mesh;
+    public Projectile producer { get; set; }
+    private HashSet<IDamagable> objectsOnPuddle = new HashSet<IDamagable>();
+    private void OnEnable()
     {
-        time += Time.deltaTime;
-        damageTicks += Time.deltaTime;
-        if (time > 2f)//сделать длительность зависимой
-            Destroy(gameObject);
+        StartCoroutine(Damage());
+        StartCoroutine(DeathSentence());
+        Entity.onEntityDeath += OnEntityDeath;
     }
-    private void OnTriggerStay(Collider other)
+    private void OnDisable()
     {
-        if(damageTicks > 2/10)
+        objectsOnPuddle.Clear();
+        Entity.onEntityDeath -= OnEntityDeath;
+    }
+    IEnumerator DeathSentence()
+    {
+        yield return new WaitForSeconds(2);
+        gameObject.SetActive(false);
+    }
+    void OnEntityDeath(Entity sender) //или IDamagable
+        => objectsOnPuddle.Remove(sender);
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        Entity otherEntity = other.GetComponent<Entity>();
+        if(otherEntity) objectsOnPuddle.Add(otherEntity);
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        Entity otherEntity = other.GetComponent<Entity>();
+        if (otherEntity) 
+            objectsOnPuddle.Remove(otherEntity);
+    }
+    IEnumerator Damage()
+    {
+        while(enabled)
         {
-            if (damage != null && other.GetComponent<Entity>() != null)
-                DoDamage.DealDamage(other.GetComponent<Entity>(), null, damage);
-            damageTicks = 0;
+            foreach (var enemy in objectsOnPuddle)
+                enemy.GetDamage(damage);
+            objectsOnPuddle.ToList().ForEach(obj => Debug.Log(obj.ToString()));
+            yield return new WaitForSeconds(0.2f);
         }
     }
 }
