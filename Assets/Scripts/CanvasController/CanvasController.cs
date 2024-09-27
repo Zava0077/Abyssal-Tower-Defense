@@ -15,109 +15,134 @@ public class CanvasController : MonoBehaviour
     [SerializeField] public Image menu;
     [SerializeField] private ButtonCanvasController prefabButton;
     [SerializeField] private GameObject prefabStat;
-    [SerializeField] private GameObject marker; 
-    private GameObject buildObject;
-    private GameObject levelUpMenu; 
+    [SerializeField] private GameObject marker;
+    [SerializeField] private Button _exitButton;
+    public GameObject buildObject;
+    public GameObject levelUpMenu; 
     private GameObject destroyButton;
     public bool showAgro = false;
     private int firstUp;
     private int secondUp;
-    private GameObject _tower;
     [SerializeField] private GameObject cooldownRedBar;
     [SerializeField] private GameObject cooldownBar;
     [SerializeField] private GameObject agroRadius;
+    private GroundToPlace _ground;
+
+    enum CanvasState
+    {
+        SelectTowerOrFarm,
+        Select,
+        ShowStats
+    }
+    
+    private CanvasState state;
+    
     private void Awake()
     {
+        menu.gameObject.SetActive(false);
+        _exitButton.onClick.AddListener(() => ExitButton());
         //menu = Camera.main.GetComponentInChildren<Image>();
         levelUpMenu = GameObject.FindGameObjectWithTag("LevelUpMenu");
-        buildObject = GameObject.FindGameObjectWithTag("CreateMenu");
+        //buildObject = GameObject.FindGameObjectWithTag("CreateMenu");
         destroyButton = GameObject.FindGameObjectWithTag("DestroyBtn");
     }
+
+    private void ExitButton()
+    {
+        switch (state)
+        {
+            case CanvasState.SelectTowerOrFarm:
+                menu.gameObject.SetActive(false);
+                break;
+            case CanvasState.Select:
+                for (int i = 0; i < buildObject.transform.childCount; i++)
+                {
+                    Destroy(buildObject.transform.GetChild(i).gameObject);
+                }
+                menu.gameObject.SetActive(false);
+                break;
+        }
+    }
+
     private void Start()
     {
         //levelUpMenu.SetActive(false); 
         //destroyButton.SetActive(false);
     }
-    private void Update()
+
+    public void Show(Entity entity, GroundToPlace ground)
     {
-        if (_tower)
+        _ground = ground;
+        state = CanvasState.SelectTowerOrFarm;
+        menu.gameObject.SetActive(true);
+        for (int i = 0; i < buildObject.transform.childCount; i++)
         {
-            if (_tower.GetComponent<Tower>().updateLvlUp)
-            {
-                GenerateUps();
-                _tower.GetComponent<Tower>().updateLvlUp = false;
-            }
+            Destroy(buildObject.transform.GetChild(i).gameObject);
         }
-        showAgro = false;
-    }
-    public void Show(Entity entity)
-    {
-        //menu.gameObject.SetActive(true);
-        //buildObject.SetActive(!_tower);
-        //levelUpMenu.SetActive(_tower && _tower.GetComponent<Tower>().levelUpsRemain > 0);
-        //destroyButton.GetComponent<Button>().onClick.AddListener(() => DestroyTower());
-        //foreach (var btn in GameObject.FindGameObjectsWithTag("LevelUpBtn"))
-        //    Destroy(btn);
-        //if (_tower)
-        //{
-        //    destroyButton.SetActive(true);
-        //    if (levelUpMenu.activeSelf && levelUpMenu.GetComponentsInChildren<Button>().Length > 0)
-        //    {
-        //        levelUpMenu.GetComponentsInChildren<Button>()[0].onClick.RemoveAllListeners();
-        //        levelUpMenu.GetComponentsInChildren<Button>()[1].onClick.RemoveAllListeners();
-        //        levelUpMenu.GetComponentsInChildren<Button>()[0].onClick.AddListener(() => _tower.GetComponent<Tower>().levelUpCallbacks[firstUp](_tower.GetComponent<Tower>()));
-        //        levelUpMenu.GetComponentsInChildren<Button>()[1].onClick.AddListener(() => _tower.GetComponent<Tower>().levelUpCallbacks[secondUp](_tower.GetComponent<Tower>()));
-        //        levelUpMenu.GetComponentsInChildren<Button>()[0].GetComponent<Image>().sprite = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[firstUp]];
-        //        levelUpMenu.GetComponentsInChildren<Button>()[1].GetComponent<Image>().sprite = _tower.GetComponent<Tower>().levelUpCallbackNames[_tower.GetComponent<Tower>().levelUpCallbacks[secondUp]];
-        //    }
-        //}
-        //else
-        //{
-        //    destroyButton.SetActive(false);
-        //    foreach (var tower in Player.instance.Towers)//
-        //    {
-        //        Button _button = Instantiate(prefabButton);
-        //        _button.transform.SetParent(buildObject.transform, false);
-        //        _button.GetComponent<Image>().sprite = tower.GetComponent<Tower>().spriteButton;
-        //        _button.onClick.AddListener(() => SetTower(tower));
-        //    }
-        //}
 
         switch (entity)
-        {
-            case Tower:
-                {
-
-                    break;
-                }
-            case Farm:
-                {
-
-                    break;
-                }
-            default:
-                {
+            {
+                case Tower:
+                    {
+                    //levelup ebanu
+                        break;
+                    }
+                case Farm:
+                    {
+                    //levelup
+                        break;
+                    }
+                default:
+                    {
                     ButtonCanvasController buttonForFarmMenu = Instantiate(prefabButton);
                     buttonForFarmMenu.transform.SetParent(buildObject.transform, false);
                     //buttonForFarmMenu.buttonImage.sprite = 
-                    buttonForFarmMenu.button.onClick.AddListener(() => ShowFarm());
+                    buttonForFarmMenu.buttonImage.color = Color.red;
+                    buttonForFarmMenu.button.onClick.AddListener(() => ShowTowerFarm(true));
+
+                    ButtonCanvasController buttonForTowerMenu = Instantiate(prefabButton);
+                    buttonForTowerMenu.transform.SetParent(buildObject.transform, false);
+                    //buttonForTowerMenu.buttonImage.sprite = 
+                    buttonForTowerMenu.buttonImage.color = Color.green;
+                    buttonForTowerMenu.button.onClick.AddListener(() => ShowTowerFarm(false));
                     break;
-                }
-        }
+                    }
+            }
+        
     }
 
-    private void ShowFarm()
+    private void ShowTowerFarm(bool tower)
     {
-        foreach(var obj in buildObject.transform.GetComponentsInChildren<GameObject>())
+        state = CanvasState.Select;
+        for (int i = 0; i < buildObject.transform.childCount; i++)
         {
-            Destroy(obj.gameObject);
+            Destroy(buildObject.transform.GetChild(i).gameObject);
         }
-        foreach(var farm in Player.instance.Ferms)
+        List<Entity> entities;
+        if (tower)
         {
-            ButtonCanvasController buttonFarm = Instantiate(prefabButton);
-            buttonFarm.transform.SetParent(buildObject.transform, false);
-            buttonFarm.buttonImage.sprite = farm.GetComponent<Farm>().spriteButton;
-            buttonFarm.button.onClick.AddListener(() => SetTower(farm.GetComponent<Farm>()));
+            entities = new List<Entity>(Player.instance.Towers);
+        }
+        else
+        {
+            entities = new List<Entity>(Player.instance.Farms);
+        }
+        foreach(var entity in entities)
+        {
+            if (entity is Tower tow)
+            {
+                ButtonCanvasController buttonTower = Instantiate(prefabButton);
+                buttonTower.transform.SetParent(buildObject.transform, false);
+                buttonTower.buttonImage.sprite = tow.spriteButton;
+                buttonTower.button.onClick.AddListener(() => SetTower(tow));
+            }
+            else if (entity is Farm farm)
+            {
+                ButtonCanvasController buttonFarm = Instantiate(prefabButton);
+                buttonFarm.transform.SetParent(buildObject.transform, false);
+                buttonFarm.buttonImage.sprite = farm.spriteButton;
+                buttonFarm.button.onClick.AddListener(() => SetTower(farm));
+            }
         }
     }
 
@@ -145,19 +170,22 @@ public class CanvasController : MonoBehaviour
 
     private void SetTower(Entity tower)
     {
-        //_tower = Instantiate(tower);
-        //_tower.transform.position = transform.position;
-        //if (Player.instance.resources.Subtract(_tower.GetComponent<Tower>().cost))
-        //{
-        //    destroyButton.SetActive(true);
-        //    buildObject.SetActive(false);
-        //    menu.gameObject.SetActive(false);
-        //    destroyButton.GetComponent<Button>().onClick.RemoveAllListeners();
-        //    Player.instance.create.Play();
-        //}
-        //else
-        //{
-        //    Destroy(_tower);
-        //}
+        GameObject _tower = Instantiate(tower.gameObject);
+        Resources cost = new Resources(0,0,0,0);
+        if (tower is Tower twr)
+            cost = new Resources(twr.costs[0], twr.costs[1], twr.costs[2], twr.costs[3]);
+        else if (tower is Farm farm)
+            cost = new Resources(farm.costs[0], farm.costs[1], farm.costs[2], farm.costs[3]);
+        _tower.transform.position = _ground.transform.position;
+        if (Player.instance.resources.Subtract(cost))
+        {
+            _ground.entity = tower;
+            ExitButton();
+            Player.instance.create.Play();
+        }
+        else
+        {
+            Destroy(_tower);
+        }
     }
 }

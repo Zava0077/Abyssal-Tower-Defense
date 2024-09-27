@@ -8,6 +8,7 @@ using UnityEngine;
 using static LevelUp;
 using static BulletEffects;
 using static UnityEngine.GraphicsBuffer;
+using System.Resources;
 
 public class Tower : Entity
 {
@@ -24,10 +25,11 @@ public class Tower : Entity
         }
     } 
     [SerializeField] private GameObject tower;
-    [SerializeField] private List<int> costs = new List<int>();
+    [SerializeField] public List<int> costs = new List<int>();
     [SerializeField] private List<int> chances = new List<int>();
     [SerializeField] private List<string> starterEffects = new List<string>();
     [SerializeField] private Dictionary<GameObject, bool> keyValuePairs = new Dictionary<GameObject, bool>();
+    public static List<Sprite> LevelUpSprites = new List<Sprite>();
     public GameObject missle;
     public float incDamage = 1;
     public float incAttackSpeed;
@@ -120,6 +122,14 @@ public class Tower : Entity
         cost = new Resources(costs[0], costs[1], costs[2], costs[3]);
         chance = new Chances(chances[0], chances[1], chances[2], chances[3], chances[4], chances[5], chances[6], chances[7]);
     }
+
+    public static void LoadSprite()
+    {
+        SpriteLoad spriteLoad = UnityEngine.Resources.Load<SpriteLoad>("SpriteLevelUp/LevelUpSprites");
+        LevelUpSprites.AddRange(spriteLoad.sprites);
+        Debug.Log(LevelUpSprites.Count);
+    }
+
     private void OnDestroy()
     {
         entities.Remove(this);

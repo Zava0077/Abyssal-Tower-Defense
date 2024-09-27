@@ -4,7 +4,7 @@ using UnityEngine;
 public class Farm : Entity
 {
     public Resources resCost;
-    [SerializeField] List<int> costs = new List<int>();
+    [SerializeField] public List<int> costs = new List<int>();
     public Sprite spriteButton;
     [SerializeField] private float timeToGainRes;
     private Resources resGain;

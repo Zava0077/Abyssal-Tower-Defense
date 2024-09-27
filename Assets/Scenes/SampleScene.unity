@@ -7355,6 +7355,7 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -7504,6 +7505,22 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f97a1d12d0448224792a19dde7017c7f, type: 3}
   - {fileID: 21300000, guid: 3a535f24d150ffe43ad52c64ee50e3ca, type: 3}
   levelUpBonus: 2
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49b4cc203aa6414fae5c798d1d0e7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
 --- !u!224 &965451626 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5151501273576699722, guid: 80e9bd6854501214aaba94170993e60b, type: 3}
@@ -16885,8 +16902,8 @@ SceneRoots:
   - {fileID: 259280291}
   - {fileID: 1325250435}
   - {fileID: 2054602000}
-  - {fileID: 1363248934}
   - {fileID: 784411989}
   - {fileID: 1357289790}
   - {fileID: 1528126214}
   - {fileID: 22989155}
+  - {fileID: 1363248934}

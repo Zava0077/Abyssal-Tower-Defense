@@ -27,9 +27,17 @@ public class Resources
         return massive;
     }
 
+    public void Start()
+    {
+        for (int i = 0; i < Player.instance._res.Count; i++)
+        {
+            Player.instance._res[i].text = Player.instance.resources.GetMassive()[i].ToString();
+        }
+    }
+
     public bool Subtract(Resources cost)
     {
-        Resources resources = Camera.main.GetComponent<Player>().resources;
+        Resources resources = Player.instance.resources;
         for(int i = 0; i < cost.GetType().GetFields().Length; i++)
         {
             if((int)resources.GetType().GetFields()[i].GetValue(resources) < (int)cost.GetType().GetFields()[i].GetValue(cost))
@@ -42,15 +50,23 @@ public class Resources
         resources.wood -= cost.wood;
         resources.stone -= cost.stone;
         resources.voidEsences -= cost.voidEsences;
+        for (int i = 0; i < Player.instance._res.Count; i++)
+        {
+            Player.instance._res[i].text = resources.GetMassive()[i].ToString();
+        }
         return true;
     }
 
     public void Gain(Resources gain)
     {
-        Resources resources = Camera.main.GetComponent<Player>().resources;
+        Resources resources = Player.instance.resources;
         resources.gold += gain.gold;
         resources.wood += gain.wood;
         resources.stone += gain.stone;
         resources.voidEsences += gain.voidEsences;
+        for (int i = 0; i < Player.instance._res.Count; i++)
+        {
+            Player.instance._res[i].text = resources.GetMassive()[i].ToString();
+        }
     }
 }

@@ -8,15 +8,14 @@ public class Player : MonoBehaviour
 {
     public AudioSource shoot, laser, expl, expl2, bounce, fraction, pudd, hit, pierce, create, hot, snow, homing, electric;
 
-    [SerializeField] private List<GameObject> _res;
-    public List<GameObject> Ferms;
-    public List<GameObject> Towers;
-    
-    private RaycastHit[] hits;
+    [SerializeField] public List<Text> _res;
+    public List<Farm> Farms;
+    public List<Tower> Towers;
 
     public GameObject explotion;
     public GameObject puddle;
     public GameObject particleShadow;
+    public CanvasController canvasController;
 
     public Camera camera;
     public static Player instance;
@@ -38,46 +37,29 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        Tower.LoadSprite();
         Camera.main.GetComponentInChildren<Image>().gameObject.SetActive(false);
+        resources.Start();
     }
     private void Update()
     {
         //hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition));//дорого
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            moveSpeed = speed * 2;
-        }
-        else
-        {
-            moveSpeed = speed;
-        }
-        float moveDirection = Input.GetAxisRaw("Vertical") * -1;
-        if (camera.transform.position.x <= 230 && moveDirection == 1)
-        {
-            camera.transform.position = camera.transform.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
-        }
-        else if (camera.transform.position.x >= -99 && moveDirection == -1)
-        {
-            camera.transform.position = camera.transform.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
-        }
-        //if (hits.Length > 0 && !CanvasController.cnv.menu.IsActive())
+        //if (Input.GetKey(KeyCode.LeftShift))
         //{
-        //    foreach(RaycastHit hit in hits)
-        //        //if (hit.transform.gameObject.tag == "Tower\'sPlace")
-        //        //{
-        //            if (Input.GetMouseButtonDown(0))
-        //        {
-        //            hit.transform.gameObject.TryGetComponent<Entity>(out Entity.entity);
-        //            if(Entity.entity != null)
-        //            Debug.Log(Entity.entity.CheckEntity());
-        //        }
-        //                //hit.transform.gameObject.GetComponentInChildren<CanvasController>().Show();
-        //            //hit.transform.gameObject.GetComponentInChildren<CanvasController>().showAgro = true;
-        //        //}
+        //    moveSpeed = speed * 2;
         //}
-        for(int i = 0; i < _res.Count; i++)
-        {
-            _res[i].GetComponentInChildren<Text>().text = resources.GetMassive()[i].ToString();
-        }
+        //else
+        //{
+        //    moveSpeed = speed;
+        //}
+        //float moveDirection = Input.GetAxisRaw("Vertical") * -1;
+        //if (camera.transform.position.x <= 230 && moveDirection == 1)
+        //{
+        //    camera.transform.position = camera.transform.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
+        //}
+        //else if (camera.transform.position.x >= -99 && moveDirection == -1)
+        //{
+        //    camera.transform.position = camera.transform.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
+        //}
     }
 }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4261000074354636903}
   - component: {fileID: 1384525066361680081}
   - component: {fileID: 1589337694094405330}
+  - component: {fileID: 5604599174696036988}
   m_Layer: 0
   m_Name: Button
   m_TagString: LevelUpBtn
@@ -120,3 +121,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5604599174696036988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6610046792060614547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65e500896d046844487fbdb5b727a733, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 1589337694094405330}
+  buttonImage: {fileID: 1384525066361680081}
