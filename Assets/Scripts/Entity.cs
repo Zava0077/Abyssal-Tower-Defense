@@ -27,7 +27,7 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
     public static event MobDelete onEntityDeath;
     protected ObjectPool<Projectile> nProjectile = new ObjectPool<Projectile>(256);
     public static List<GameObject> shadows = new List<GameObject>();
-    [Header("Stats")]
+    [Header("Stats")] //вывести статы в отдельный класс
     public float maxHealth;
     public float health; 
     public float attackSpeed;
@@ -36,13 +36,15 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
     public float agroRadius;
     public Damage damage;
     public Resistances resistances;
-    //public Transform transform;
     public List<Status> statuses = new List<Status>();
     public List<float> _damage = new List<float>();
     public List<float> _resist = new List<float>();
     Renderer renderer;
     [SerializeField] private Material damageMat;
     private Color defaultColor;
+
+    public int firstUp;
+    public int secondUp;
     public int TeamId { get; set; }
     public Entity()
     {

@@ -13,20 +13,14 @@ public class CanvasController : MonoBehaviour
         cnv = this;
     }
     [SerializeField] public Image menu;
-    [SerializeField] private ButtonCanvasController prefabButton;
-    [SerializeField] private GameObject prefabStat;
-    [SerializeField] private GameObject marker;
+    [SerializeField] private ButtonCanvasController _prefabButton;
     [SerializeField] private Button _exitButton;
     public GameObject buildObject;
     public GameObject levelUpMenu; 
-    private GameObject destroyButton;
+    [SerializeField] private ButtonCanvasController _destroyButton;
     public bool showAgro = false;
-    private int firstUp;
-    private int secondUp;
-    [SerializeField] private GameObject cooldownRedBar;
-    [SerializeField] private GameObject cooldownBar;
-    [SerializeField] private GameObject agroRadius;
-    private GroundToPlace _ground;
+    [SerializeField] private GroundToPlace _ground;
+    private Entity _entity;
 
     enum CanvasState
     {
@@ -41,74 +35,82 @@ public class CanvasController : MonoBehaviour
     {
         menu.gameObject.SetActive(false);
         _exitButton.onClick.AddListener(() => ExitButton());
-        //menu = Camera.main.GetComponentInChildren<Image>();
-        levelUpMenu = GameObject.FindGameObjectWithTag("LevelUpMenu");
-        //buildObject = GameObject.FindGameObjectWithTag("CreateMenu");
-        destroyButton = GameObject.FindGameObjectWithTag("DestroyBtn");
+        _destroyButton.button.onClick.AddListener(() => DestroyTower());
     }
 
-    private void ExitButton()
+    public static void ExitButton()
     {
-        switch (state)
+        switch (cnv.state) //€ какую-то хуйню сделал, главное работает!
         {
-            case CanvasState.SelectTowerOrFarm:
-                menu.gameObject.SetActive(false);
-                break;
-            case CanvasState.Select:
-                for (int i = 0; i < buildObject.transform.childCount; i++)
+            case CanvasState.SelectTowerOrFarm: //тип тавера
+                for (int i = 0; i < cnv.levelUpMenu.transform.childCount; i++)
                 {
-                    Destroy(buildObject.transform.GetChild(i).gameObject);
+                    Destroy(cnv.levelUpMenu.transform.GetChild(i).gameObject);
                 }
-                menu.gameObject.SetActive(false);
+                for (int i = 0; i < cnv.buildObject.transform.childCount; i++)
+                {
+                    Destroy(cnv.buildObject.transform.GetChild(i).gameObject);
+                }
+                cnv.menu.gameObject.SetActive(false);
+                break;
+            case CanvasState.Select: //конкретный тавер
+                for (int i = 0; i < cnv.buildObject.transform.childCount; i++)
+                {
+                    Destroy(cnv.buildObject.transform.GetChild(i).gameObject);
+                }
+                cnv.menu.gameObject.SetActive(false);
                 break;
         }
-    }
-
-    private void Start()
-    {
-        //levelUpMenu.SetActive(false); 
-        //destroyButton.SetActive(false);
     }
 
     public void Show(Entity entity, GroundToPlace ground)
     {
         _ground = ground;
+        _entity = entity;
         state = CanvasState.SelectTowerOrFarm;
+        ExitButton();
         menu.gameObject.SetActive(true);
-        for (int i = 0; i < buildObject.transform.childCount; i++)
-        {
-            Destroy(buildObject.transform.GetChild(i).gameObject);
-        }
-
+        _destroyButton.gameObject.SetActive(true);
         switch (entity)
-            {
-                case Tower:
+        {
+            case Tower twr:
+                {
+                    for(int i =0; i < 2; i++)
                     {
-                    //levelup ebanu
-                        break;
+                        levelUpMenu.gameObject.SetActive(true);
+                        ButtonCanvasController firstLevelUp = Instantiate(_prefabButton);
+                        firstLevelUp.transform.SetParent(levelUpMenu.transform, false);
+                        LevelUp.LevelUpCallback action = twr.levelUpCallbacks[i == 1 ? twr.firstUp : twr.secondUp];
+                        firstLevelUp.buttonImage.sprite = Tower.levelUpCallbackNames[action];
+                        firstLevelUp.button.onClick.AddListener(() => action(twr));
                     }
-                case Farm:
-                    {
+                    break;
+                }
+            case Farm:
+                {
                     //levelup
-                        break;
-                    }
-                default:
-                    {
-                    ButtonCanvasController buttonForFarmMenu = Instantiate(prefabButton);
+                    break;
+                }
+            default:
+                {
+                    ButtonCanvasController buttonForFarmMenu = Instantiate(_prefabButton);
                     buttonForFarmMenu.transform.SetParent(buildObject.transform, false);
                     //buttonForFarmMenu.buttonImage.sprite = 
                     buttonForFarmMenu.buttonImage.color = Color.red;
                     buttonForFarmMenu.button.onClick.AddListener(() => ShowTowerFarm(true));
 
-                    ButtonCanvasController buttonForTowerMenu = Instantiate(prefabButton);
+                    ButtonCanvasController buttonForTowerMenu = Instantiate(_prefabButton);
                     buttonForTowerMenu.transform.SetParent(buildObject.transform, false);
                     //buttonForTowerMenu.buttonImage.sprite = 
                     buttonForTowerMenu.buttonImage.color = Color.green;
                     buttonForTowerMenu.button.onClick.AddListener(() => ShowTowerFarm(false));
-                    break;
-                    }
-            }
-        
+    
+                    _destroyButton.gameObject.SetActive(false);
+                    return;
+                }
+        }
+        //показ статов
+        Debug.Log("Ѕашн€€ стоит!");
     }
 
     private void ShowTowerFarm(bool tower)
@@ -131,14 +133,14 @@ public class CanvasController : MonoBehaviour
         {
             if (entity is Tower tow)
             {
-                ButtonCanvasController buttonTower = Instantiate(prefabButton);
+                ButtonCanvasController buttonTower = Instantiate(_prefabButton);
                 buttonTower.transform.SetParent(buildObject.transform, false);
                 buttonTower.buttonImage.sprite = tow.spriteButton;
                 buttonTower.button.onClick.AddListener(() => SetTower(tow));
             }
             else if (entity is Farm farm)
             {
-                ButtonCanvasController buttonFarm = Instantiate(prefabButton);
+                ButtonCanvasController buttonFarm = Instantiate(_prefabButton);
                 buttonFarm.transform.SetParent(buildObject.transform, false);
                 buttonFarm.buttonImage.sprite = farm.spriteButton;
                 buttonFarm.button.onClick.AddListener(() => SetTower(farm));
@@ -146,26 +148,11 @@ public class CanvasController : MonoBehaviour
         }
     }
 
-    private void GenerateUps()
-    {
-        //firstUp = Random.Range(0, _tower.GetComponent<Tower>().levelUpCallbacks.Count);
-        //secondUp = 0;
-        //while (true)
-        //{
-        //    secondUp = Random.Range(0, _tower.GetComponent<Tower>().levelUpCallbacks.Count);
-        //    if (secondUp == firstUp) continue;
-        //    else break;
-        //}
-        //menu.gameObject.SetActive(false);
-        //destroyButton.GetComponent<Button>().onClick.RemoveAllListeners();
-    }
-
     public void DestroyTower()
     {
-        //Destroy(_tower);
-        //destroyButton.SetActive(false);
-        //menu.gameObject.SetActive(false);
-        //destroyButton.GetComponent<Button>().onClick.RemoveAllListeners();
+        Destroy(_entity.gameObject);
+        _ground.entity = null;
+        ExitButton();
     }
 
     private void SetTower(Entity tower)
@@ -179,7 +166,7 @@ public class CanvasController : MonoBehaviour
         _tower.transform.position = _ground.transform.position;
         if (Player.instance.resources.Subtract(cost))
         {
-            _ground.entity = tower;
+            _ground.entity = _tower.GetComponent<Entity>();
             ExitButton();
             Player.instance.create.Play();
         }

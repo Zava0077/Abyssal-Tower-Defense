@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8937428846708967392}
   - component: {fileID: 1004954847654883184}
   - component: {fileID: -786055179897019197}
-  m_Layer: 7
+  m_Layer: 2
   m_Name: Puddle
   m_TagString: Effect
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chance: {fileID: 0}
+  mesh: {fileID: 0}
 --- !u!114 &-786055179897019197
 MonoBehaviour:
   m_ObjectHideFlags: 0

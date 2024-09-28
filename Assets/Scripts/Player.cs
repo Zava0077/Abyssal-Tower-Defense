@@ -34,10 +34,13 @@ public class Player : MonoBehaviour
     public Sprite[] levelUpSprites;
     public float levelUpBonus = 2f;
 
+    private void Awake()
+    {
+        Tower.LoadSprite();
+    }
 
     private void Start()
     {
-        Tower.LoadSprite();
         Camera.main.GetComponentInChildren<Image>().gameObject.SetActive(false);
         resources.Start();
     }

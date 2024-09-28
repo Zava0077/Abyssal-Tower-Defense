@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2011189355239585380}
   - component: {fileID: 5805989420618753034}
   - component: {fileID: 7078905111100947825}
-  m_Layer: 7
+  m_Layer: 2
   m_Name: Explotion
   m_TagString: Effect
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
