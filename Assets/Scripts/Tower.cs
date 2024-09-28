@@ -71,7 +71,8 @@ public class Tower : Entity
         { "Bomb", new[] { null, null, explotionEnd } },
         { "Ignite", new[] { igniteStart, null, igniteEnd } },
         { "Cold", new[] { coldStart, null, coldEnd } },
-        { "Elec", new[] { elecStart, elecTravel, elecEnd } }
+        { "Elec", new[] { elecStart, elecTravel, elecEnd } },
+        { "Fraction", new[] { null, null, fractionEnd } }
     };
 
     public static Dictionary<LevelUpCallback, Sprite> levelUpCallbackNames;
@@ -82,7 +83,6 @@ public class Tower : Entity
     private float time;
     private Dictionary<float, Entity> enemiesCanShooted = new Dictionary<float, Entity>();
     private Player _player = Player.instance;
-    public Chances chance;
     private float rotationAngle = 0f;
     private float ResultRotationAngle
     {
@@ -166,11 +166,11 @@ public class Tower : Entity
             if (time > 1 / attackSpeed)
             {
                 Vector3 fromWhere = gameObject.transform.position;
-                Projectile pMissle = missle.GetComponent<Projectile>();
-                foreach (var element in gameObject.GetComponentsInChildren<Transform>())
+                Projectile pMissle = missle.GetComponent<Projectile>();//нихуясебе
+                foreach (var element in gameObject.GetComponentsInChildren<Transform>()) //нихуясебе
                     if (element.tag == "Projectile")
                         fromWhere = element.position;
-                Shoot(this, fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10), pMissle,
+                Shoot(this, fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10),projSpeed, pMissle,
                     chance, onStart, travel, onEnd, new List<Entity>(), missle.transform.localScale, pMissle.damage);//
                 if (UnityEngine.Random.Range(1, 99) > chance.doubleAttack)
                     time = 0f;

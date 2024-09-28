@@ -197,7 +197,7 @@ public sealed class BulletEffects : MonoBehaviour
             {
                 return;
             }
-            proj.Shoot(proj, from, nextTarget, proj, proj.chance,
+            proj.Shoot(proj, from, nextTarget,proj.projSpeed, proj, proj.chance,
                 proj.onStart, proj.travel, proj.onEnd, proj.prevEnemy);
             if (Player.instance.bounce.isPlaying) Player.instance.bounce.Stop();
             Player.instance.bounce.Play();
@@ -224,15 +224,14 @@ public sealed class BulletEffects : MonoBehaviour
                     _elec = true;
                     modifier = 2;
                 }
-
                 Vector3 nextTarget = new Vector3(from.x + random.Next(-9 * modifier, 9 * modifier), from.y, from.z + random.Next(-9 * modifier, 9 * modifier));
                 Chances newChance = new Chances(proj.chance.bounce, proj.chance.splash, proj.chance.puddle,
                     proj.chance.shatter / 2f, proj.chance.doubleAttack, proj.chance.crit,
                     proj.chance.status, proj.chance.pierce);
-                proj.Shoot(proj,from, nextTarget, proj, newChance, proj.onStart,proj.travel,proj.onEnd,!_elec ? null : proj.prevEnemy,
+                proj.Shoot(proj,from, nextTarget, proj.projSpeed, proj, newChance, proj.onStart,proj.travel,proj.onEnd,!_elec ? null : proj.prevEnemy,
                     new Vector3(proj.transform.localScale.x / 1.5f, proj.transform.localScale.y / 1.5f, proj.transform.localScale.z / 1.5f),
                     new Damage(proj.damage._fire / 2, proj.damage._cold / 2, proj.damage._lightning / 2, proj.damage._void / 2, proj.damage._physical / 2));
-            }
+            }//
             if (Player.instance.fraction.isPlaying) Player.instance.fraction.Stop();
             Player.instance.fraction.Play();
         }

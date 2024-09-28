@@ -23,6 +23,8 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
     }
     public MeshHolder MeshHolder { get; set; }
     public Mesh pMesh;
+
+    private bool hasCollided = false;
     public int TeamId { get; set; }
     public Chances chance;
     public Color shadowColor;
@@ -55,23 +57,6 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
     {
         Entity.onEntityDeath -= OnEntityDeath;
     }
-    private void Start()
-    {
-        //if (target != null)
-        //{
-        //    position = transform.position;
-        //    projHeight = 0f; 
-        //    liveTime = 0f;
-        //    Vector3 direction = (target - position).normalized;
-        //    distance = Vector3.Distance(position, target);
-        //    float speed = projSpeed * direction.magnitude * 0.85f;
-        //    timeNeed = distance / speed; 
-        //    targetMemory = target;
-        //    testTimer = 0f;
-        //    collidable = true;
-        //}
-        //onStart?.Invoke(this,ref followTarget);
-    }
     private void OnEnable()
     {
         if (target != null)
@@ -89,6 +74,7 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
         }
         Entity.onEntityDeath += OnEntityDeath;
         onStart?.Invoke(this);
+        hasCollided = false;
     }
     private void OnEntityDeath(Entity sender)
     {
@@ -101,17 +87,18 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
         if (waitCast)
             StartCoroutine(shadowCaster());
     }
-    private void FixedUpdate()//дорого. внутренние методы могут быть тяжелыми
+    private void FixedUpdate()//дорого. вложенные методы могут быть тяжелыми
     {
         travel?.Invoke(this);
     }
-    public void Shoot<T>(T producer, Vector3 turret, Vector3 target, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam
+    public void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam
     {
-        Entity.entity.Shoot(producer, turret, target, missle, chance, onStart, travel, onEnd, prevEnemy, scale, nDamage);
+        Entity.entity.Shoot(producer, turret, target,projSpeed, missle, chance, onStart, travel, onEnd, prevEnemy, scale, nDamage);
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (hasCollided) return;
         if (damage == null) throw new ArgumentNullException(nameof(damage));
         prevEnemy ??= new List<Entity>();
         Entity otherEntity = other.GetComponent<Entity>();
@@ -122,14 +109,14 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
             otherEntity.GetDamage(damage);
             prevEnemy.Add(otherEntity);
         }
-        onEnd?.Invoke(this); //followTarget можно уже убрать
+        onEnd?.Invoke(this);
         if (chance.pierce < UnityEngine.Random.Range(1, 100) || other.gameObject.tag == "Tower\'s Place" || other.gameObject.tag == "Unpiercable")
         {
             if (Player.instance.hit.isPlaying) Player.instance.hit.Stop();
             Player.instance.hit.Play();
-            gameObject.SetActive(false);
-            //Destroy(gameObject);//
+            gameObject.SetActive(false);//иногда не регает
             enabled = true;
+            hasCollided = true;
         }
         else
         {

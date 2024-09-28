@@ -16,7 +16,7 @@ public interface ITeam
 }
 internal interface IShootable
 {
-    void Shoot<T>(T producer, Vector3 turret, Vector3 target, Projectile missle, Chances chances, 
+    void Shoot<T>(T producer, Vector3 turret, Vector3 target,float projSpeed, Projectile missle, Chances chances, 
         BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, 
         [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam;
 }
@@ -39,7 +39,8 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
     public List<Status> statuses = new List<Status>();
     public List<float> _damage = new List<float>();
     public List<float> _resist = new List<float>();
-    Renderer renderer;
+    private Renderer renderer;
+    public Chances chance;
     [SerializeField] private Material damageMat;
     private Color defaultColor;
 
@@ -82,7 +83,7 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
             renderer.materials[0].color = defaultColor;
         }
     }
-    public virtual void Shoot<T>(T producer, Vector3 turret, Vector3 target, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale,[Optional] Damage nDamage) where T : MonoBehaviour, ITeam
+    public virtual void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale,[Optional] Damage nDamage) where T : MonoBehaviour, ITeam
     {
         //Чтобы сменить модель можно поменять меш, но для этого нужно все существующие модели заменить на obj модели   
         //Профайлер показывает как трудоёмий процесс. Необходима оптимизация. *
@@ -108,19 +109,12 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
     }
     public void GetDamage(Damage damage) //когда моб умирает иногда всё равно вызывается
     {
-        try
-        {
-            health -= damage._fire * (1 - resistances._fire);
-            health -= damage._lightning * (1 - resistances._lightning);
-            health -= damage._cold * (1 - resistances._cold);
-            health -= damage._void * (1 - resistances._void);
-            health -= damage._physical * (1 - resistances._physical);
-            StartCoroutine(ColorChanger());
-        }
-        catch
-        {
-            Debug.Log($"Who damaged = {null}, damage = {damage}");
-        }
+        health -= damage._fire * (1 - resistances._fire);
+        health -= damage._lightning * (1 - resistances._lightning);
+        health -= damage._cold * (1 - resistances._cold);
+        health -= damage._void * (1 - resistances._void);
+        health -= damage._physical * (1 - resistances._physical);
+        StartCoroutine(ColorChanger());
     }
 
     public Type CheckEntity()
