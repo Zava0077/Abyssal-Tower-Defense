@@ -116,9 +116,4 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
         health -= damage._physical * (1 - resistances._physical);
         StartCoroutine(ColorChanger());
     }
-
-    public Type CheckEntity()
-    {
-        return this.GetType();
-    }
 }

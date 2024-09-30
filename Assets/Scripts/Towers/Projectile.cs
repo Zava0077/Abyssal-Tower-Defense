@@ -132,11 +132,12 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
         Fading pref = Player.instance.particleShadow.GetComponentInChildren<Fading>();
         while (gameObject)
         {
-            Player.nShadows.PullObject(pref, gameObject.transform.position, null, true, true, 1).MoveNext();
+            Player.nShadows.PullObject(pref, gameObject.transform.position, null, true, false, 1).MoveNext();
             fadingComponent = Player.nShadows.pulledObj;
             fadingComponent.color = shadowColor;
             fadingComponent.transform.rotation = gameObject.transform.rotation;
             fadingComponent.liveTime = 0.1f;
+            fadingComponent.gameObject.SetActive(true);
             yield return new WaitForNextFrameUnit();
         }
         waitCast = true;

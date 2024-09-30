@@ -119,8 +119,8 @@ public class Tower : Entity
     }
     public static void LoadSprite()
     {
-        //SpriteLoad spriteLoad = UnityEngine.Resources.Load<SpriteLoad>("SpriteLevelUp/LevelUpSprites");
-        //LevelUpSprites.AddRange(spriteLoad.sprites);
+        SpriteLoad spriteLoad = UnityEngine.Resources.Load<SpriteLoad>("SpriteLevelUp/LevelUpSprites");
+        LevelUpSprites.AddRange(spriteLoad.sprites);
         levelUpCallbackNames = new()
         {
               { FireUp , Player.instance.levelUpSprites[0] },
@@ -151,11 +151,12 @@ public class Tower : Entity
     }
     private void FixedUpdate()
     {
-        enemy = FindEnemy(this, agroRadius, enemiesCanShooted);
+        //enemy = FindEnemy(this, agroRadius, enemiesCanShooted);
     }
     new protected void Update()
     {
         base.Update();
+        enemy = FindEnemy(this, agroRadius, enemiesCanShooted);
         ResultRotationAngle += attackSpeed * Time.deltaTime * 30;
         Quaternion newDir;
         if (enemy)

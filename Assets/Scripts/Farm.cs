@@ -10,10 +10,12 @@ public class Farm : Entity
     private Resources resGain;
     [SerializeField] List<int> gains = new List<int>();
     float timer = 0f;
+    private Player player;
 
     private void Awake()
     {
         base.Awake();
+        player = Camera.main.GetComponent<Player>();
         resCost = new Resources(costs[0], costs[1], costs[2], costs[3]);
         resGain = new Resources(gains[0], gains[1], gains[2], 0);
     }
@@ -24,7 +26,7 @@ public class Farm : Entity
         timer += Time.deltaTime;
         if (timer >= timeToGainRes)
         {
-            Camera.main.GetComponent<Player>().resources.Gain(resGain);
+            player.resources.Gain(resGain);
             timer = 0f;
         }
     }
