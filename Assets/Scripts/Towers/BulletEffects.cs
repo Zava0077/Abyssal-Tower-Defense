@@ -93,11 +93,8 @@ public sealed class BulletEffects : MonoBehaviour
     };
     public static BulletEffect igniteEnd = (Projectile proj) =>
     {
-        Vector3 from = proj.transform.position;
+        Vector3 from = proj.Source.Transform.position;
         Damage damage1 = proj.damage;
-        foreach (var element in proj.GetComponentsInChildren<Transform>())
-            if (element.gameObject.tag == "Projectile")
-                from = element.position;
         Explotion expl = null;
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
         Player.nExplosions.PullObject(pref, from, null).MoveNext();
@@ -119,11 +116,8 @@ public sealed class BulletEffects : MonoBehaviour
     };
     public static BulletEffect coldEnd = (Projectile proj) =>
     {
-        Vector3 from = proj.transform.position;
+        Vector3 from = proj.Source.Transform.position;
         Damage damage1 = proj.damage;
-        foreach (var element in proj.GetComponentsInChildren<Transform>())
-            if (element.gameObject.tag == "Projectile")
-                from = element.position;
         Explotion expl = null;
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
         Player.nExplosions.PullObject(pref, from, null).MoveNext();
@@ -165,11 +159,8 @@ public sealed class BulletEffects : MonoBehaviour
     };
     public static BulletEffect elecEnd = (Projectile proj) =>
     {
-        Vector3 from = proj.transform.position;
+        Vector3 from = proj.Source.Transform.position;
         Damage damage1 = proj.damage;
-        foreach (var element in proj.GetComponentsInChildren<Transform>())
-            if (element.gameObject.tag == "Projectile")
-                from = element.position;
         Explotion expl = null;
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
         Player.nExplosions.PullObject(pref, from, null).MoveNext();
@@ -187,7 +178,7 @@ public sealed class BulletEffects : MonoBehaviour
         float testrnd = random.Next(0, 99);
         if (testrnd < proj.chance.bounce)//заменить на шанс от башни
         {
-            Vector3 from = proj.transform.position;
+            Vector3 from = proj.Source.Transform.position;
             foreach (var element in proj.GetComponentsInChildren<Transform>())
                 if (element.gameObject.tag == "Projectile")
                     from = element.position;
@@ -216,9 +207,6 @@ public sealed class BulletEffects : MonoBehaviour
                 bool _elec = false;
                 int modifier = 1;
                 Vector3 from = proj.transform.position;
-                foreach (var element in proj.GetComponentsInChildren<Transform>())
-                    if (element.gameObject.tag == "Projectile")
-                        from = element.position;
                 if (proj.onStart - elecStart != proj.onStart)
                 {
                     _elec = true;
@@ -247,7 +235,7 @@ public sealed class BulletEffects : MonoBehaviour
         if (testrnd < _proj.chance.splash)//
         {
             float size = 0;
-            Vector3 from = proj.transform.position;
+            Vector3 from = proj.Source.Transform.position;
             Explotion expl = null;
             Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
             foreach (var element in proj.GetComponentsInChildren<Transform>())
@@ -296,9 +284,6 @@ public sealed class BulletEffects : MonoBehaviour
                     colors[i] = 1;
                 else colors[i] = colors[i] / colors.Max();
             Vector3 from = proj.transform.position;
-            foreach (var element in proj.GetComponentsInChildren<Transform>())
-                if (element.gameObject.tag == "Projectile")
-                    from = element.position;
             foreach (var damage in proj.damage.GetType().GetFields())//
                 size += (float)damage.GetValue(proj.damage) / 4;
             GameObject[] ground = GameObject.FindGameObjectsWithTag("Ground");

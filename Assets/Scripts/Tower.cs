@@ -100,6 +100,8 @@ public class Tower : Entity
         base.Awake();
         Mesh pMesh = gameObject.GetComponentInChildren<MeshFilter>().mesh; //надо поместить меш в объект и ссылатьс€ на этот объект с мешем, а не на сам меш.
         missle.GetComponent<Projectile>().MeshHolder = new MeshHolder(pMesh);
+        Producer = gameObject;
+        Source = this.FindSource();
         foreach (var levelUp in levelUps)
             levelUpCallbacks.Add(lUCLinks[levelUp]);
         foreach (var eff in starterEffects)
@@ -109,7 +111,7 @@ public class Tower : Entity
             onEnd += effectLinks[eff][2];
         }
         if (!tower)
-            tower = GetComponent<GameObject>();
+            tower = gameObject;//это че ваще бл€ть?
         TeamId = 1;
         entities.Add(this);
         missle.GetComponent<Projectile>().damage = damage;
@@ -166,11 +168,8 @@ public class Tower : Entity
 
             if (time > 1 / attackSpeed)
             {
-                Vector3 fromWhere = gameObject.transform.position;
+                Vector3 fromWhere = Source.Transform.position;
                 Projectile pMissle = missle.GetComponent<Projectile>();//ниху€себе
-                foreach (var element in gameObject.GetComponentsInChildren<Transform>()) //ниху€себе
-                    if (element.tag == "Projectile")
-                        fromWhere = element.position;
                 Shoot(this, fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10),projSpeed, pMissle,
                     chance, onStart, travel, onEnd, new List<Entity>(), missle.transform.localScale, pMissle.damage);//
                 if (UnityEngine.Random.Range(1, 99) > chance.doubleAttack)

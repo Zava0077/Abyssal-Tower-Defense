@@ -21,7 +21,9 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
         this.agroRadius = agroRadius;
         this.chance = chance;
     }
+    public ProducerSource Source { get; set; }
     public MeshHolder MeshHolder { get; set; }
+    public GameObject Producer { get; set; }
     public Mesh pMesh;
 
     private bool hasCollided = false;
@@ -52,6 +54,8 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
     private void Awake()
     {
         projHeight = archMultiplier;
+        Producer = gameObject;
+        Source = this.FindSource();
     }
     private void OnDisable()
     {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public delegate void MobDelete(Entity sender);
 public interface IDamagable
@@ -14,14 +15,18 @@ public interface ITeam
 {
     int TeamId { get; set; }
 }
-internal interface IShootable
+public interface IShootable
 {
+    GameObject Producer { get; set; }
+    ProducerSource Source { get; set; }
     void Shoot<T>(T producer, Vector3 turret, Vector3 target,float projSpeed, Projectile missle, Chances chances, 
         BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, 
         [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam;
 }
 public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
 {
+    public ProducerSource Source { get; set; }
+    public GameObject Producer { get; set; }
     public static Entity entity;
     public static List<Entity> entities = new List<Entity>();
     public static event MobDelete onEntityDeath;
@@ -57,7 +62,6 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
         damage = new Damage(_damage[0], _damage[1], _damage[2], _damage[3], _damage[4]);
         resistances = new Resistances(_resist[0], _resist[1], _resist[2], _resist[3], _resist[4]);
         renderer = GetComponent<Renderer>();
-
         if (renderer)
             defaultColor = renderer.materials[0].color;
     }
