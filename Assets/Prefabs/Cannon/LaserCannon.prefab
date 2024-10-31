@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7490537545158428284}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Hole
   m_TagString: Projectile
   m_Icon: {fileID: 0}
@@ -43,9 +43,10 @@ GameObject:
   - component: {fileID: 312111415878609934}
   - component: {fileID: 1500248849422271449}
   - component: {fileID: 4303856231167388408}
-  m_Layer: 6
+  - component: {fileID: 2987585942838433229}
+  m_Layer: 0
   m_Name: LaserCannon
-  m_TagString: Effect
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,7 +85,6 @@ MonoBehaviour:
   projSpeed: 35
   multiplierTakeDamage: 0
   agroRadius: 45
-  transform: {fileID: 5213378883116263550}
   statuses: []
   _damage:
   - 0
@@ -98,16 +98,12 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  chance: {fileID: 0}
   damageMat: {fileID: 0}
-  missle: {fileID: 7686851911220215187, guid: 2599fac3fb6947a4582089d15f7d3806, type: 3}
+  firstUp: 0
+  secondUp: 0
+  speed: 0
   tower: {fileID: 5956137601538878063}
-  time: 0
-  incDamage: 1
-  incAttackSpeed: 0
-  incHealth: 0
-  levelUpsRemain: 2220
-  spriteButton: {fileID: 21300000, guid: 6aa79c52dd96f9345b9ffe5a93a4ca3b, type: 3}
-  updateLvlUp: 1
   costs: 0a0000000a0000000a00000000000000
   chances: 0000000000000000000000000000000000000000000000000000000064000000
   starterEffects:
@@ -129,7 +125,11 @@ MonoBehaviour:
   - ColdConvert
   - LightningConvert
   - PhysicalConvert
-  chance: {fileID: 0}
+  missle: {fileID: 7686851911220215187, guid: 2599fac3fb6947a4582089d15f7d3806, type: 3}
+  incDamage: 1
+  incAttackSpeed: 0
+  incHealth: 0
+  spriteButton: {fileID: 21300000, guid: 6aa79c52dd96f9345b9ffe5a93a4ca3b, type: 3}
 --- !u!23 &1500248849422271449
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -184,6 +184,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ca1c7c616b346449ee9c8a53ab1fce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!135 &2987585942838433229
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5956137601538878063}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0.3, y: 0.31, z: 0}
 --- !u!1001 &5921786675275393759
 PrefabInstance:
   m_ObjectHideFlags: 0

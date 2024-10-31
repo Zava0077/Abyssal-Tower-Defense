@@ -51,6 +51,8 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
 
     public int firstUp;
     public int secondUp;
+    public float speed = 0f;
+    public virtual Vector3 Direction { get; } = Vector3.zero;
     public int TeamId { get; set; }
     public Entity()
     {

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2381517892362367151}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: End
   m_TagString: Projectile
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 8616462509861489022}
   - component: {fileID: 6411475034501561373}
   - component: {fileID: -206416577230312154}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Laser
   m_TagString: Effect
   m_Icon: {fileID: 0}
@@ -156,6 +156,7 @@ MonoBehaviour:
   chance: {fileID: 0}
   shadowColor: {r: 1, g: 0, b: 0, a: 0}
   agroRadius: 0
+  followTarget: {fileID: 0}
   owner: {fileID: 0}
   target: {x: 0, y: 0, z: 0}
   targetMemory: {x: 0, y: 0, z: 0}

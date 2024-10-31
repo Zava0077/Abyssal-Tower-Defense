@@ -8,9 +8,8 @@ using UnityEngine.AI;
 public class Mob : Entity
 {
     private NavMeshAgent agent;
-    [SerializeField] private Transform finish;
-    public float speed; 
-    public Vector3 Direction
+    [SerializeField] private Transform finish; 
+    public override Vector3 Direction
     {
         get
         {

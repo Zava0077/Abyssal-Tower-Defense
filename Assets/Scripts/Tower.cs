@@ -170,8 +170,8 @@ public class Tower : Entity
             {
                 Vector3 fromWhere = Source.Transform.position;
                 Projectile pMissle = missle.GetComponent<Projectile>();//ниху€себе
-                Shoot(this, fromWhere, enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10),projSpeed, pMissle,
-                    chance, onStart, travel, onEnd, new List<Entity>(), missle.transform.localScale, pMissle.damage);//
+                Shoot(this, fromWhere, enemy.transform.position + enemy.Direction * enemy.speed / (projSpeed / 10),projSpeed, pMissle,
+                    chance, onStart, travel, onEnd, new List<Entity>(), missle.transform.localScale, pMissle.damage); 
                 if (UnityEngine.Random.Range(1, 99) > chance.doubleAttack)
                     time = 0f;
             }
@@ -199,8 +199,8 @@ public class Tower : Entity
             Gizmos.color = Color.red;
             Gizmos.DrawLine(enemy.transform.position, new Vector3(enemy.transform.position.x, enemy.transform.position.y + 10f, enemy.transform.position.z));
             Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(enemy.transform.position + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10),
-                new Vector3(enemy.transform.position.x, enemy.transform.position.y + 10f, enemy.transform.position.z) + (enemy as Mob).Direction * (enemy as Mob).speed / (projSpeed / 10));
+            Gizmos.DrawLine(enemy.transform.position + enemy.Direction * enemy.speed / (projSpeed / 10),
+                new Vector3(enemy.transform.position.x, enemy.transform.position.y + 10f, enemy.transform.position.z) + enemy.Direction * enemy.speed / (projSpeed / 10));
         }
     }
     //перекинуть эти методы в Entity

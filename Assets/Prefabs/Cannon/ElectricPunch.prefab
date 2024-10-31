@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2013992748575409544}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: End
   m_TagString: Projectile
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 4853837017559809232}
   - component: {fileID: 4222858382983931280}
   - component: {fileID: 7288343441462546672}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: ElectricPunch
   m_TagString: Effect
   m_Icon: {fileID: 0}
@@ -83,6 +83,7 @@ MonoBehaviour:
   chance: {fileID: 0}
   shadowColor: {r: 0, g: 0, b: 0, a: 0}
   agroRadius: 0
+  followTarget: {fileID: 0}
   owner: {fileID: 0}
   target: {x: 0, y: 0, z: 0}
   targetMemory: {x: 0, y: 0, z: 0}
@@ -158,7 +159,7 @@ GameObject:
   - component: {fileID: 5908240777725896017}
   - component: {fileID: 1494657005279774603}
   - component: {fileID: 1304082897134843950}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Effect
   m_Icon: {fileID: 0}

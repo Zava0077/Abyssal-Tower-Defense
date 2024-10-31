@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7490537545158428284}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Hole
   m_TagString: Projectile
   m_Icon: {fileID: 0}
@@ -43,9 +43,10 @@ GameObject:
   - component: {fileID: 312111415878609934}
   - component: {fileID: 5317101081882125223}
   - component: {fileID: 8419269250050374487}
-  m_Layer: 6
+  - component: {fileID: 5559261145320947776}
+  m_Layer: 0
   m_Name: ArcherCannon
-  m_TagString: Effect
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,7 +85,6 @@ MonoBehaviour:
   projSpeed: 60
   multiplierTakeDamage: 0
   agroRadius: 45
-  transform: {fileID: 5213378883116263550}
   statuses: []
   _damage:
   - 0
@@ -98,16 +98,12 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  chance: {fileID: 0}
   damageMat: {fileID: 0}
-  missle: {fileID: 7686851911220215187, guid: c23b3aacf2c38a2468b108b0d2213b52, type: 3}
+  firstUp: 0
+  secondUp: 0
+  speed: 0
   tower: {fileID: 5956137601538878063}
-  time: 0
-  incDamage: 1
-  incAttackSpeed: 0
-  incHealth: 0
-  levelUpsRemain: 2220
-  spriteButton: {fileID: 21300000, guid: 21600128ee6070a40b53a04acd0c20c1, type: 3}
-  updateLvlUp: 1
   costs: 0a0000000a0000000a00000000000000
   chances: 0000000000000000000000000000000000000000000000000000000000000000
   starterEffects:
@@ -130,7 +126,11 @@ MonoBehaviour:
   - LightningConvert
   - PhysicalConvert
   - ProjectileSpeedUp
-  chance: {fileID: 0}
+  missle: {fileID: 7686851911220215187, guid: c23b3aacf2c38a2468b108b0d2213b52, type: 3}
+  incDamage: 1
+  incAttackSpeed: 0
+  incHealth: 0
+  spriteButton: {fileID: 21300000, guid: 21600128ee6070a40b53a04acd0c20c1, type: 3}
 --- !u!23 &5317101081882125223
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -185,6 +185,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ca1c7c616b346449ee9c8a53ab1fce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!135 &5559261145320947776
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5956137601538878063}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: -0.04, y: 0.34, z: 0.04}
 --- !u!1001 &3032026139353455669
 PrefabInstance:
   m_ObjectHideFlags: 0
