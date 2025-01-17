@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-public class Puddle : MonoBehaviour, IMeshHolder
+
+public class Puddle : MonoBehaviour, IMeshHolder, ITeam
 {
+    
     public MeshHolder MeshHolder { get; set; }
     public Damage damage;
     public Chances chance;
     [SerializeField] public Mesh mesh;
     public Projectile producer { get; set; }
+    public int TeamId { get; set; }
+
     private HashSet<IDamagable> objectsOnPuddle = new HashSet<IDamagable>();
     private void OnEnable()
     {
@@ -22,18 +25,18 @@ public class Puddle : MonoBehaviour, IMeshHolder
         objectsOnPuddle.Clear();
         Entity.onEntityDeath -= OnEntityDeath;
     }
-    IEnumerator DeathSentence()
+    private IEnumerator DeathSentence()
     {
         yield return new WaitForSeconds(2);
         gameObject.SetActive(false);
     }
-    void OnEntityDeath(Entity sender) //или IDamagable
+    private void OnEntityDeath(Entity sender) //или IDamagable
         => objectsOnPuddle.Remove(sender);
     
     private void OnTriggerEnter(Collider other)
     {
         Entity otherEntity = other.GetComponent<Entity>();
-        if(otherEntity) objectsOnPuddle.Add(otherEntity);
+        if(otherEntity && TeamId != otherEntity.TeamId) objectsOnPuddle.Add(otherEntity);
     }
     private void OnTriggerExit(Collider other)
     {
@@ -41,7 +44,7 @@ public class Puddle : MonoBehaviour, IMeshHolder
         if (otherEntity) 
             objectsOnPuddle.Remove(otherEntity);
     }
-    IEnumerator Damage()
+    private IEnumerator Damage()
     {
         while(enabled)
         {

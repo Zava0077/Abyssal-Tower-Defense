@@ -32,7 +32,7 @@ public sealed class BulletEffects : MonoBehaviour
     public static BulletEffect laserStart = (Projectile proj) =>
     {
         proj.collidable = false;
-        proj.GetComponent<Collider>().enabled = false;
+        proj.collider.enabled = false;
         proj.shadowColor = Color.red;
         proj.waitCast = true;
         if (Player.instance.laser.isPlaying) Player.instance.laser.Stop();
@@ -41,11 +41,10 @@ public sealed class BulletEffects : MonoBehaviour
     public static BulletEffect laserTravel = (Projectile proj) =>
     {
         if (proj.liveTime > 0.08f)
-            proj.GetComponent<Collider>().enabled = true;
+            proj.collider.enabled = true;
         if (proj.liveTime > 1.5f)
         {
             proj.gameObject.SetActive(false);
-            //Destroy(proj.gameObject);//
         }
         proj.transform.position += proj.transform.forward * Vector3.Distance(proj.position, proj.target) / 10;
         proj.transform.position = new Vector3(proj.transform.position.x, 1f, proj.transform.position.z);
@@ -56,7 +55,7 @@ public sealed class BulletEffects : MonoBehaviour
     public static BulletEffect homingStart = (Projectile proj) =>
     {
         proj.followTarget = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
-        proj.GetComponent<Collider>().enabled = false;
+        proj.collider.enabled = false;
         proj.shadowColor = Color.magenta;
         proj.collidable = false;
         proj.waitCast = true;
@@ -74,7 +73,7 @@ public sealed class BulletEffects : MonoBehaviour
         if (proj.liveTime > (0.15f / proj.projSpeed) * 35f && proj.followTarget)
         {
             proj.transform.rotation = Quaternion.Lerp(proj.transform.rotation, Quaternion.LookRotation(Vector3.RotateTowards(proj.transform.forward, proj.followTarget.transform.position - proj.transform.position, 3.14f, 0f)), (0.02f * 35f) / proj.projSpeed);
-            proj.GetComponent<Collider>().enabled = true;
+            proj.collider.enabled = true;
         }
         proj.transform.position += proj.transform.forward * proj.projSpeed * Time.deltaTime;
         proj.transform.position = new Vector3(proj.transform.position.x, 1f, proj.transform.position.z);
@@ -99,6 +98,7 @@ public sealed class BulletEffects : MonoBehaviour
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
         Player.nExplosions.PullObject(pref, from, null).MoveNext();
         expl = Player.nExplosions.pulledObj;
+        expl.TeamId = proj.TeamId;
         expl.producer = proj;
         expl.damage = new Damage(damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(1f, 0.35f, 0f, 0.6f);
@@ -122,6 +122,7 @@ public sealed class BulletEffects : MonoBehaviour
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
         Player.nExplosions.PullObject(pref, from, null).MoveNext();
         expl = Player.nExplosions.pulledObj;
+        expl.TeamId = proj.TeamId;
         expl.damage = new Damage(0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(0f, 0.15f, 1f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
@@ -138,7 +139,7 @@ public sealed class BulletEffects : MonoBehaviour
         transformChildren.localScale = new Vector3(transformChildren.localScale.x, transformChildren.localScale.y, Vector3.Distance(positionMemory, proj.targetMemory));
         transformChildren.position = Vector3.MoveTowards(positionMemory, proj.targetMemory, Vector3.Distance(positionMemory, proj.targetMemory) / 2);
         transformChildren.rotation = Quaternion.LookRotation(Vector3.RotateTowards(proj.transform.right, proj.targetMemory - proj.transform.position, 3.14f, 0));
-        proj.GetComponent<Collider>().enabled = false;
+        proj.collider.enabled = false;
         proj.collidable = false;
         Damage damage = proj.damage;
         proj.damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
@@ -149,7 +150,7 @@ public sealed class BulletEffects : MonoBehaviour
     public static BulletEffect elecTravel = (Projectile proj) =>
     {
         if (proj.liveTime > 0.2f)
-            proj.GetComponent<Collider>().enabled = true;
+            proj.collider.enabled = true;
         if (proj.liveTime > 0.25f)
         {
             proj.onEnd(proj);
@@ -165,6 +166,7 @@ public sealed class BulletEffects : MonoBehaviour
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
         Player.nExplosions.PullObject(pref, from, null).MoveNext();
         expl = Player.nExplosions.pulledObj;
+        expl.TeamId = proj.TeamId;
         expl.damage = new Damage(0f, 0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(0f, 0.35f, 1f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
@@ -241,10 +243,12 @@ public sealed class BulletEffects : MonoBehaviour
             foreach (var element in proj.GetComponentsInChildren<Transform>())
                 if (element.gameObject.tag == "Projectile")
                     from = element.position;
-            foreach (var damage in _proj.damage.GetType().GetFields())//
+            foreach (var damage in _proj.damage.GetType().GetFields())
                 size += (float)damage.GetValue(_proj.damage) / 7;
             Player.nExplosions.PullObject(pref, from, null).MoveNext();
+            //
             expl = Player.nExplosions.pulledObj;
+            expl.TeamId = proj.TeamId;
             expl.GetComponent<Renderer>().material.color = new Color(1, 0.08f, 0f, 0.6f);
             expl.damage = new Damage(15f, 0f, 0f, 0f, 50f);
             expl.transform.localScale = new Vector3(5f + size, 5f + size, 5f + size);
@@ -289,7 +293,8 @@ public sealed class BulletEffects : MonoBehaviour
             GameObject[] ground = GameObject.FindGameObjectsWithTag("Ground");
             Vector3 puddPosition = new Vector3(from.x, ground[0].transform.position.y, from.z);
             Player.nPuddles.PullObject(pref, puddPosition, null).MoveNext(); 
-            pudd = Player.nPuddles.pulledObj; 
+            pudd = Player.nPuddles.pulledObj;
+            pudd.TeamId = proj.TeamId;
             Vector3 puddScale = new Vector3(size, pudd.transform.localScale.y, size);
             pudd.transform.localScale = puddScale;
             pudd.damage = proj.damage;

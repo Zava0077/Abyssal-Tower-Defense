@@ -51,10 +51,12 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
     public BulletEffect onStart;
     public BulletEffect travel;
     public BulletEffect onEnd;
+    public Collider collider;
     private void Awake()
     {
         projHeight = archMultiplier;
         Producer = gameObject;
+        collider = gameObject.GetComponent<Collider>();
         Source = this.FindSource();
     }
     private void OnDisable()
