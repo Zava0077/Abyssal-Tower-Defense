@@ -34,7 +34,8 @@ public class Resources
             Player.instance._res[i].text = Player.instance.resources.GetMassive()[i].ToString();
         }
     }
-
+    //public static Resources operator -(Resources left, Resources right) =>
+    //    new Resources(left.gold - right.gold, left.wood - right.wood, left.stone - right.stone, left.voidEsences - right.voidEsences);
     public bool Subtract(Resources cost)
     {
         Resources resources = Player.instance.resources;

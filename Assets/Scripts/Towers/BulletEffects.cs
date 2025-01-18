@@ -18,7 +18,6 @@ public sealed class BulletEffects : MonoBehaviour
     {
         if (proj.liveTime > 5f)
             proj.gameObject.SetActive(false);
-            //Destroy(proj);//
         if (proj.liveTime > proj.timeNeed)
             proj.projHeight = -50;
         else
@@ -33,7 +32,7 @@ public sealed class BulletEffects : MonoBehaviour
     {
         proj.collidable = false;
         proj.collider.enabled = false;
-        proj.shadowColor = Color.red;
+        //proj.shadowColor = Color.red;
         proj.waitCast = true;
         if (Player.instance.laser.isPlaying) Player.instance.laser.Stop();
         Player.instance.laser.Play();
@@ -56,7 +55,7 @@ public sealed class BulletEffects : MonoBehaviour
     {
         proj.followTarget = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
         proj.collider.enabled = false;
-        proj.shadowColor = Color.magenta;
+        //proj.shadowColor = Color.magenta;
         proj.collidable = false;
         proj.waitCast = true;
         if (Player.instance.laser.isPlaying)
@@ -178,14 +177,14 @@ public sealed class BulletEffects : MonoBehaviour
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
-        if (testrnd < proj.chance.bounce)//заменить на шанс от башни
+        if (testrnd < proj.chance.bounce)
         {
             Vector3 from = proj.Source.Transform.position;
             foreach (var element in proj.GetComponentsInChildren<Transform>())
                 if (element.gameObject.tag == "Projectile")
                     from = element.position;
-            Entity nextEnemy = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);//иногда баунс всё равно может считать противником самого себя
-            Vector3 nextTarget = nextEnemy ? nextEnemy.GetComponent<Transform>().position : Vector3.zero;
+            Entity nextEnemy = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
+            Vector3 nextTarget = nextEnemy ? nextEnemy.transform.position : Vector3.zero;
             if (nextEnemy == null || (proj.prevEnemy != null && proj.prevEnemy.Count > 0 /*&& nextTarget == proj.prevEnemy[0].gameObject.transform.position*/)) //
             {
                 return;
@@ -303,7 +302,6 @@ public sealed class BulletEffects : MonoBehaviour
             if (Player.instance.pudd.isPlaying) Player.instance.pudd.Stop();
             Player.instance.pudd.Play();
         }
-
     };
     #endregion
     public static bool Has(BulletEffect method, Tower storage)

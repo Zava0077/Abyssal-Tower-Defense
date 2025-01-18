@@ -48,30 +48,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23001e1bee15ec847a3e2c3967ffd446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  health: 100
+  shotShadowColor: {r: 0.28773582, g: 1, b: 0.3769957, a: 0}
+  maxHealth: 125
+  health: 125
   attackSpeed: 0.5
   projSpeed: 40
   multiplierTakeDamage: 0
-  agroRadius: 25
+  agroRadius: 50
   statuses: []
   _damage:
-  - 5
-  - 12
   - 0
-  - 12
-  - 0.5
+  - 0
+  - 0
+  - 0
+  - -10
   _resist:
   - 0
   - 0
   - 0
   - 0
   - 0
+  forcedTags:
+  - Invisible
+  - Hunter
   chance: {fileID: 0}
   damageMat: {fileID: 0}
   firstUp: 0
   secondUp: 0
   speed: 0
+  _forcedTeamId: 0
   tower: {fileID: 5956137601538878063}
   costs: 0a0000000a0000000a00000000000000
   chances: 0000000000000000000000000000000000000000000000000000000000000000

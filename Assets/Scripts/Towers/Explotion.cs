@@ -17,7 +17,7 @@ public class Explotion : MonoBehaviour, IMeshHolder, ITeam
     //    Entity.onEntityDeath -= OnEntityDeath;
     private IEnumerator DeathSentence()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(0.10f);
         gameObject.SetActive(false);
     }
     //void OnEntityDeath(Entity sender)

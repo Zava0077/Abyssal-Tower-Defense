@@ -11,7 +11,7 @@ using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static LevelUp;
 
-public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
+public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder, ITagger
 {
     public Projectile(Damage damage, Vector3 target, GameObject owner, float agroRadius, Chances chance)
     {
@@ -25,6 +25,7 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
     public MeshHolder MeshHolder { get; set; }
     public GameObject Producer { get; set; }
     public Mesh pMesh;
+    public string[] Tags { get; set; }
 
     private bool hasCollided = false;
     public int TeamId { get; set; }
@@ -97,7 +98,7 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder
     {
         travel?.Invoke(this);
     }
-    public void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam
+    public void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger
     {
         Entity.entity.Shoot(producer, turret, target,projSpeed, missle, chance, onStart, travel, onEnd, prevEnemy, scale, nDamage);
     }

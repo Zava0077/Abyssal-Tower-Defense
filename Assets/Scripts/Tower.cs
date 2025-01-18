@@ -10,7 +10,12 @@ using static BulletEffects;
 using static UnityEngine.GraphicsBuffer;
 using System.Resources;
 using UnityEditor;
-
+public static class EntityTags
+{
+    public static readonly string Invulnerable = "Invulnerable";
+    public static readonly string Invisible = "Invisible";
+    public static readonly string Hunter = "Hunter";
+}
 public class Tower : Entity
 {
     [SerializeField] private GameObject tower;
@@ -18,7 +23,6 @@ public class Tower : Entity
     [SerializeField] private List<int> chances = new List<int>();
     [SerializeField] private List<string> starterEffects = new List<string>();
     [SerializeField] private string[] levelUps;
-    
     public GameObject missle;
     public float incDamage = 1f;
     public float incAttackSpeed;
@@ -112,7 +116,7 @@ public class Tower : Entity
         }
         if (!tower)
             tower = gameObject;//это че ваще бл€ть?
-        TeamId = 1;
+        //TeamId = 1;
         entities.Add(this);
         missle.GetComponent<Projectile>().damage = damage;
         cost = new Resources(costs[0], costs[1], costs[2], costs[3]);
@@ -170,7 +174,7 @@ public class Tower : Entity
             {
                 Vector3 fromWhere = Source.Transform.position;
                 Projectile pMissle = missle.GetComponent<Projectile>();//ниху€себе
-                Shoot(this, fromWhere, enemy.transform.position + enemy.Direction * enemy.speed / (projSpeed / 10),projSpeed, pMissle,
+                Shoot(this, fromWhere, enemy.transform.position + enemy.Direction * enemy.speed / (projSpeed / 10), projSpeed, pMissle,
                     chance, onStart, travel, onEnd, new List<Entity>(), missle.transform.localScale, pMissle.damage); 
                 if (UnityEngine.Random.Range(1, 99) > chance.doubleAttack)
                     time = 0f;
@@ -204,20 +208,20 @@ public class Tower : Entity
         }
     }
     //перекинуть эти методы в Entity
-    public Entity FindEnemy<T>(T tower, float agroRadius, Dictionary<float, Entity> enemiesCanShooted, List<Entity> lastEnemy = null) where T : MonoBehaviour, ITeam
+    public Entity FindEnemy<T>(T tower, float agroRadius, Dictionary<float, Entity> enemiesCanShooted, List<Entity> lastEnemy = null) where T : MonoBehaviour, ITeam, ITagger
     {
         List<Entity> enemies = entities;
         List<Entity> resultEnemiesInRange = new List<Entity>();
-
         foreach (var enemy in enemies)
         {
-            if (tower.TeamId == enemy.TeamId)
+            if (tower.TeamId == enemy.TeamId || enemy.Tags.Contains(EntityTags.Invisible))
                 continue;
             float distance = Vector3.Distance(enemy.transform.position, tower.transform.position);
             enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(s => s.Value == enemy).Key);
             if (distance < agroRadius)
             {
                 resultEnemiesInRange.Add(enemy);
+                if (enemiesCanShooted.ContainsKey(distance)) distance += 0.0001f;
                 enemiesCanShooted[distance] = enemy;
             }
         }
@@ -240,9 +244,21 @@ public class Tower : Entity
                 }
             }
         }
-
         if (enemiesCanShooted.Count > 0)
         {
+            if (tower.Tags.Contains(EntityTags.Hunter) && enemiesCanShooted.Count > 1)
+            {
+                var closeEnemies = enemiesCanShooted
+                    .Where(pair => Math.Abs(pair.Key - enemiesCanShooted.Keys.Min()) <= 5)
+                    .ToList();
+                if (closeEnemies.Any())
+                {
+                    var target = closeEnemies
+                        .OrderBy(pair => pair.Value.health)
+                        .FirstOrDefault();
+                    return target.Value;
+                }
+            }
             float minDistance = enemiesCanShooted.Keys.Min();
             return enemiesCanShooted[minDistance];
         }

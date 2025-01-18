@@ -18,12 +18,17 @@ public interface IShootable
     ProducerSource Source { get; set; }
     void Shoot<T>(T producer, Vector3 turret, Vector3 target,float projSpeed, Projectile missle, Chances chances, 
         BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, 
-        [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam;
+        [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger;
 }
-public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
+public interface ITagger
+{
+    string[] Tags { get; set; }
+}
+public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
 {
     public ProducerSource Source { get; set; }
     public GameObject Producer { get; set; }
+    public Color shotShadowColor;
     public static Entity entity;
     public static List<Entity> entities = new List<Entity>();
     public static event MobDelete onEntityDeath;
@@ -42,6 +47,8 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
     public List<float> _damage = new List<float>();
     public List<float> _resist = new List<float>();
     private Renderer renderer;
+    [SerializeField] private string[] forcedTags;
+    public string[] Tags { get; set; } = new string[0];
     public Chances chance;
     [SerializeField] private Material damageMat;
     private Color defaultColor;
@@ -49,6 +56,7 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
     public int firstUp;
     public int secondUp;
     public float speed = 0f;
+    [SerializeField] private int _forcedTeamId = -1;
     public virtual Vector3 Direction { get; } = Vector3.zero;
     public int TeamId { get; set; }
     public Entity()
@@ -61,6 +69,8 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
         damage = new Damage(_damage[0], _damage[1], _damage[2], _damage[3], _damage[4]);
         resistances = new Resistances(_resist[0], _resist[1], _resist[2], _resist[3], _resist[4]);
         renderer = GetComponent<Renderer>();
+        if (_forcedTeamId != -1) TeamId = _forcedTeamId;
+        if(forcedTags.Length != 0) Tags = forcedTags;
         if (renderer)
             defaultColor = renderer.materials[0].color;
     }
@@ -86,7 +96,7 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
             renderer.materials[0].color = defaultColor;
         }
     }
-    public virtual void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale,[Optional] Damage nDamage) where T : MonoBehaviour, ITeam
+    public virtual void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale,[Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger
     {
         //Чтобы сменить модель можно поменять меш, но для этого нужно все существующие модели заменить на obj модели   
         //Профайлер показывает как трудоёмий процесс. Необходима оптимизация. *
@@ -98,7 +108,7 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
         if (scale != Vector3.zero)
             _missle.transform.localScale = scale;
         pMissle.target = target;
-        pMissle.damage = nDamage != null ? nDamage : damage;
+        pMissle.damage = nDamage ?? damage;
         pMissle.TeamId = producer.TeamId;
         pMissle.chance = chances;
         pMissle.agroRadius = agroRadius;
@@ -107,7 +117,9 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable
         pMissle.onStart = onStart;
         pMissle.travel = travel;
         pMissle.onEnd = onEnd;
+        pMissle.Tags = producer.Tags; //мб не необходимо
         pMissle.liveTime = 0f;
+        pMissle.shadowColor = shotShadowColor;
         _missle.gameObject.SetActive(true);
     }
     public void GetDamage(Damage damage) //когда моб умирает иногда всё равно вызывается

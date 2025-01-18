@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d65597ba17705714fbe7ed65255eedd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shotShadowColor: {r: 0, g: 0, b: 0, a: 0}
   maxHealth: 250
   health: 250
   attackSpeed: 0
@@ -139,9 +140,13 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  chance: {fileID: 0}
   damageMat: {fileID: 0}
-  finish: {fileID: 0}
+  firstUp: 0
+  secondUp: 0
   speed: 1.5
+  _forcedTeamId: 0
+  finish: {fileID: 0}
 --- !u!195 &6730308878948706872
 NavMeshAgent:
   m_ObjectHideFlags: 0
