@@ -100,7 +100,7 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
     {
         //Чтобы сменить модель можно поменять меш, но для этого нужно все существующие модели заменить на obj модели   
         //Профайлер показывает как трудоёмий процесс. Необходима оптимизация. *
-        nProjectile.PullObject(missle, turret, missle.pMesh, false, false).MoveNext();//тут меняет демедж
+        nProjectile.PullObject(missle, turret, missle.pMesh, false, false).MoveNext();
         //возможно придётся для каждой башни создавать свой пул проджектайлов
         Projectile _missle = nProjectile.pulledObj;
         _missle.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0));
