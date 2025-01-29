@@ -1,5 +1,7 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -121,6 +123,65 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
         pMissle.liveTime = 0f;
         pMissle.shadowColor = shotShadowColor;
         _missle.gameObject.SetActive(true);
+    }
+    public Entity FindEnemy<T>(T tower, float agroRadius, Dictionary<float, Entity> enemiesCanShooted, List<Entity> lastEnemy = null) where T : MonoBehaviour, ITeam, ITagger
+    {
+        List<Entity> enemies = entities;
+        List<Entity> resultEnemiesInRange = new List<Entity>();
+        foreach (var enemy in enemies)
+        {
+            if (tower.TeamId == enemy.TeamId || enemy.Tags.Contains(EntityTags.Invisible))
+                continue;
+            float distance = Vector3.Distance(enemy.transform.position, tower.transform.position);
+            enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(s => s.Value == enemy).Key);
+            if (distance < agroRadius)
+            {
+                resultEnemiesInRange.Add(enemy);
+                if (enemiesCanShooted.ContainsKey(distance)) distance += 0.0001f;
+                enemiesCanShooted[distance] = enemy;
+            }
+        }
+        if (lastEnemy != null)
+        {
+            lastEnemy.RemoveAll(mob => Vector3.Distance(mob.transform.position, tower.transform.position) > agroRadius);
+            if (resultEnemiesInRange.Count == lastEnemy.Count)
+            {
+                lastEnemy.Clear();
+            }
+            else
+            {
+                foreach (var mob in lastEnemy)
+                {
+                    float distance = Vector3.Distance(mob.transform.position, tower.transform.position);
+                    if (resultEnemiesInRange.Contains(mob))
+                    {
+                        enemiesCanShooted.Remove(distance);
+                    }
+                }
+            }
+        }
+        if (enemiesCanShooted.Count > 0)
+        {
+            if (tower.Tags.Contains(EntityTags.Hunter) && enemiesCanShooted.Count > 1)
+            {
+                var closeEnemies = enemiesCanShooted
+                    .Where(pair => Math.Abs(pair.Key - enemiesCanShooted.Keys.Min()) <= 5)
+                    .ToList();
+                if (closeEnemies.Any())
+                {
+                    var target = closeEnemies
+                        .OrderBy(pair => pair.Value.health)
+                        .FirstOrDefault();
+                    return target.Value;
+                }
+            }
+            float minDistance = enemiesCanShooted.Keys.Min();
+            return enemiesCanShooted[minDistance];
+        }
+        else
+        {
+            return null;
+        }
     }
     public void GetDamage(Damage damage) //когда моб умирает иногда всё равно вызывается
     {

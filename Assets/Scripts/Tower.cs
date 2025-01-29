@@ -27,12 +27,14 @@ public class Tower : Entity
     public float incDamage = 1f;
     public float incAttackSpeed;
     public float incHealth;
-    private float levelUpsRemain = 2220f;
+    private float levelUpsRemain = 1000f; //какого хуя float??
+    public int currentLevel;
     public float LevelUpsRemain
     {
         get => levelUpsRemain;
         set
         {
+            if (value < levelUpsRemain) currentLevel++;
             levelUpsRemain = value;
             GenerateUps();
             CanvasController.ExitButton();
@@ -40,12 +42,13 @@ public class Tower : Entity
     }
     public Sprite spriteButton;
     public Resources cost;
+    public Resources upgradeCost;
     public BulletEffect onStart;
     public BulletEffect travel;
     public BulletEffect onEnd;
-    public List<LevelUpCallback> levelUpCallbacks = new List<LevelUpCallback>();
+    public List<Action<Tower>> levelUpCallbacks = new List<Action<Tower>>();
 
-    public static Dictionary<string, LevelUpCallback> lUCLinks = new Dictionary<string, LevelUpCallback>()
+    public static Dictionary<string, Action<Tower>> lUCLinks = new Dictionary<string, Action<Tower>>()
     {
         { "FireUp", FireUp },
         { "ColdUp", ColdUp },
@@ -79,7 +82,7 @@ public class Tower : Entity
         { "Fraction", new[] { null, null, fractionEnd } }
     };
 
-    public static Dictionary<LevelUpCallback, Sprite> levelUpCallbackNames;
+    public static Dictionary<Action<Tower>, Sprite> levelUpCallbackNames;
     public static List<Sprite> LevelUpSprites = new List<Sprite>();
     public static Tower twr;
 
@@ -116,10 +119,10 @@ public class Tower : Entity
         }
         if (!tower)
             tower = gameObject;//это че ваще блять?
-        //TeamId = 1;
         entities.Add(this);
         missle.GetComponent<Projectile>().damage = damage;
         cost = new Resources(costs[0], costs[1], costs[2], costs[3]);
+        upgradeCost = new Resources(0, 0, 0, 0);
         chance = new Chances(chances[0], chances[1], chances[2], chances[3], chances[4], chances[5], chances[6], chances[7]);
         GenerateUps(); //потом удалить                                                                                       зава х
     }
@@ -208,63 +211,5 @@ public class Tower : Entity
         }
     }
     //перекинуть эти методы в Entity
-    public Entity FindEnemy<T>(T tower, float agroRadius, Dictionary<float, Entity> enemiesCanShooted, List<Entity> lastEnemy = null) where T : MonoBehaviour, ITeam, ITagger
-    {
-        List<Entity> enemies = entities;
-        List<Entity> resultEnemiesInRange = new List<Entity>();
-        foreach (var enemy in enemies)
-        {
-            if (tower.TeamId == enemy.TeamId || enemy.Tags.Contains(EntityTags.Invisible))
-                continue;
-            float distance = Vector3.Distance(enemy.transform.position, tower.transform.position);
-            enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(s => s.Value == enemy).Key);
-            if (distance < agroRadius)
-            {
-                resultEnemiesInRange.Add(enemy);
-                if (enemiesCanShooted.ContainsKey(distance)) distance += 0.0001f;
-                enemiesCanShooted[distance] = enemy;
-            }
-        }
-        if (lastEnemy != null)
-        {
-            lastEnemy.RemoveAll(mob => Vector3.Distance(mob.transform.position, tower.transform.position) > agroRadius);
-            if (resultEnemiesInRange.Count == lastEnemy.Count)
-            {
-                lastEnemy.Clear();
-            }
-            else
-            {
-                foreach (var mob in lastEnemy)
-                {
-                    float distance = Vector3.Distance(mob.transform.position, tower.transform.position);
-                    if (resultEnemiesInRange.Contains(mob))
-                    {
-                        enemiesCanShooted.Remove(distance);
-                    }
-                }
-            }
-        }
-        if (enemiesCanShooted.Count > 0)
-        {
-            if (tower.Tags.Contains(EntityTags.Hunter) && enemiesCanShooted.Count > 1)
-            {
-                var closeEnemies = enemiesCanShooted
-                    .Where(pair => Math.Abs(pair.Key - enemiesCanShooted.Keys.Min()) <= 5)
-                    .ToList();
-                if (closeEnemies.Any())
-                {
-                    var target = closeEnemies
-                        .OrderBy(pair => pair.Value.health)
-                        .FirstOrDefault();
-                    return target.Value;
-                }
-            }
-            float minDistance = enemiesCanShooted.Keys.Min();
-            return enemiesCanShooted[minDistance];
-        }
-        else
-        {
-            return null;
-        }
-    }
+   
 }

@@ -70,4 +70,11 @@ public class Resources
             Player.instance._res[i].text = resources.GetMassive()[i].ToString();
         }
     }
+    public void Gain(int gold, int wood, int stone, int voidEssences)
+    {
+        this.gold += gold;
+        this.wood += wood;
+        this.stone += stone;
+        voidEsences += voidEssences;
+    }
 }

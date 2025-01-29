@@ -1,8 +1,10 @@
 using OpenCover.Framework.Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using UnityEngine;
+using static LevelUp;
 using UnityEngine.UI;
 
 public class CanvasController : MonoBehaviour
@@ -77,12 +79,12 @@ public class CanvasController : MonoBehaviour
                 {
                     for(int i =0; i < 2; i++)
                     {
-                        levelUpMenu.gameObject.SetActive(true);
+                        levelUpMenu.gameObject.SetActive(twr.LevelUpsRemain != 0);
                         ButtonCanvasController firstLevelUp = Instantiate(_prefabButton);
                         firstLevelUp.transform.SetParent(levelUpMenu.transform, false);
-                        LevelUp.LevelUpCallback action = twr.levelUpCallbacks[i == 1 ? twr.firstUp : twr.secondUp];
+                        Action<Tower> action = twr.levelUpCallbacks[i == 1 ? twr.firstUp : twr.secondUp];
                         firstLevelUp.buttonImage.sprite = Tower.levelUpCallbackNames[action];
-                        firstLevelUp.button.onClick.AddListener(() => action(twr));
+                        firstLevelUp.button.onClick.AddListener(() => Controller(twr,action));
                     }
                     break;
                 }

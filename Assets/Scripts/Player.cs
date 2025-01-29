@@ -44,25 +44,4 @@ public class Player : MonoBehaviour
         Camera.main.GetComponentInChildren<Image>().gameObject.SetActive(false);
         resources.Start();
     }
-    private void Update()
-    {
-        //hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition));//дорого
-        //if (Input.GetKey(KeyCode.LeftShift))
-        //{
-        //    moveSpeed = speed * 2;
-        //}
-        //else
-        //{
-        //    moveSpeed = speed;
-        //}
-        //float moveDirection = Input.GetAxisRaw("Vertical") * -1;
-        //if (camera.transform.position.x <= 230 && moveDirection == 1)
-        //{
-        //    camera.transform.position = camera.transform.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
-        //}
-        //else if (camera.transform.position.x >= -99 && moveDirection == -1)
-        //{
-        //    camera.transform.position = camera.transform.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0, 0);
-        //}
-    }
 }
