@@ -41,7 +41,7 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder, 
     public List<Entity> prevEnemy = new List<Entity>();
     public Damage damage;
     public float projSpeed;
-    public float archMultiplier;
+    public float ArchMulti { get; set; }
     public float distance;
     public float projHeight = 0f;
     public float liveTime = 0f;
@@ -55,7 +55,7 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder, 
     public Collider collider;
     private void Awake()
     {
-        projHeight = archMultiplier;
+        projHeight = ArchMulti;
         Producer = gameObject;
         collider = gameObject.GetComponent<Collider>();
         Source = this.FindSource();
@@ -69,7 +69,7 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder, 
         if (target != null)
         {
             position = transform.position;
-            projHeight = 0f;
+            projHeight = ArchMulti;
             liveTime = 0f;
             Vector3 direction = (target - position).normalized;
             distance = Vector3.Distance(position, target);
@@ -100,9 +100,9 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder, 
     }
     public void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, Action<Projectile> onStart, Action<Projectile> travel, Action<Projectile> onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger
     {
-        Entity.entity.Shoot(producer, turret, target,projSpeed, missle, chance, onStart, travel, onEnd, prevEnemy, scale, nDamage);
-    }
-
+        Entity.entity.Shoot(producer, turret, target, projSpeed, missle, chance, onStart, travel, onEnd, prevEnemy, scale, nDamage); //не передает ArchMulti
+    }//че за пиздец я тут накалякал нахуЙ?
+    
     private void OnTriggerEnter(Collider other)
     {
         if (hasCollided) return;

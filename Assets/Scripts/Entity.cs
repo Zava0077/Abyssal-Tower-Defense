@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using TMPro;
 
-public delegate void MobDelete(Entity sender);
+public delegate void MobDeathHandler(Entity sender);
 public interface IDamagable //не нужный интерфейс
 {
     void GetDamage(Damage damage);
@@ -18,6 +19,7 @@ public interface IShootable
 {
     GameObject Producer { get; set; }
     ProducerSource Source { get; set; }
+    float ArchMulti { get; set; }
     void Shoot<T>(T producer, Vector3 turret, Vector3 target,float projSpeed, Projectile missle, Chances chances,
         Action<Projectile> onStart, Action<Projectile> travel, Action<Projectile> onEnd, 
         [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger;
@@ -30,10 +32,12 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
 {
     public ProducerSource Source { get; set; }
     public GameObject Producer { get; set; }
+    [SerializeField] private float _archMulti;
+    public float ArchMulti { get; set; }
     public Color shotShadowColor;
     public static Entity entity;
     public static List<Entity> entities = new List<Entity>();
-    public static event MobDelete onEntityDeath;
+    public static event MobDeathHandler onEntityDeath;
     protected ObjectPool<Projectile> nProjectile = new ObjectPool<Projectile>(256);
     public static List<GameObject> shadows = new List<GameObject>();
     [Header("Stats")] //вывести статы в отдельный класс
@@ -72,6 +76,7 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
         resistances = new Resistances(_resist[0], _resist[1], _resist[2], _resist[3], _resist[4]);
         renderer = GetComponent<Renderer>();
         entities.Add(this);
+        ArchMulti = _archMulti;
         if (_forcedTeamId != -1) TeamId = _forcedTeamId;
         if (forcedTags.Length != 0) Tags = forcedTags;
         if (renderer)
@@ -121,6 +126,7 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
         pMissle.onStart = onStart;
         pMissle.travel = travel;
         pMissle.onEnd = onEnd;
+        pMissle.ArchMulti = ArchMulti;
         pMissle.Tags = producer.Tags; //мб не необходимо
         pMissle.liveTime = 0f;
         pMissle.shadowColor = shotShadowColor;

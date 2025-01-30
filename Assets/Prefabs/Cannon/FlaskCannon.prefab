@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 2089748620776964545}
   - component: {fileID: 4129091867558256287}
   m_Layer: 0
-  m_Name: BombCannon
+  m_Name: FlaskCannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,19 +81,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _archMulti: 10
   shotShadowColor: {r: 0, g: 0, b: 0, a: 0}
-  maxHealth: 100
-  health: 100
-  attackSpeed: 0.1
+  maxHealth: 200
+  health: 200
+  attackSpeed: 1
   projSpeed: 35
   multiplierTakeDamage: 0
-  agroRadius: 55
+  agroRadius: 35
   statuses: []
   _damage:
   - 0
   - 0
   - 0
   - 0
-  - 10
+  - 5
   _resist:
   - 0
   - 0
@@ -109,10 +109,10 @@ MonoBehaviour:
   _forcedTeamId: 1
   tower: {fileID: 5956137601538878063}
   costs: 0a0000000a0000000a00000000000000
-  chances: 0000000064000000000000000000000000000000000000000000000000000000
+  chances: 0000000000000000640000000000000000000000000000000000000000000000
   starterEffects:
   - Missle
-  - Bomb
+  - Puddle
   levelUps:
   - FireUp
   - ColdUp
@@ -129,12 +129,12 @@ MonoBehaviour:
   - ColdConvert
   - LightningConvert
   - PhysicalConvert
-  missle: {fileID: 7686851911220215187, guid: b3a1e694e4142824b93d696f60b21b1d, type: 3}
+  missle: {fileID: 7686851911220215187, guid: 0ce6c8cedbd077e4e8fed33fe2bded75, type: 3}
   incDamage: 1
   incAttackSpeed: 0
   incHealth: 0
   currentLevel: 0
-  spriteButton: {fileID: 21300000, guid: 1fe7aa07b0893f34eaa6d12f0b36295b, type: 3}
+  spriteButton: {fileID: 21300000, guid: bc3a4d3e748fb02458113b3bc7d05645, type: 3}
 --- !u!23 &-9003738750014985903
 MeshRenderer:
   m_ObjectHideFlags: 0

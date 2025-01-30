@@ -43,7 +43,7 @@ public class Resources
         {
             if((int)resources.GetType().GetFields()[i].GetValue(resources) < (int)cost.GetType().GetFields()[i].GetValue(cost))
             {
-                Debug.Log("что-то не хватает");
+                Debug.Log("Ќе хватает ресурсов дл€ сотворени€");
                 return false;
             }
         }
