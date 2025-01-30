@@ -10,6 +10,7 @@ using static BulletEffects;
 using static UnityEngine.GraphicsBuffer;
 using System.Resources;
 using UnityEditor;
+using static UnityEngine.EventSystems.EventTrigger;
 public static class EntityTags
 {
     public static readonly string Invulnerable = "Invulnerable";
@@ -43,9 +44,9 @@ public class Tower : Entity
     public Sprite spriteButton;
     public Resources cost;
     public Resources upgradeCost;
-    public BulletEffect onStart;
-    public BulletEffect travel;
-    public BulletEffect onEnd;
+    public Action<Projectile> onStart;
+    public Action<Projectile> travel;
+    public Action<Projectile> onEnd;
     public List<Action<Tower>> levelUpCallbacks = new List<Action<Tower>>();
 
     public static Dictionary<string, Action<Tower>> lUCLinks = new Dictionary<string, Action<Tower>>()
@@ -70,7 +71,7 @@ public class Tower : Entity
         { "ProjectileSpeedUp", ProjectileSpeedUp }
     };
 
-    public static Dictionary<string, BulletEffect[]> effectLinks = new Dictionary<string, BulletEffect[]>()
+    public static Dictionary<string, Action<Projectile>[]> effectLinks = new Dictionary<string, Action<Projectile>[]>()
     {
         { "Missle", new[] { missleStart, missleTravel, null } },
         { "Laser", new[] { laserStart, laserTravel, null } },
@@ -85,8 +86,18 @@ public class Tower : Entity
     public static Dictionary<Action<Tower>, Sprite> levelUpCallbackNames;
     public static List<Sprite> LevelUpSprites = new List<Sprite>();
     public static Tower twr;
-
-    private Entity enemy;
+    private Entity _enemy;
+    public Entity Enemy { get => _enemy;
+        set
+        {
+            if (value == null)
+            {
+                _enemy = FindEnemy(this, agroRadius, enemiesCanShooted);
+                return;
+            }
+            _enemy = value;
+        }
+    }
     private float time;
     private Dictionary<float, Entity> enemiesCanShooted = new Dictionary<float, Entity>();
     private Player _player = Player.instance;
@@ -109,6 +120,7 @@ public class Tower : Entity
         missle.GetComponent<Projectile>().MeshHolder = new MeshHolder(pMesh);
         Producer = gameObject;
         Source = this.FindSource();
+        onEntityDeath += OnEntityDeath;
         foreach (var levelUp in levelUps)
             levelUpCallbacks.Add(lUCLinks[levelUp]);
         foreach (var eff in starterEffects)
@@ -165,19 +177,19 @@ public class Tower : Entity
     new protected void Update()
     {
         base.Update();
-        enemy = FindEnemy(this, agroRadius, enemiesCanShooted);
+        Enemy = FindEnemy(this, agroRadius, enemiesCanShooted);
         ResultRotationAngle += attackSpeed * Time.deltaTime * 30;
         Quaternion newDir;
-        if (enemy)
+        if (Enemy)
         {
             time += Time.deltaTime;
-            newDir = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (enemy.gameObject.transform.position - tower.transform.position), 3.14f, 0)), attackSpeed);
+            newDir = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (Enemy.gameObject.transform.position - tower.transform.position), 3.14f, 0)), attackSpeed);
 
             if (time > 1 / attackSpeed)
             {
                 Vector3 fromWhere = Source.Transform.position;
                 Projectile pMissle = missle.GetComponent<Projectile>();//ниху€себе
-                Shoot(this, fromWhere, enemy.transform.position + enemy.Direction * enemy.speed / (projSpeed / 10), projSpeed, pMissle,
+                Shoot(this, fromWhere, Enemy.transform.position + Enemy.Direction * Enemy.speed / (projSpeed / 10), projSpeed, pMissle,
                     chance, onStart, travel, onEnd, new List<Entity>(), missle.transform.localScale, pMissle.damage); 
                 if (UnityEngine.Random.Range(1, 99) > chance.doubleAttack)
                     time = 0f;
@@ -187,6 +199,8 @@ public class Tower : Entity
             newDir = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, ResultRotationAngle, 0), 0.05f);
         transform.rotation = newDir;
     }
+    private void OnEntityDeath(Entity sender) =>
+        enemiesCanShooted.Remove(enemiesCanShooted.FirstOrDefault(s => s.Value == sender).Key);
     private void GenerateUps()
     {
         firstUp = UnityEngine.Random.Range(0, levelUpCallbacks.Count);
@@ -201,13 +215,13 @@ public class Tower : Entity
 
     private void OnDrawGizmos()
     {
-        if (enemy)
+        if (Enemy)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(enemy.transform.position, new Vector3(enemy.transform.position.x, enemy.transform.position.y + 10f, enemy.transform.position.z));
+            Gizmos.DrawLine(Enemy.transform.position, new Vector3(Enemy.transform.position.x, Enemy.transform.position.y + 10f, Enemy.transform.position.z));
             Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(enemy.transform.position + enemy.Direction * enemy.speed / (projSpeed / 10),
-                new Vector3(enemy.transform.position.x, enemy.transform.position.y + 10f, enemy.transform.position.z) + enemy.Direction * enemy.speed / (projSpeed / 10));
+            Gizmos.DrawLine(Enemy.transform.position + Enemy.Direction * Enemy.speed / (projSpeed / 10),
+                new Vector3(Enemy.transform.position.x, Enemy.transform.position.y + 10f, Enemy.transform.position.z) + Enemy.Direction * Enemy.speed / (projSpeed / 10));
         }
     }
     //перекинуть эти методы в Entity

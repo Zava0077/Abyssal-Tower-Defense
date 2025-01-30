@@ -10,10 +10,10 @@ public class Puddle : MonoBehaviour, IMeshHolder, ITeam
     public Damage damage;
     public Chances chance;
     [SerializeField] public Mesh mesh;
-    public Projectile producer { get; set; }
+    public Projectile Producer { get; set; }
     public int TeamId { get; set; }
 
-    private HashSet<IDamagable> objectsOnPuddle = new HashSet<IDamagable>();
+    private HashSet<IDamagable> objectsOnPuddle = new HashSet<IDamagable>(); 
     private void OnEnable()
     {
         StartCoroutine(Damage());

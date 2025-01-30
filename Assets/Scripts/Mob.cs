@@ -23,13 +23,12 @@ public class Mob : Entity
     }
     private void OnDestroy()
     {
-        entities.Remove(this);
+        
     }
     new private void Awake()
     {
         base.Awake();
         //TeamId = 0;
-        entities.Add(this);
         agent = GetComponent<NavMeshAgent>();
     }
     private void Start()

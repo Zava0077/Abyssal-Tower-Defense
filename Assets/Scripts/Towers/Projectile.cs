@@ -49,9 +49,9 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder, 
     public float testTimer; 
     public bool waitCast = false;
     public bool collidable;
-    public BulletEffect onStart;
-    public BulletEffect travel;
-    public BulletEffect onEnd;
+    public Action<Projectile> onStart;
+    public Action<Projectile> travel;
+    public Action<Projectile> onEnd;
     public Collider collider;
     private void Awake()
     {
@@ -98,7 +98,7 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder, 
     {
         travel?.Invoke(this);
     }
-    public void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger
+    public void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, Action<Projectile> onStart, Action<Projectile> travel, Action<Projectile> onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger
     {
         Entity.entity.Shoot(producer, turret, target,projSpeed, missle, chance, onStart, travel, onEnd, prevEnemy, scale, nDamage);
     }

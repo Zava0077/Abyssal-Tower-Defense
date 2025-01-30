@@ -28,8 +28,6 @@ public class Player : MonoBehaviour
     public static ObjectPool<Explotion> nExplosions = new ObjectPool<Explotion>(128);
     public static ObjectPool<Fading> nShadows = new ObjectPool<Fading>(64);
     #endregion
-    private float moveSpeed;
-    private float speed = 40f;
     public Resources resources = new Resources(50,50,50,0);
     public Sprite[] levelUpSprites;
     public float levelUpBonus = 2f;

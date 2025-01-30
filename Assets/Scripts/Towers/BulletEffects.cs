@@ -2,19 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
-public delegate void BulletEffect(Projectile proj);
-
 public sealed class BulletEffects : MonoBehaviour
 {
     public Projectile _proj;
     #region Missle
-    public static BulletEffect missleStart = (Projectile proj) =>
+    public static Action<Projectile> missleStart = (Projectile proj) =>
     {
         if (Player.instance.shoot.isPlaying) Player.instance.shoot.Stop();
             Player.instance.shoot.Play();
     };
-    public static BulletEffect missleTravel = (Projectile proj) =>
+    public static Action<Projectile> missleTravel = (Projectile proj) =>
     {
         if (proj.liveTime > 5f)
             proj.gameObject.SetActive(false);
@@ -28,7 +25,7 @@ public sealed class BulletEffects : MonoBehaviour
     };
     #endregion
     #region Laser
-    public static BulletEffect laserStart = (Projectile proj) =>
+    public static Action<Projectile> laserStart = (Projectile proj) =>
     {
         proj.collidable = false;
         proj.collider.enabled = false;
@@ -37,7 +34,7 @@ public sealed class BulletEffects : MonoBehaviour
         if (Player.instance.laser.isPlaying) Player.instance.laser.Stop();
         Player.instance.laser.Play();
     };
-    public static BulletEffect laserTravel = (Projectile proj) =>
+    public static Action<Projectile> laserTravel = (Projectile proj) =>
     {
         if (proj.liveTime > 0.08f)
             proj.collider.enabled = true;
@@ -51,7 +48,7 @@ public sealed class BulletEffects : MonoBehaviour
     };
     #endregion
     #region Homing
-    public static BulletEffect homingStart = (Projectile proj) =>
+    public static Action<Projectile> homingStart = (Projectile proj) =>
     {
         proj.followTarget = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
         proj.collider.enabled = false;
@@ -63,7 +60,7 @@ public sealed class BulletEffects : MonoBehaviour
         Player.instance.laser.Play();
         Player.instance.homing.Play();
     };
-    public static BulletEffect homingTravel = (Projectile proj) =>
+    public static Action<Projectile> homingTravel = (Projectile proj) =>
     {
         if (!proj.followTarget)
             proj.followTarget = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
@@ -77,19 +74,19 @@ public sealed class BulletEffects : MonoBehaviour
         proj.transform.position += proj.transform.forward * proj.projSpeed * Time.deltaTime;
         proj.transform.position = new Vector3(proj.transform.position.x, 1f, proj.transform.position.z);
     };
-    public static BulletEffect homingEnd = (Projectile proj) =>
+    public static Action<Projectile> homingEnd = (Projectile proj) =>
     {
         Player.instance.homing.Stop();
     };
     #endregion
     #region Ignite
-    public static BulletEffect igniteStart = (Projectile proj) =>
+    public static Action<Projectile> igniteStart = (Projectile proj) =>
     {
         Damage damage = proj.damage;
         proj.damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
 
     };
-    public static BulletEffect igniteEnd = (Projectile proj) =>
+    public static Action<Projectile> igniteEnd = (Projectile proj) =>
     {
         Vector3 from = proj.Source.Transform.position;
         Damage damage1 = proj.damage;
@@ -98,7 +95,7 @@ public sealed class BulletEffects : MonoBehaviour
         Player.nExplosions.PullObject(pref, from, null).MoveNext();
         expl = Player.nExplosions.pulledObj;
         expl.TeamId = proj.TeamId;
-        expl.producer = proj;
+        expl.Producer = proj;
         expl.damage = new Damage(damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(1f, 0.35f, 0f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
@@ -108,12 +105,12 @@ public sealed class BulletEffects : MonoBehaviour
 
     #endregion
     #region Cold
-    public static BulletEffect coldStart = (Projectile proj) =>
+    public static Action<Projectile> coldStart = (Projectile proj) =>
     {
         Damage damage = proj.damage;
         proj.damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
     };
-    public static BulletEffect coldEnd = (Projectile proj) =>
+    public static Action<Projectile> coldEnd = (Projectile proj) =>
     {
         Vector3 from = proj.Source.Transform.position;
         Damage damage1 = proj.damage;
@@ -125,13 +122,13 @@ public sealed class BulletEffects : MonoBehaviour
         expl.damage = new Damage(0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(0f, 0.15f, 1f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
-        expl.producer = proj;
+        expl.Producer = proj;
         if (Player.instance.snow.isPlaying) Player.instance.snow.Stop();
         Player.instance.snow.Play();
     };
     #endregion
     #region Elec
-    public static BulletEffect elecStart = (Projectile proj) =>
+    public static Action<Projectile> elecStart = (Projectile proj) =>
     {
         Transform transformChildren = proj.GetComponentInChildren<Transform>();
         Vector3 positionMemory = proj.transform.position;
@@ -146,7 +143,7 @@ public sealed class BulletEffects : MonoBehaviour
             Player.instance.electric.Stop();
         Player.instance.electric.Play();
     };
-    public static BulletEffect elecTravel = (Projectile proj) =>
+    public static Action<Projectile> elecTravel = (Projectile proj) =>
     {
         if (proj.liveTime > 0.2f)
             proj.collider.enabled = true;
@@ -157,7 +154,7 @@ public sealed class BulletEffects : MonoBehaviour
             //Destroy(proj.gameObject);//
         }
     };
-    public static BulletEffect elecEnd = (Projectile proj) =>
+    public static Action<Projectile> elecEnd = (Projectile proj) =>
     {
         Vector3 from = proj.Source.Transform.position;
         Damage damage1 = proj.damage;
@@ -173,7 +170,7 @@ public sealed class BulletEffects : MonoBehaviour
 
     #endregion
     #region Bounce
-    public static BulletEffect bounceEnd = (Projectile proj) =>
+    public static Action<Projectile> bounceEnd = (Projectile proj) =>
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
@@ -197,7 +194,7 @@ public sealed class BulletEffects : MonoBehaviour
     };
     #endregion
     #region Fraction
-    public static BulletEffect fractionEnd = (Projectile proj) =>
+    public static Action<Projectile> fractionEnd = (Projectile proj) =>
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
@@ -227,7 +224,7 @@ public sealed class BulletEffects : MonoBehaviour
     };
     #endregion
     #region Explotion
-    public static BulletEffect explotionEnd = (Projectile proj) =>
+    public static Action<Projectile> explotionEnd = (Projectile proj) =>
     {
         System.Random random = new System.Random();
         Projectile _proj = proj;
@@ -251,7 +248,7 @@ public sealed class BulletEffects : MonoBehaviour
             expl.GetComponent<Renderer>().material.color = new Color(1, 0.08f, 0f, 0.6f);
             expl.damage = new Damage(15f, 0f, 0f, 0f, 50f);
             expl.transform.localScale = new Vector3(5f + size, 5f + size, 5f + size);
-            expl.producer = proj;
+            expl.Producer = proj;
             if (sound == 1)
             {
                 if (Player.instance.expl.isPlaying)
@@ -268,7 +265,7 @@ public sealed class BulletEffects : MonoBehaviour
     };
     #endregion
     #region Puddle
-    public static BulletEffect puddleEnd = (Projectile proj) =>
+    public static Action<Projectile> puddleEnd = (Projectile proj) =>
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
@@ -298,26 +295,26 @@ public sealed class BulletEffects : MonoBehaviour
             pudd.transform.localScale = puddScale;
             pudd.damage = proj.damage;
             pudd.GetComponent<Renderer>().material.color = new Color(colors[0], colors[1], colors[2], 0.6f);
-            pudd.producer = proj;
+            pudd.Producer = proj;
             if (Player.instance.pudd.isPlaying) Player.instance.pudd.Stop();
             Player.instance.pudd.Play();
         }
     };
     #endregion
-    public static bool Has(BulletEffect method, Tower storage)
+    public static bool Has(Action<Projectile> method, Tower storage)
     {
         if (method.GetInvocationList().Length > 1)
             throw new IndexOutOfRangeException("—равниваемый делегат имеет больше одного метода");
         if (storage.onStart != null)
-            foreach (BulletEffect _method in storage.onStart.GetInvocationList())
+            foreach (Action<Projectile> _method in storage.onStart.GetInvocationList())
                 if (method == _method)
                     return true;
         if (storage.travel != null)
-            foreach (BulletEffect _method in storage.travel.GetInvocationList())
+            foreach (Action<Projectile> _method in storage.travel.GetInvocationList())
                 if (method == _method)
                     return true;
         if (storage.onEnd != null)
-            foreach (BulletEffect _method in storage.onEnd.GetInvocationList())
+            foreach (Action<Projectile> _method in storage.onEnd.GetInvocationList())
                 if (method == _method)
                     return true;
         return false;

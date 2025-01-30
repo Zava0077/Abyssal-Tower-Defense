@@ -5,7 +5,7 @@ public class Explotion : MonoBehaviour, IMeshHolder, ITeam
 {
     public MeshHolder MeshHolder { get; set; }
 
-    public Projectile producer { get; set; }//продюсеры не нужны лужам и взрыву. кто код писал бл€ть?
+    public Projectile Producer { get; set; }//продюсеры не нужны лужам и взрыву. кто код писал бл€ть?
     public int TeamId { get; set; }
     public Damage damage;
     private void OnEnable()

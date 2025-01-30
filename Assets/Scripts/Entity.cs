@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 
 public delegate void MobDelete(Entity sender);
-public interface IDamagable
+public interface IDamagable //не нужный интерфейс
 {
     void GetDamage(Damage damage);
 }
@@ -18,8 +18,8 @@ public interface IShootable
 {
     GameObject Producer { get; set; }
     ProducerSource Source { get; set; }
-    void Shoot<T>(T producer, Vector3 turret, Vector3 target,float projSpeed, Projectile missle, Chances chances, 
-        BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, 
+    void Shoot<T>(T producer, Vector3 turret, Vector3 target,float projSpeed, Projectile missle, Chances chances,
+        Action<Projectile> onStart, Action<Projectile> travel, Action<Projectile> onEnd, 
         [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger;
 }
 public interface ITagger
@@ -71,14 +71,16 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
         damage = new Damage(_damage[0], _damage[1], _damage[2], _damage[3], _damage[4]);
         resistances = new Resistances(_resist[0], _resist[1], _resist[2], _resist[3], _resist[4]);
         renderer = GetComponent<Renderer>();
+        entities.Add(this);
         if (_forcedTeamId != -1) TeamId = _forcedTeamId;
-        if(forcedTags.Length != 0) Tags = forcedTags;
+        if (forcedTags.Length != 0) Tags = forcedTags;
         if (renderer)
             defaultColor = renderer.materials[0].color;
     }
     private void Death()
     {
         onEntityDeath?.Invoke(this);
+        entities.Remove(this);
         Destroy(gameObject);
     }
     public void Update()
@@ -98,7 +100,7 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
             renderer.materials[0].color = defaultColor;
         }
     }
-    public virtual void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, BulletEffect onStart, BulletEffect travel, BulletEffect onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale,[Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger
+    public virtual void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, Action<Projectile> onStart, Action<Projectile> travel, Action<Projectile> onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale,[Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger
     {
         //Чтобы сменить модель можно поменять меш, но для этого нужно все существующие модели заменить на obj модели   
         //Профайлер показывает как трудоёмий процесс. Необходима оптимизация. *
