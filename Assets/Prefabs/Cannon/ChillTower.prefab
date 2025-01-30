@@ -99,6 +99,7 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  forcedTags: []
   chance: {fileID: 0}
   damageMat: {fileID: 0}
   firstUp: 0
@@ -133,6 +134,7 @@ MonoBehaviour:
   incDamage: 1
   incAttackSpeed: 0
   incHealth: 0
+  currentLevel: 0
   spriteButton: {fileID: 21300000, guid: bc2871e88e3919d409e5ba29e2e85643, type: 3}
 --- !u!23 &6450535464780253534
 MeshRenderer:

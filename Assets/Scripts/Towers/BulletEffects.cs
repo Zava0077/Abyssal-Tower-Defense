@@ -182,7 +182,7 @@ public sealed class BulletEffects : MonoBehaviour
                     from = element.position;
             Entity nextEnemy = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
             Vector3 nextTarget = nextEnemy ? nextEnemy.transform.position : Vector3.zero;
-            if (nextEnemy == null || (proj.prevEnemy != null && proj.prevEnemy.Count > 0 /*&& nextTarget == proj.prevEnemy[0].gameObject.transform.position*/)) //
+            if (nextEnemy == null /*|| (proj.prevEnemy != null && proj.prevEnemy.Count > 0*/) //
             {
                 return;
             }

@@ -80,7 +80,8 @@ public class Tower : Entity
         { "Ignite", new[] { igniteStart, null, igniteEnd } },
         { "Cold", new[] { coldStart, null, coldEnd } },
         { "Elec", new[] { elecStart, elecTravel, elecEnd } },
-        { "Fraction", new[] { null, null, fractionEnd } }
+        { "Fraction", new[] { null, null, fractionEnd } },
+        { "Bounce", new[] { null, null, bounceEnd } }
     };
 
     public static Dictionary<Action<Tower>, Sprite> levelUpCallbackNames;
