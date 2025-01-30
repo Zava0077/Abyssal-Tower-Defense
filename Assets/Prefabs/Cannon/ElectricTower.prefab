@@ -48,13 +48,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23001e1bee15ec847a3e2c3967ffd446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _archMulti: 0
   shotShadowColor: {r: 0, g: 0, b: 0, a: 0}
   maxHealth: 100
   health: 100
   attackSpeed: 0.5
   projSpeed: 35
   multiplierTakeDamage: 0
-  agroRadius: 25
+  _agroRadius: 30
   statuses: []
   _damage:
   - 0
@@ -69,7 +70,6 @@ MonoBehaviour:
   - 0
   - 0
   forcedTags: []
-  chance: {fileID: 0}
   damageMat: {fileID: 0}
   firstUp: 0
   secondUp: 0

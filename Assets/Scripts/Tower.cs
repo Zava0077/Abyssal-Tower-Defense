@@ -94,7 +94,7 @@ public class Tower : Entity
         {
             if (value == null)
             {
-                _enemy = FindEnemy(this, agroRadius, enemiesCanShooted);
+                _enemy = FindEnemy(this, AgroRadius, enemiesCanShooted);
                 return;
             }
             _enemy = value;
@@ -134,10 +134,10 @@ public class Tower : Entity
         if (!tower)
             tower = gameObject;//это че ваще бл€ть?
         entities.Add(this);
-        missle.GetComponent<Projectile>().damage = damage;
+        missle.GetComponent<Projectile>().Damage = Damage;
         cost = new Resources(costs[0], costs[1], costs[2], costs[3]);
         upgradeCost = new Resources(0, 0, 0, 0);
-        chance = new Chances(chances[0], chances[1], chances[2], chances[3], chances[4], chances[5], chances[6], chances[7]);
+        Chance = new Chances(chances[0], chances[1], chances[2], chances[3], chances[4], chances[5], chances[6], chances[7]);
         GenerateUps(); //потом удалить                                                                                       зава х
     }
     public static void LoadSprite()
@@ -179,7 +179,7 @@ public class Tower : Entity
     new protected void Update()
     {
         base.Update();
-        Enemy = FindEnemy(this, agroRadius, enemiesCanShooted);
+        Enemy = FindEnemy(this, AgroRadius, enemiesCanShooted);
         ResultRotationAngle += attackSpeed * Time.deltaTime * 30;
         Quaternion newDir;
         if (Enemy)
@@ -192,8 +192,8 @@ public class Tower : Entity
                 Vector3 fromWhere = Source.Transform.position;
                 Projectile pMissle = missle.GetComponent<Projectile>();//ниху€себе
                 Shoot(this, fromWhere, Enemy.transform.position + Enemy.Direction * Enemy.speed / (projSpeed / 10), projSpeed, pMissle,
-                    chance, onStart, travel, onEnd, new List<Entity>(), missle.transform.localScale, pMissle.damage); 
-                if (UnityEngine.Random.Range(1, 99) > chance.doubleAttack)
+                    Chance, onStart, travel, onEnd, new List<Entity>(), missle.transform.localScale, pMissle.Damage); 
+                if (UnityEngine.Random.Range(1, 99) > Chance.doubleAttack)
                     time = 0f;
             }
         }

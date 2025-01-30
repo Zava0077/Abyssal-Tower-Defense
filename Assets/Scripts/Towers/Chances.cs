@@ -28,5 +28,5 @@ public class Chances : MonoBehaviour
         this.pierce = pierce;
     }
     public override string ToString() =>
-        $"Chances = bounce {bounce} explotion {splash} puddle {pierce} shatter {shatter} doubleAttack {doubleAttack} critChance {crit} statusChance {status} pierce chance {pierce}";
+        $"Chances = bounce {bounce} explotion {splash} puddle {puddle} shatter {shatter} doubleAttack {doubleAttack} critChance {crit} statusChance {status} pierce chance {pierce}";
 }

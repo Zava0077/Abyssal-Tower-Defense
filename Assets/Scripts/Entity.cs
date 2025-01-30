@@ -19,10 +19,44 @@ public interface IShootable
 {
     GameObject Producer { get; set; }
     ProducerSource Source { get; set; }
+    ObjectPool<Projectile> Projectiles { get; set; }
     float ArchMulti { get; set; }
+    float AgroRadius { get; set; }
+    Damage Damage { get; set; }
+    Chances Chance { get; set; }
+    Color ShotShadowColor { get; set; }
     void Shoot<T>(T producer, Vector3 turret, Vector3 target,float projSpeed, Projectile missle, Chances chances,
         Action<Projectile> onStart, Action<Projectile> travel, Action<Projectile> onEnd, 
-        [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger;
+        [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger, IShootable;
+}
+public static class ShootingHandler
+{
+    public static void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances,
+        Action<Projectile> onStart, Action<Projectile> travel, Action<Projectile> onEnd,
+        [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger, IShootable
+    {
+        producer.Projectiles.PullObject(missle, turret, missle.pMesh, false, false).MoveNext();
+        Projectile _missle = producer.Projectiles.pulledObj;
+        _missle.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0));
+        Projectile pMissle = _missle;
+        if (scale != Vector3.zero)
+            _missle.transform.localScale = scale;
+        pMissle.target = target;
+        pMissle.Damage = nDamage ?? producer.Damage;
+        pMissle.TeamId = producer.TeamId;
+        pMissle.Chance = chances;//
+        pMissle.AgroRadius = producer.AgroRadius;//
+        pMissle.prevEnemy = prevEnemy;
+        pMissle.projSpeed = projSpeed;
+        pMissle.onStart = onStart;
+        pMissle.travel = travel;
+        pMissle.onEnd = onEnd;
+        pMissle.ArchMulti = producer.ArchMulti;//
+        pMissle.Tags = producer.Tags;
+        pMissle.liveTime = 0f;
+        pMissle.ShotShadowColor = producer.ShotShadowColor;//
+        _missle.gameObject.SetActive(true);
+    }
 }
 public interface ITagger
 {
@@ -33,12 +67,11 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
     public ProducerSource Source { get; set; }
     public GameObject Producer { get; set; }
     [SerializeField] private float _archMulti;
-    public float ArchMulti { get; set; }
-    public Color shotShadowColor;
+    [SerializeField] private Color shotShadowColor;
     public static Entity entity;
     public static List<Entity> entities = new List<Entity>();
     public static event MobDeathHandler onEntityDeath;
-    protected ObjectPool<Projectile> nProjectile = new ObjectPool<Projectile>(256);
+    //protected ObjectPool<Projectile> nProjectile = new ObjectPool<Projectile>(256);
     public static List<GameObject> shadows = new List<GameObject>();
     [Header("Stats")] //вывести статы в отдельный класс
     public float maxHealth;
@@ -46,8 +79,7 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
     public float attackSpeed;
     public float projSpeed;
     public float multiplierTakeDamage;
-    public float agroRadius;
-    public Damage damage;
+    [SerializeField] private float _agroRadius;
     public Resistances resistances;
     public List<Status> statuses = new List<Status>();
     public List<float> _damage = new List<float>();
@@ -55,7 +87,6 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
     private Renderer renderer;
     [SerializeField] private string[] forcedTags;
     public string[] Tags { get; set; } = new string[0];
-    public Chances chance;
     [SerializeField] private Material damageMat;
     private Color defaultColor;
 
@@ -63,8 +94,15 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
     public int secondUp;
     public float speed = 0f;
     [SerializeField] private int _forcedTeamId = -1;
+    public float ArchMulti { get; set; }
     public virtual Vector3 Direction { get; } = Vector3.zero;
     public int TeamId { get; set; }
+    public ObjectPool<Projectile> Projectiles { get; set; } = new ObjectPool<Projectile>(256);
+    public float AgroRadius { get; set; }
+    public Damage Damage { get; set; }
+    public Chances Chance { get; set; }
+    public Color ShotShadowColor { get; set; }
+
     public Entity()
     {
         entity = this;
@@ -72,7 +110,9 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
 
     public void Awake()
     {
-        damage = new Damage(_damage[0], _damage[1], _damage[2], _damage[3], _damage[4]);
+        Damage = new Damage(_damage[0], _damage[1], _damage[2], _damage[3], _damage[4]);
+        AgroRadius = _agroRadius;
+        ShotShadowColor = shotShadowColor;
         resistances = new Resistances(_resist[0], _resist[1], _resist[2], _resist[3], _resist[4]);
         renderer = GetComponent<Renderer>();
         entities.Add(this);
@@ -105,32 +145,33 @@ public class Entity : MonoBehaviour, IDamagable, ITeam, IShootable, ITagger
             renderer.materials[0].color = defaultColor;
         }
     }
-    public virtual void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, Action<Projectile> onStart, Action<Projectile> travel, Action<Projectile> onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale,[Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger
+    public virtual void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, Action<Projectile> onStart, Action<Projectile> travel, Action<Projectile> onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale,[Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger, IShootable
     {
-        //Чтобы сменить модель можно поменять меш, но для этого нужно все существующие модели заменить на obj модели   
-        //Профайлер показывает как трудоёмий процесс. Необходима оптимизация. *
-        nProjectile.PullObject(missle, turret, missle.pMesh, false, false).MoveNext();
-        //возможно придётся для каждой башни создавать свой пул проджектайлов
-        Projectile _missle = nProjectile.pulledObj;
-        _missle.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0));
-        Projectile pMissle = _missle;
-        if (scale != Vector3.zero)
-            _missle.transform.localScale = scale;
-        pMissle.target = target;
-        pMissle.damage = nDamage ?? damage;
-        pMissle.TeamId = producer.TeamId;
-        pMissle.chance = chances;
-        pMissle.agroRadius = agroRadius;
-        pMissle.prevEnemy = prevEnemy;
-        pMissle.projSpeed = projSpeed;
-        pMissle.onStart = onStart;
-        pMissle.travel = travel;
-        pMissle.onEnd = onEnd;
-        pMissle.ArchMulti = ArchMulti;
-        pMissle.Tags = producer.Tags; //мб не необходимо
-        pMissle.liveTime = 0f;
-        pMissle.shadowColor = shotShadowColor;
-        _missle.gameObject.SetActive(true);
+        ShootingHandler.Shoot(producer, turret, target, projSpeed, missle, Chance, onStart, travel, onEnd, prevEnemy, scale, nDamage);
+        ////Чтобы сменить модель можно поменять меш, но для этого нужно все существующие модели заменить на obj модели   
+        ////Профайлер показывает как трудоёмий процесс. Необходима оптимизация. *
+        //nProjectile.PullObject(missle, turret, missle.pMesh, false, false).MoveNext();
+        ////возможно придётся для каждой башни создавать свой пул проджектайлов
+        //Projectile _missle = nProjectile.pulledObj;
+        //_missle.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(missle.transform.forward, (target - turret), 3.14f, 0));
+        //Projectile pMissle = _missle;
+        //if (scale != Vector3.zero)
+        //    _missle.transform.localScale = scale;
+        //pMissle.target = target;
+        //pMissle.damage = nDamage ?? damage;
+        //pMissle.TeamId = producer.TeamId;
+        //pMissle.chance = chances;
+        //pMissle.agroRadius = agroRadius;
+        //pMissle.prevEnemy = prevEnemy;
+        //pMissle.projSpeed = projSpeed;
+        //pMissle.onStart = onStart;
+        //pMissle.travel = travel;
+        //pMissle.onEnd = onEnd;
+        //pMissle.ArchMulti = ArchMulti;
+        //pMissle.Tags = producer.Tags; //мб не необходимо
+        //pMissle.liveTime = 0f;
+        //pMissle.shadowColor = shotShadowColor;
+        //_missle.gameObject.SetActive(true);
     }
     public Entity FindEnemy<T>(T tower, float agroRadius, Dictionary<float, Entity> enemiesCanShooted, List<Entity> lastEnemy = null) where T : MonoBehaviour, ITeam, ITagger
     {

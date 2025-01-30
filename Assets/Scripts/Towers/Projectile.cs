@@ -13,14 +13,14 @@ using static LevelUp;
 
 public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder, ITagger
 {
-    public Projectile(Damage damage, Vector3 target, GameObject owner, float agroRadius, Chances chance)
-    {
-        this.damage = damage;
-        this.target = target;
-        this.owner = owner;
-        this.agroRadius = agroRadius;
-        this.chance = chance;
-    }
+    //public Projectile(Damage damage, Vector3 target, GameObject owner, float agroRadius, Chances chance)
+    //{
+    //    this.amage = damage;
+    //    this.target = target;
+    //    this.owner = owner;
+    //    this.agroRadius = agroRadius;
+    //    this.chance = chance;
+    //}
     public ProducerSource Source { get; set; }
     public MeshHolder MeshHolder { get; set; }
     public GameObject Producer { get; set; }
@@ -29,9 +29,7 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder, 
 
     private bool hasCollided = false;
     public int TeamId { get; set; }
-    public Chances chance;
     public Color shadowColor;
-    public float agroRadius;
     public Entity followTarget;
     public GameObject owner;
     public Vector3 target;
@@ -39,9 +37,14 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder, 
     public Vector3 projection;
     public Vector3 position;
     public List<Entity> prevEnemy = new List<Entity>();
-    public Damage damage;
     public float projSpeed;
     public float ArchMulti { get; set; }
+    public ObjectPool<Projectile> Projectiles { get; set; } = new ObjectPool<Projectile>(128);
+    public float AgroRadius { get; set; }
+    public Damage Damage { get; set; }
+    public Chances Chance { get; set; }
+    public Color ShotShadowColor { get; set; }
+
     public float distance;
     public float projHeight = 0f;
     public float liveTime = 0f;
@@ -98,26 +101,26 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder, 
     {
         travel?.Invoke(this);
     }
-    public void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, Action<Projectile> onStart, Action<Projectile> travel, Action<Projectile> onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger
+    public void Shoot<T>(T producer, Vector3 turret, Vector3 target, float projSpeed, Projectile missle, Chances chances, Action<Projectile> onStart, Action<Projectile> travel, Action<Projectile> onEnd, [Optional] List<Entity> prevEnemy, [Optional] Vector3 scale, [Optional] Damage nDamage) where T : MonoBehaviour, ITeam, ITagger, IShootable
     {
-        Entity.entity.Shoot(producer, turret, target, projSpeed, missle, chance, onStart, travel, onEnd, prevEnemy, scale, nDamage); //не передает ArchMulti
-    }//че за пиздец я тут накалякал нахуЙ?
+        ShootingHandler.Shoot(producer, turret, target, projSpeed, missle, Chance, onStart, travel, onEnd, prevEnemy, scale, nDamage); //не передает ArchMulti
+    }
     
     private void OnTriggerEnter(Collider other)
     {
         if (hasCollided) return;
-        if (damage == null) throw new ArgumentNullException(nameof(damage));
+        if (Damage == null) throw new ArgumentNullException(nameof(Damage));
         prevEnemy ??= new List<Entity>();
         Entity otherEntity = other.GetComponent<Entity>();
         if (other.gameObject.tag == "Effect") return;
         if (otherEntity != null && (prevEnemy.Contains(otherEntity) || otherEntity.TeamId == TeamId)) return;
         if (otherEntity)
         {
-            otherEntity.GetDamage(damage);
+            otherEntity.GetDamage(Damage);
             prevEnemy.Add(otherEntity);
         }
         onEnd?.Invoke(this);
-        if (chance.pierce < UnityEngine.Random.Range(1, 100) || other.gameObject.tag == "Tower\'s Place" || other.gameObject.tag == "Unpiercable")
+        if (Chance.pierce < UnityEngine.Random.Range(1, 100) || other.gameObject.tag == "Tower\'s Place" || other.gameObject.tag == "Unpiercable")
         {
             if (Player.instance.hit.isPlaying) Player.instance.hit.Stop();
             Player.instance.hit.Play();
@@ -141,7 +144,7 @@ public sealed class Projectile : MonoBehaviour, ITeam, IShootable, IMeshHolder, 
         {
             Player.nShadows.PullObject(pref, gameObject.transform.position, null, true, false, 1).MoveNext();
             fadingComponent = Player.nShadows.pulledObj;
-            fadingComponent.color = shadowColor;
+            fadingComponent.color = ShotShadowColor;
             fadingComponent.transform.rotation = gameObject.transform.rotation;
             fadingComponent.liveTime = 0.1f;
             fadingComponent.gameObject.SetActive(true);

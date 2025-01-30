@@ -86,7 +86,7 @@ MonoBehaviour:
   attackSpeed: 1
   projSpeed: 35
   multiplierTakeDamage: 0
-  agroRadius: 35
+  _agroRadius: 20
   statuses: []
   _damage:
   - 0
@@ -101,7 +101,6 @@ MonoBehaviour:
   - 0
   - 0
   forcedTags: []
-  chance: {fileID: 0}
   damageMat: {fileID: 0}
   firstUp: 0
   secondUp: 0

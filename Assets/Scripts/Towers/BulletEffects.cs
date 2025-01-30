@@ -50,7 +50,7 @@ public sealed class BulletEffects : MonoBehaviour
     #region Homing
     public static Action<Projectile> homingStart = (Projectile proj) =>
     {
-        proj.followTarget = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
+        proj.followTarget = Tower.twr.FindEnemy(proj, proj.AgroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
         proj.collider.enabled = false;
         //proj.shadowColor = Color.magenta;
         proj.collidable = false;
@@ -63,7 +63,7 @@ public sealed class BulletEffects : MonoBehaviour
     public static Action<Projectile> homingTravel = (Projectile proj) =>
     {
         if (!proj.followTarget)
-            proj.followTarget = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
+            proj.followTarget = Tower.twr.FindEnemy(proj, proj.AgroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
         if (proj.liveTime > (2.5f / proj.projSpeed) * 35f)
             proj.gameObject.SetActive(false);//
         if (proj.liveTime > (0.15f / proj.projSpeed) * 35f && proj.followTarget)
@@ -82,21 +82,21 @@ public sealed class BulletEffects : MonoBehaviour
     #region Ignite
     public static Action<Projectile> igniteStart = (Projectile proj) =>
     {
-        Damage damage = proj.damage;
-        proj.damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
+        Damage Damage = proj.Damage;
+        proj.Damage = new Damage(Damage._fire / 3, Damage._cold / 3, Damage._lightning / 3, Damage._void / 3, Damage._physical / 3);
 
     };
     public static Action<Projectile> igniteEnd = (Projectile proj) =>
     {
         Vector3 from = proj.Source.Transform.position;
-        Damage damage1 = proj.damage;
+        Damage Damage1 = proj.Damage;
         Explotion expl = null;
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
         Player.nExplosions.PullObject(pref, from, null).MoveNext();
         expl = Player.nExplosions.pulledObj;
         expl.TeamId = proj.TeamId;
         expl.Producer = proj;
-        expl.damage = new Damage(damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f, 0f);
+        expl.damage = new Damage(Damage1._lightning * 3 + Damage1._physical * 3 + Damage1._fire * 3 + Damage1._void * 3 + Damage1._cold * 3, 0f, 0f, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(1f, 0.35f, 0f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
         if (Player.instance.hot.isPlaying) Player.instance.hot.Stop();
@@ -107,19 +107,19 @@ public sealed class BulletEffects : MonoBehaviour
     #region Cold
     public static Action<Projectile> coldStart = (Projectile proj) =>
     {
-        Damage damage = proj.damage;
-        proj.damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
+        Damage Damage = proj.Damage;
+        proj.Damage = new Damage(Damage._fire / 3, Damage._cold / 3, Damage._lightning / 3, Damage._void / 3, Damage._physical / 3);
     };
     public static Action<Projectile> coldEnd = (Projectile proj) =>
     {
         Vector3 from = proj.Source.Transform.position;
-        Damage damage1 = proj.damage;
+        Damage Damage1 = proj.Damage;
         Explotion expl = null;
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
         Player.nExplosions.PullObject(pref, from, null).MoveNext();
         expl = Player.nExplosions.pulledObj;
         expl.TeamId = proj.TeamId;
-        expl.damage = new Damage(0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f, 0f);
+        expl.damage = new Damage(0f, Damage1._lightning * 3 + Damage1._physical * 3 + Damage1._fire * 3 + Damage1._void * 3 + Damage1._cold * 3, 0f, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(0f, 0.15f, 1f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
         expl.Producer = proj;
@@ -137,8 +137,8 @@ public sealed class BulletEffects : MonoBehaviour
         transformChildren.rotation = Quaternion.LookRotation(Vector3.RotateTowards(proj.transform.right, proj.targetMemory - proj.transform.position, 3.14f, 0));
         proj.collider.enabled = false;
         proj.collidable = false;
-        Damage damage = proj.damage;
-        proj.damage = new Damage(damage._fire / 3, damage._cold / 3, damage._lightning / 3, damage._void / 3, damage._physical / 3);
+        Damage Damage = proj.Damage;
+        proj.Damage = new Damage(Damage._fire / 3, Damage._cold / 3, Damage._lightning / 3, Damage._void / 3, Damage._physical / 3);
         if (Player.instance.electric.isPlaying)
             Player.instance.electric.Stop();
         Player.instance.electric.Play();
@@ -157,13 +157,13 @@ public sealed class BulletEffects : MonoBehaviour
     public static Action<Projectile> elecEnd = (Projectile proj) =>
     {
         Vector3 from = proj.Source.Transform.position;
-        Damage damage1 = proj.damage;
+        Damage Damage1 = proj.Damage;
         Explotion expl = null;
         Explotion pref = Player.instance.explotion.GetComponent<Explotion>();
         Player.nExplosions.PullObject(pref, from, null).MoveNext();
         expl = Player.nExplosions.pulledObj;
         expl.TeamId = proj.TeamId;
-        expl.damage = new Damage(0f, 0f, damage1._lightning * 3 + damage1._physical * 3 + damage1._fire * 3 + damage1._void * 3 + damage1._cold * 3, 0f, 0f);
+        expl.damage = new Damage(0f, 0f, Damage1._lightning * 3 + Damage1._physical * 3 + Damage1._fire * 3 + Damage1._void * 3 + Damage1._cold * 3, 0f, 0f);
         expl.GetComponent<Renderer>().material.color = new Color(0f, 0.35f, 1f, 0.6f);
         expl.transform.localScale = new Vector3(5f, 5f, 5f);
     };
@@ -174,19 +174,19 @@ public sealed class BulletEffects : MonoBehaviour
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
-        if (testrnd < proj.chance.bounce)
+        if (testrnd < proj.Chance.bounce)
         {
             Vector3 from = proj.Source.Transform.position;
             foreach (var element in proj.GetComponentsInChildren<Transform>())
                 if (element.gameObject.tag == "Projectile")
                     from = element.position;
-            Entity nextEnemy = Tower.twr.FindEnemy(proj, proj.agroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
+            Entity nextEnemy = Tower.twr.FindEnemy(proj, proj.AgroRadius, new Dictionary<float, Entity>(), proj.prevEnemy);
             Vector3 nextTarget = nextEnemy ? nextEnemy.transform.position : Vector3.zero;
             if (nextEnemy == null /*|| (proj.prevEnemy != null && proj.prevEnemy.Count > 0*/) //
             {
                 return;
             }
-            proj.Shoot(proj, from, nextTarget,proj.projSpeed, proj, proj.chance,
+            proj.Shoot(proj, from, nextTarget,proj.projSpeed, proj, proj.Chance,
                 proj.onStart, proj.travel, proj.onEnd, proj.prevEnemy);
             if (Player.instance.bounce.isPlaying) Player.instance.bounce.Stop();
             Player.instance.bounce.Play();
@@ -198,7 +198,7 @@ public sealed class BulletEffects : MonoBehaviour
     {
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
-        if (testrnd < proj.chance.shatter)//заменить на шанс от башни
+        if (testrnd < proj.Chance.shatter)//заменить на шанс от башни
         {
             for (int i = 0; i < 2; i++)
             {
@@ -211,12 +211,12 @@ public sealed class BulletEffects : MonoBehaviour
                     modifier = 2;
                 }
                 Vector3 nextTarget = new Vector3(from.x + random.Next(-9 * modifier, 9 * modifier), from.y, from.z + random.Next(-9 * modifier, 9 * modifier));
-                Chances newChance = new Chances(proj.chance.bounce, proj.chance.splash, proj.chance.puddle,
-                    proj.chance.shatter / 2f, proj.chance.doubleAttack, proj.chance.crit,
-                    proj.chance.status, proj.chance.pierce);
+                Chances newChance = new Chances(proj.Chance.bounce, proj.Chance.splash, proj.Chance.puddle,
+                    proj.Chance.shatter / 2f, proj.Chance.doubleAttack, proj.Chance.crit,
+                    proj.Chance.status, proj.Chance.pierce);
                 proj.Shoot(proj,from, nextTarget, proj.projSpeed, proj, newChance, proj.onStart,proj.travel,proj.onEnd,!_elec ? null : proj.prevEnemy,
                     new Vector3(proj.transform.localScale.x / 1.5f, proj.transform.localScale.y / 1.5f, proj.transform.localScale.z / 1.5f),
-                    new Damage(proj.damage._fire / 2, proj.damage._cold / 2, proj.damage._lightning / 2, proj.damage._void / 2, proj.damage._physical / 2));
+                    new Damage(proj.Damage._fire / 2, proj.Damage._cold / 2, proj.Damage._lightning / 2, proj.Damage._void / 2, proj.Damage._physical / 2));
             }//
             if (Player.instance.fraction.isPlaying) Player.instance.fraction.Stop();
             Player.instance.fraction.Play();
@@ -230,7 +230,7 @@ public sealed class BulletEffects : MonoBehaviour
         Projectile _proj = proj;
         float sound = UnityEngine.Random.Range(1, 3);
         float testrnd = random.Next(0, 99);
-        if (testrnd < _proj.chance.splash)//
+        if (testrnd < _proj.Chance.splash)//
         {
             float size = 0;
             Vector3 from = proj.Source.Transform.position;
@@ -239,8 +239,8 @@ public sealed class BulletEffects : MonoBehaviour
             foreach (var element in proj.GetComponentsInChildren<Transform>())
                 if (element.gameObject.tag == "Projectile")
                     from = element.position;
-            foreach (var damage in _proj.damage.GetType().GetFields())
-                size += (float)damage.GetValue(_proj.damage) / 7;
+            foreach (var Damage in _proj.Damage.GetType().GetFields())
+                size += (float)Damage.GetValue(_proj.Damage) / 7;
             Player.nExplosions.PullObject(pref, from, null).MoveNext();
             //
             expl = Player.nExplosions.pulledObj;
@@ -270,22 +270,22 @@ public sealed class BulletEffects : MonoBehaviour
         System.Random random = new System.Random();
         float testrnd = random.Next(0, 99);
 
-        if (testrnd < proj.chance.puddle)
+        if (testrnd < proj.Chance.puddle)
         {
             float size = 0;
             float[] colors = new float[3];
             Puddle pudd = null;
             Puddle pref = Player.instance.puddle.GetComponent<Puddle>();
-            colors[0] = (proj.damage._fire + proj.damage._physical < 255 ? proj.damage._fire + proj.damage._physical : 255) / 255;
-            colors[1] = (proj.damage._lightning + proj.damage._void < 255 ? proj.damage._lightning + proj.damage._void : 255) / 255;
-            colors[2] = (proj.damage._cold < 255 ? proj.damage._cold : 255) / 255;
+            colors[0] = (proj.Damage._fire + proj.Damage._physical < 255 ? proj.Damage._fire + proj.Damage._physical : 255) / 255;
+            colors[1] = (proj.Damage._lightning + proj.Damage._void < 255 ? proj.Damage._lightning + proj.Damage._void : 255) / 255;
+            colors[2] = (proj.Damage._cold < 255 ? proj.Damage._cold : 255) / 255;
             for (int i = 0; i < colors.Length; i++)
                 if (colors[i] == colors.Max())
                     colors[i] = 1;
                 else colors[i] = colors[i] / colors.Max();
             Vector3 from = proj.transform.position;
-            foreach (var damage in proj.damage.GetType().GetFields())//
-                size += (float)damage.GetValue(proj.damage) / 4;
+            foreach (var Damage in proj.Damage.GetType().GetFields())//
+                size += (float)Damage.GetValue(proj.Damage) / 4;
             GameObject[] ground = GameObject.FindGameObjectsWithTag("Ground");
             Vector3 puddPosition = new Vector3(from.x, ground[0].transform.position.y, from.z);
             Player.nPuddles.PullObject(pref, puddPosition, null).MoveNext(); 
@@ -293,7 +293,7 @@ public sealed class BulletEffects : MonoBehaviour
             pudd.TeamId = proj.TeamId;
             Vector3 puddScale = new Vector3(size, pudd.transform.localScale.y, size);
             pudd.transform.localScale = puddScale;
-            pudd.damage = proj.damage;
+            pudd.damage = proj.Damage;
             pudd.GetComponent<Renderer>().material.color = new Color(colors[0], colors[1], colors[2], 0.6f);
             pudd.Producer = proj;
             if (Player.instance.pudd.isPlaying) Player.instance.pudd.Stop();

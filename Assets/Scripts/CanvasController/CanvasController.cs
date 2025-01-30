@@ -112,7 +112,7 @@ public class CanvasController : MonoBehaviour
                 }
         }
         //показ статов
-        Debug.Log($"{entity} hp {entity.health} maxHP {entity.maxHealth} projSpeed {entity.projSpeed} as = {entity.attackSpeed} ar {entity.agroRadius} {entity.damage} {entity.chance}");
+        Debug.Log($"{entity} hp {entity.health} maxHP {entity.maxHealth} projSpeed {entity.projSpeed} as = {entity.attackSpeed} ar {entity.AgroRadius} {entity.Damage} {entity.Chance}");
         //Debug.Log("Башня стоит!");
     }
     private void ShowTowerFarm(bool tower)
